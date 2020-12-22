@@ -1,22 +1,22 @@
 $(function() {
-    // 온도
-    const temp = new CircleProgress('.temp .progress', {
-        max: 48,
-        value: 28,
-        animationDuration: 400,
-        textFormat: (val) => val + '°C'
-    });
-
-    if (temp.value > 26) {
-        $('.temp').addClass('red');
-        $('.temp').removeClass('blue');
-    } else if (temp.value < 23) {
-        $('.temp').addClass('blue');
-        $('.temp').removeClass('red');
-    } else {
-        $('.temp').removeClass('blue');
-        $('.temp').removeClass('red');
-    }
+    // // 온도
+    // const temp = new CircleProgress('.temp .progress', {
+    //     max: 48,
+    //     value: 28,
+    //     animationDuration: 400,
+    //     textFormat: (val) => val + '°C'
+    // });
+    //
+    // if (temp.value > 26) {
+    //     $('.temp').addClass('red');
+    //     $('.temp').removeClass('blue');
+    // } else if (temp.value < 23) {
+    //     $('.temp').addClass('blue');
+    //     $('.temp').removeClass('red');
+    // } else {
+    //     $('.temp').removeClass('blue');
+    //     $('.temp').removeClass('red');
+    // }
 
     // 습도
     const humidity = new CircleProgress('.humidity .progress', {

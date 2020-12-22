@@ -37,16 +37,25 @@ public class HomeDataRestController {
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();
 
-        HomeData lightData = null;
+        HomeData sensorData;
         Optional<HomeData> light = homedataRepository.findByIdData("light");
         if(!light.isPresent()) {
             log.info("light 받아오기 실패");
         }else{
-            lightData = light.get();
-            log.info(""+lightData);
+            sensorData = light.get();
+            log.info(""+sensorData);
+            data.put("lightData",sensorData);
         }
 
-        data.put("lightData",lightData);
+        Optional<HomeData> temperature = homedataRepository.findByIdData("temperature");
+        if(!temperature.isPresent()) {
+            log.info("temperature 받아오기 실패");
+        }else{
+            sensorData = temperature.get();
+            log.info(""+sensorData);
+            data.put("temperatureData",sensorData);
+        }
+
         res.addResponse("data",data);
 
         return ResponseEntity.ok(res.success());
