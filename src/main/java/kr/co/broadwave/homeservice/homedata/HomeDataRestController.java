@@ -73,7 +73,6 @@ public class HomeDataRestController {
 
     }
 
-
     @PostMapping("lightOnOff")
     public ResponseEntity<Map<String,Object>> lightOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
         AjaxResponse res = new AjaxResponse();
