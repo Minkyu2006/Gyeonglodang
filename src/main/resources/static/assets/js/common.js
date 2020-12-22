@@ -1,10 +1,10 @@
 $(function() {
     // 온도
     const temp = new CircleProgress('.temp .progress', {
-    	max: 48,
-    	value: 24,
-    	animationDuration: 400,
-    	textFormat: (val) => val + '°C'
+        max: 48,
+        value: 28,
+        animationDuration: 400,
+        textFormat: (val) => val + '°C'
     });
 
     if (temp.value > 26) {
@@ -20,10 +20,10 @@ $(function() {
 
     // 습도
     const humidity = new CircleProgress('.humidity .progress', {
-    	max: 100,
-    	value: 90,
-    	animationDuration: 400,
-    	textFormat: (val) => val + '%'
+        max: 100,
+        value: 90,
+        animationDuration: 400,
+        textFormat: (val) => val + '%'
     });
 
     if (humidity.value > 70) {
@@ -41,7 +41,6 @@ $(function() {
     // button toggle
     $('.console-button').on('click', function() {
         $(this).toggleClass('active');
-
         if ($(this).hasClass('light active')) {
             $(this).children('.fa-lightbulb').removeClass('fas');
             $(this).children('.fa-lightbulb').addClass('far');
@@ -49,6 +48,18 @@ $(function() {
             $(this).children('.fa-lightbulb').removeClass('far');
             $(this).children('.fa-lightbulb').addClass('fas');
         }
+    })
+
+    // 경고메시지 예제 추후 삭제
+    $('.ex-button').on('click', function(e) {
+        $('.alert').addClass('active');
+
+        e.preventDefault();
+    });
+    $('.alert-pop__close').on('click', function(e) {
+        $('.alert').removeClass('active');
+
+        e.preventDefault();
     })
 
 })

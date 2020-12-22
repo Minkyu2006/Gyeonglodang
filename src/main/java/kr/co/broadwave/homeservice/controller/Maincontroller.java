@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class Maincontroller {
 
-    //메인화면
+    // 대시보드 메인화면
     @RequestMapping("/")
     public String main(){
         return "index";
