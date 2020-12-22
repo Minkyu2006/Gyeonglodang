@@ -75,11 +75,23 @@
                         $('.temp').removeClass('red');
                     }
 
-
                 }
             });
         }
 
+        function lightOnOff(value) {
+            // console.log("spanText : "+spanText);
+            var params = {
+                value: value
+            };
+
+            $.ajax({
+                url: '/homedata/lightOnOff',
+                type: 'post',
+                data: params,
+                cache: false
+            });
+        }
 
 
     </script>

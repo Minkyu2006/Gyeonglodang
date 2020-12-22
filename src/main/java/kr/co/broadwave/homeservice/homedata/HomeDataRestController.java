@@ -1,12 +1,16 @@
 package kr.co.broadwave.homeservice.homedata;
 
 import kr.co.broadwave.homeservice.common.AjaxResponse;
+import kr.co.broadwave.homeservice.mqttsetting.MyMqttClient;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -23,6 +27,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/homedata")
 public class HomeDataRestController {
+
+    @Value("${broadwave.ha.iot.username}")
+    private String BROADWAVE_USERNAME;
+    @Value("${broadwave.ha.iot.password}")
+    private String BROADWAVE_PASSWORD;
+    @Value("${broadwave.ha.iot.url}")
+    private String BROADWAVE_URL;
 
     private final HomeDataService homedataRepository;
 
@@ -63,4 +74,22 @@ public class HomeDataRestController {
     }
 
 
+    @PostMapping("lightOnOff")
+    public ResponseEntity<Map<String,Object>> lightOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
+        AjaxResponse res = new AjaxResponse();
+        MyMqttClient client = new MyMqttClient();
+        log.info("value : "+value);
+        log.info("BROADWAVE_USERNAME : "+BROADWAVE_USERNAME);
+        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
+        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
+        if(value.equals("ON")){
+            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command")
+                    .sender("command/smart/lighton","dashboardCommand");
+        }else{
+            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command")
+                    .sender("command/smart/lightoff","dashboardCommand");
+        }
+
+        return ResponseEntity.ok(res.success());
+    }
 }

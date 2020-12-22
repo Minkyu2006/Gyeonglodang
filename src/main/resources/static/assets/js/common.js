@@ -44,9 +44,11 @@ $(function() {
         if ($(this).hasClass('light active')) {
             $(this).children('.fa-lightbulb').removeClass('fas');
             $(this).children('.fa-lightbulb').addClass('far');
+            lightOnOff("ON");
         }else{
             $(this).children('.fa-lightbulb').removeClass('far');
             $(this).children('.fa-lightbulb').addClass('fas');
+            lightOnOff("OFF");
         }
     })
 
