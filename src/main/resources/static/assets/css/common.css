@@ -1,0 +1,337 @@
+@charset "utf-8";
+
+/* noto-sans-kr-regular - korean */
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/notosanskr/noto-sans-kr-v12-korean-regular.eot'); /* IE9 Compat Modes */
+  src: local('Noto Sans KR Regular'), local('NotoSansKR-Regular'),
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-regular.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-regular.svg#NotoSansKR') format('svg'); /* Legacy iOS */
+}
+/* noto-sans-kr-700 - korean */
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.eot'); /* IE9 Compat Modes */
+  src: local('Noto Sans KR Bold'), local('NotoSansKR-Bold'),
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.svg#NotoSansKR') format('svg'); /* Legacy iOS */
+}
+
+
+/* reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 100%;
+	/* font: inherit; */
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+html {
+	overflow: hidden;
+	height: 100%;
+}
+body {
+	overflow: auto;
+	height: 100%;
+	margin: 0;
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+a {
+    text-decoration: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh
+}
+
+/* header */
+/* .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 15%;
+    height: 100vh;
+} */
+
+/* contents */
+/* .contents {
+    position: relative;
+    width: 70%;
+    height: 100vh;
+    margin: 0 auto;
+} */
+.contents {
+    float: left;
+    overflow: auto;
+    position: relative;
+    width: 80%;
+    height: 100vh;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* card-list */
+.card-list {
+}
+.card-list:before {
+    content: " ";
+    display: table;
+}
+.card-list:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
+/* card */
+.card {
+    float: left;
+    width: 25%;
+    min-width: 340px;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+}
+.card-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: #222;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.card-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+.card-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 48px;
+    color: #43a047;
+}
+.red .card-icon {
+    color: #ff5c8d
+}
+.blue .card-icon {
+    color: #039be5
+}
+
+/* 온습도 */
+.temp,
+.humidity {
+
+}
+.progress {
+    text-align: center;
+}
+.circle-progress {
+    width: 250px;
+    height: 250px;
+}
+.progress .circle-progress-value {
+    stroke-width: 6px;
+    stroke: #43a047;
+    stroke-dasharray: 5.98 2;
+    transition: stroke 0.4s;
+}
+.progress .circle-progress-circle {
+    stroke-width: 2px;
+    stroke: transparent;
+}
+.progress .circle-progress-text {
+    font-weight: bold;
+    fill: #43a047;
+    transform: translateX(0.2em);
+    transition: fill 0.4s;
+}
+.red .progress .circle-progress-value {
+    stroke: #ff5c8d;
+}
+.red .progress .circle-progress-text {
+    fill: #ff5c8d;
+}
+.blue .progress .circle-progress-value{
+    stroke: #039be5;
+}
+.blue .progress .circle-progress-text {
+    fill: #039be5;
+}
+
+/* 공기질 */
+.air-icon {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+.air-icon i {
+    font-size: 250px;
+    color: #43a047;
+}
+.air.bad .air-icon {
+    color: #ff5c8d;
+}
+.air.good .air-icon {
+    color: #039be5;
+}
+
+/* on/off */
+.power {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+.power .card-icon {
+    color: #ddd;
+}
+.power-icon i {
+    font-size: 250px;
+    color: #ddd;
+}
+.power.active .card-icon,
+.power.active .power-icon i {
+    color: #039be5;
+}
+
+/* door */
+.door {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    text-align: center;
+}
+.door .card-icon {
+    color: #ddd;
+}
+.door-icon {
+    padding: 20px 0;
+}
+.door-icon i {
+    font-size: 200px;
+    color: #ddd;
+}
+.door.active .card-icon,
+.door.active .door-icon i {
+    color: #039be5;
+}
+
+/* console */
+.console {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 100vh;
+    padding: 20px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.buttons {
+    width: 100%;
+}
+.buttons li + li {
+    margin-top: 20px;
+}
+.console-button {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #888;
+    font-size: 44px;
+}
+.console-button.exit {
+    border: 1px solid #c4001d;
+    background-color: #ff616f;
+    color: #fff;
+}
+.console-button i {
+    margin-right: 10px;
+}
+.console-button span {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    line-height: 36px;
+}
+.console-button.active span {
+    display: block;
+}
+.console-button.light.active {
+    background-color: #ffeb3b;
+    color: #222;
+}
+.console-button.aircon.active {
+    background-color: #9bffff;
+    color: #006db3;
+}
+.console-button.airfresher.active {
+    background-color: #a9ffa5;
+    color: #00701a;
+}

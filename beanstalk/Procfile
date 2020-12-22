@@ -1,0 +1,1 @@
+web: java -javaagent:./scouter.agent.jar -Dscouter.config=./scouter.conf -jar ./application.jar
