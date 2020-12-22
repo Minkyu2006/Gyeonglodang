@@ -79,6 +79,7 @@
             });
         }
 
+        // 조명 온오프
         function lightOnOff(value) {
             // console.log("spanText : "+spanText);
             var params = {
@@ -93,6 +94,20 @@
             });
         }
 
+        // 공기청정기 온오프
+        function aqOnOff(value) {
+            // console.log("spanText : "+spanText);
+            var params = {
+                value: value
+            };
+
+            $.ajax({
+                url: '/homedata/aqOnOff',
+                type: 'post',
+                data: params,
+                cache: false
+            });
+        }
 
     </script>
 
@@ -142,7 +157,7 @@
                         <button id="lightBtn" class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
                     </li>
                     <li>
-                        <button class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
+                        <button id="aqBtn" class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
                     </li>
                     <li>
                         <button class="console-button door"><i class="fas fa-door-open"></i>문열림</button>

@@ -5,15 +5,16 @@ import org.eclipse.paho.client.mqttv3.*;
 public class MyMqttClient implements MqttCallback {
 
     private MqttClient client;
-    private MqttConnectOptions option;
 
     public MyMqttClient init(String userName, String password, String serverURI, String clientId){
 
-        option = new MqttConnectOptions();
+        MqttConnectOptions option = new MqttConnectOptions();
+
+        //옵션 객체에 접속하기위한 세팅
         option.setCleanSession(true);
         option.setKeepAliveInterval(30);
         option.setUserName(userName);
-        option.setPassword(password.toCharArray());  //옵션 객체에 접속하기위한 세팅끝!
+        option.setPassword(password.toCharArray());
         try {
             client = new MqttClient(serverURI, clientId);
             client.setCallback(this);

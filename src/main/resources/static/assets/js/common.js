@@ -38,8 +38,8 @@ $(function() {
     }
 
 
-    // button toggle
-    $('.console-button').on('click', function() {
+    // 조명버튼
+    $('#lightBtn').on('click', function() {
         $(this).toggleClass('active');
         if ($(this).hasClass('light active')) {
             $(this).children('.fa-lightbulb').removeClass('fas');
@@ -49,6 +49,16 @@ $(function() {
             $(this).children('.fa-lightbulb').removeClass('far');
             $(this).children('.fa-lightbulb').addClass('fas');
             lightOnOff("OFF");
+        }
+    })
+
+    // 공기청정기 버튼
+    $('#aqBtn').on('click', function() {
+        $(this).toggleClass('active');
+        if ($(this).hasClass('airfresher active')) {
+            aqOnOff("ON");
+        }else{
+            aqOnOff("OFF");
         }
     })
 
