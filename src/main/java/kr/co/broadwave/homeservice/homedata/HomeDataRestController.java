@@ -4,7 +4,6 @@ import kr.co.broadwave.homeservice.common.AjaxResponse;
 import kr.co.broadwave.homeservice.mqttsetting.MyMqttClient;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -82,11 +81,9 @@ public class HomeDataRestController {
 //        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
 //        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
         if(value.equals("ON")){
-            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command")
-                    .sender("command/smart/lighton","{\"Dashboard\":\"lightONcommand\"}");
+            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command").sender("command/smart/lighton","{\"Dashboard\":\"lightONcommand\"}");
         }else{
-            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command")
-                    .sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFcommand\"}");
+            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command").sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFcommand\"}");
         }
 
         return ResponseEntity.ok(res.success());
@@ -97,15 +94,11 @@ public class HomeDataRestController {
         AjaxResponse res = new AjaxResponse();
         MyMqttClient client = new MyMqttClient();
         log.info("공기청정기 명령하기 : "+value);
-//        log.info("BROADWAVE_USERNAME : "+BROADWAVE_USERNAME);
-//        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
-//        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
+
         if(value.equals("ON")){
-            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command")
-                    .sender("command/smart/aqon","{\"Dashboard\":\"aqONcommand\"}");
+            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command").sender("command/smart/aqon","{\"Dashboard\":\"aqONcommand\"}");
         }else{
-            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command")
-                    .sender("command/smart/aqoff","{\"Dashboard\":\"aqOFFcommand\"}");
+            client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command").sender("command/smart/aqoff","{\"Dashboard\":\"aqOFFcommand\"}");
         }
 
         return ResponseEntity.ok(res.success());
