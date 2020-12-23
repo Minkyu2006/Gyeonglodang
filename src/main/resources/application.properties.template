@@ -1,5 +1,5 @@
 
-server.port=8001
+server.port=8999
 server.servlet.session.timeout=360m
 
 #Log

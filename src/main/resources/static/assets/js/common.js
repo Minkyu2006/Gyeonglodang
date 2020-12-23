@@ -44,11 +44,11 @@ $(function() {
         if ($(this).hasClass('light active')) {
             $(this).children('.fa-lightbulb').removeClass('fas');
             $(this).children('.fa-lightbulb').addClass('far');
-            lightOnOff("ON");
+            integratedFun("light","ON");
         }else{
             $(this).children('.fa-lightbulb').removeClass('far');
             $(this).children('.fa-lightbulb').addClass('fas');
-            lightOnOff("OFF");
+            integratedFun("light","OFF");
         }
     })
 
@@ -56,11 +56,17 @@ $(function() {
     $('#aqBtn').on('click', function() {
         $(this).toggleClass('active');
         if ($(this).hasClass('airfresher active')) {
-            aqOnOff("ON");
+            integratedFun("aq","ON");
         }else{
-            aqOnOff("OFF");
+            integratedFun("aq","OFF");
         }
     })
+
+    // 문열기버튼
+    $('#openDoorBtn').on('click', function() {
+        integratedFun("door", "OPEN");
+    });
+
 
     // 경고메시지 예제 추후 삭제
     $('.ex-button').on('click', function(e) {

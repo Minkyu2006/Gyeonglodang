@@ -90,34 +90,37 @@
             });
         }
 
-        // 조명 온오프
-        function lightOnOff(value) {
-            // console.log("spanText : "+spanText);
+        // 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
+        function integratedFun(name,value) {
+            // console.log("name : "+name);
+            // console.log("value : "+value);
             var params = {
                 value: value
             };
 
-            $.ajax({
-                url: '/homedata/lightOnOff',
-                type: 'post',
-                data: params,
-                cache: false
-            });
-        }
+            if(name==="light"){
+                $.ajax({
+                    url: '/homedata/lightOnOff',
+                    type: 'post',
+                    data: params,
+                    cache: false
+                });
+            }else if(name==="aq"){
+                $.ajax({
+                    url: '/homedata/aqOnOff',
+                    type: 'post',
+                    data: params,
+                    cache: false
+                });
+            }else if(name==="door"){
+                $.ajax({
+                    url: '/homedata/opendoor',
+                    type: 'post',
+                    data: params,
+                    cache: false
+                });
+            }
 
-        // 공기청정기 온오프
-        function aqOnOff(value) {
-            // console.log("spanText : "+spanText);
-            var params = {
-                value: value
-            };
-
-            $.ajax({
-                url: '/homedata/aqOnOff',
-                type: 'post',
-                data: params,
-                cache: false
-            });
         }
 
     </script>
@@ -159,10 +162,10 @@
             <div class="button-list">
                 <ul>
                     <li>
-                        <button class="console-button exit"><i class="fas fa-sign-out-alt"></i>퇴실</button>
+                        <button id="outBtn" class="console-button exit"><i class="fas fa-sign-out-alt"></i>퇴실</button>
                     </li>
                     <li>
-                        <button class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
+                        <button id="airConBtn" class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
                     </li>
                     <li>
                         <button id="lightBtn" class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
@@ -171,7 +174,7 @@
                         <button id="aqBtn" class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
                     </li>
                     <li>
-                        <button class="console-button door"><i class="fas fa-door-open"></i>문열림</button>
+                        <button id="openDoorBtn" class="console-button door"><i class="fas fa-door-open"></i>문열림</button>
                     </li>
                 </ul>
             </div>
@@ -245,7 +248,7 @@
                     </li> -->
                     <li class="card">
                         <div class="card-inner">
-                            <a href="#" class="card-link">
+                            <a id="all" href="#" class="card-link">
                                 <h3 class="card-title">전원장치</h3>
                                 <div class="power active">
                                     <span class="card-icon"><i class="fas fa-plug"></i></span>

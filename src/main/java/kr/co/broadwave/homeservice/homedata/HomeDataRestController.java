@@ -53,7 +53,7 @@ public class HomeDataRestController {
             log.info("light 받아오기 실패");
         }else{
             sensorData = light.get();
-            log.info(""+sensorData);
+            log.info("조명 데이터 : "+sensorData);
             data.put("lightData",sensorData);
         }
 
@@ -62,7 +62,7 @@ public class HomeDataRestController {
             log.info("temperature 받아오기 실패");
         }else{
             sensorData = temperature.get();
-            log.info(""+sensorData);
+            log.info("온도 데이터 : "+sensorData);
             data.put("temperatureData",sensorData);
         }
 
@@ -71,7 +71,7 @@ public class HomeDataRestController {
             log.info("airpurification 받아오기 실패");
         }else{
             sensorData = airpurification.get();
-            log.info(""+sensorData);
+            log.info("공기청정기 데이터 : "+sensorData);
             data.put("airpurification",sensorData);
         }
 
@@ -91,9 +91,9 @@ public class HomeDataRestController {
 //        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
 //        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
         if(value.equals("ON")){
-            client.sender("command/smart/lighton","{\"Dashboard\":\"lightONcommand\"}");
+            client.sender("command/smart/lighton","{\"Dashboard\":\"lightONCommand\"}");
         }else{
-            client.sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFcommand\"}");
+            client.sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFCommand\"}");
         }
 
         return ResponseEntity.ok(res.success());
@@ -106,12 +106,25 @@ public class HomeDataRestController {
         log.info("공기청정기 명령하기 : "+value);
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
         if(value.equals("ON")){
-            client.sender("command/smart/aqon","{\"Dashboard\":\"aqONcommand\"}");
+            client.sender("command/smart/aqon","{\"Dashboard\":\"aqONCommand\"}");
         }else{
-            client.sender("command/smart/aqoff","{\"Dashboard\":\"aqOFFcommand\"}");
+            client.sender("command/smart/aqoff","{\"Dashboard\":\"aqOFFCommand\"}");
         }
 
         return ResponseEntity.ok(res.success());
     }
+
+    @PostMapping("opendoor")
+    public ResponseEntity<Map<String,Object>> opendoor(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
+        AjaxResponse res = new AjaxResponse();
+        MyMqttClient client = new MyMqttClient();
+        log.info("문열기 명령하기 : "+value);
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+        if(value.equals("OPEN")){
+            client.sender("command/door1/unlock","{\"Dashboard\":\"openDoorCommand\"}");
+        }
+        return ResponseEntity.ok(res.success());
+    }
+
 
 }
