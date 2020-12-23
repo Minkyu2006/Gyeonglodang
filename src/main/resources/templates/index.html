@@ -76,6 +76,15 @@
                         $('.temp').removeClass('red');
                     }
 
+                    console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
+                    var airpurification = JSON.parse(res.data.airpurification.r_data);
+                    console.log('airpurification 상태 : '+airpurification.power);
+                    var airpurificationPower = airpurification.power;
+                    if(airpurificationPower==="on"){
+                        var $aqBtn = $('#aqBtn');
+                        $aqBtn.addClass("active")
+                    }
+
                 }
             });
         }
