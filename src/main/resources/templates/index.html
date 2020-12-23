@@ -39,6 +39,7 @@
                 success: function (res) {
                     console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
                     var light = JSON.parse(res.data.lightData.r_data);
+                    console.log('내자신');
                     console.log('light 상태 : '+light.lt1);
                     var listhData = light.lt1;
                     if(listhData==="on"){
