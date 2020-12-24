@@ -200,9 +200,9 @@
                 }else{
                     $("#nowWeather").text("흐림");
                 }
-                $("#nowTem").text(weather.temperature+"º");
-                $("#nowHum").text(weather.humidity+"%");
-                $("#nowWindSpeed").text(weather.wind_speed+"km/h");
+                $("#nowTem").text(weather.temperature.toFixed(1)+"º");
+                $("#nowHum").text(weather.humidity.toFixed(1)+"%");
+                $("#nowWindSpeed").text(weather.wind_speed.toFixed(1)+"km/h");
 
                 var today = new Date();
                 var d=1;
