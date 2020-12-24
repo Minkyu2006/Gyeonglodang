@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+#FROM openjdk:8-jdk-alpine
 RUN echo "Asia/Seoul" > /etc/timezone
 VOLUME /tmp
 ARG JAR_FILE
