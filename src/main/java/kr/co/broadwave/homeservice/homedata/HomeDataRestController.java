@@ -84,6 +84,15 @@ public class HomeDataRestController {
             data.put("airpurification",sensorData);
         }
 
+        Optional<HomeData> weather = homedataRepository.findByIdData("weather");
+        if(!weather.isPresent()) {
+            log.info("weather 받아오기 실패");
+        }else{
+            sensorData = weather.get();
+            log.info("날씨 데이터 : "+sensorData);
+            data.put("weather",sensorData);
+        }
+
         res.addResponse("data",data);
 
         return ResponseEntity.ok(res.success());

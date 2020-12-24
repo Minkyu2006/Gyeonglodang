@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="./assets/css/fontawesome/all.min.css">        <link rel="stylesheet" href="./assets/css/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="./assets/css/fontawesome/all.min.css">
+    <link rel="stylesheet" href="./assets/css/fontawesome/brands.min.css">
     <link rel="stylesheet" href="./assets/css/fontawesome/regular.min.css">
     <link rel="stylesheet" href="./assets/css/fontawesome/solid.min.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/common.css">
@@ -17,6 +18,7 @@
     $(function() {
 
         dataInfo();
+        realTime();
 
         // 조명버튼
         $('#lightBtn').on('click', function() {
@@ -53,14 +55,46 @@
         $('#outBtn').on('click', function() {
             outGo();
         });
+
     });
+
+    var week = ['일', '월', '화', '수', '목', '금', '토'];
+    function clock() {
+
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var clockDate = date.getDate();
+        var day = date.getDay();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+
+        var ampm;
+        if(hours<=12){
+            ampm="오후"
+        }else{
+            ampm="오전"
+        }
+
+        // 초까지 받아온 후
+        $("#clockDate").text(`${year}.${month+1}.${clockDate}(${week[day]})`);
+        $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }`);
+        // $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }.${seconds < 10 ? `0${seconds }`  : seconds }`);
+    }
+
+    function realTime() {
+        clock();
+        setInterval(clock, 55000);
+    }
+
     // 퇴실버튼
     function outGo() {
         $.ajax({
             url: '/exitGo/outGo',
             type: 'post',
             cache: false,
-            rror: function () {
+            error: function () {
                 alert('퇴실실패');
             },
             success: function () {
@@ -78,6 +112,8 @@
                 alert('데이터받기 실패');
             },
             success: function (res) {
+
+                // 조명셋팅
                 console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
                 var light = JSON.parse(res.data.lightData.r_data);
                 console.log('내자신');
@@ -90,6 +126,8 @@
                     $lightBtn.children('.fa-lightbulb').removeClass('fas');
                     $lightBtn.children('.fa-lightbulb').addClass('far');
                 }
+
+                // 온도셋팅
                 console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
                 var temperature = JSON.parse(res.data.temperatureData.r_data);
                 console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
@@ -97,7 +135,7 @@
                 console.log('');
                 var temDataRm1 = temperature.rm1tm01; // 사무실 온도
                 var temDataRm2 = temperature.rm2tm01; // 회의실 온도
-                // 온도셋팅
+
                 const temp = new CircleProgress('.temp .progress', {
                     max: 48,
                     value: temDataRm1,
@@ -112,6 +150,8 @@
                 } else {
                     $temp.removeClass('blue').removeClass('red');
                 }
+
+                // 습도셋팅
                 console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
                 var humidity = JSON.parse(res.data.humidity.r_data);
                 console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
@@ -119,7 +159,7 @@
                 console.log('');
                 var humDataRm1 = humidity.rm1hu01; // 사무실 습도
                 var humDataRm2 = humidity.rm1hu01; // 회의실 습도
-                // 습도셋팅
+
                 const hum = new CircleProgress('.humidity .progress', {
                     max: 100,
                     value: humDataRm1,
@@ -134,6 +174,8 @@
                 } else {
                     $humidity.removeClass('blue').removeClass('red');
                 }
+
+                // 공기청정기 셋팅
                 console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
                 var airpurification = JSON.parse(res.data.airpurification.r_data);
                 console.log('airpurification 상태 : '+airpurification.power);
@@ -143,6 +185,38 @@
                     var $aqBtn = $('#aqBtn');
                     $aqBtn.addClass("active")
                 }
+
+                // 날씨셋팅
+                console.log('weather Json 데이터 : '+ res.data.weather.r_data);
+                var weather = JSON.parse(res.data.weather.r_data);
+                console.log('오늘 날씨 상태 : '+weather.condition);
+                console.log('오늘 날씨 온도 : '+weather.temperature);
+                console.log('오늘 날씨 습도 : '+weather.humidity);
+                console.log('오늘 날씨 풍속 : '+weather.wind_speed);
+                console.log('다음날 날씨 리스트 : '+weather.forecast)
+                console.log('');
+                if(weather.condition==="sunny"){
+                    $("#nowWeather").text("맑음");
+                }else{
+                    $("#nowWeather").text("흐림");
+                }
+                $("#nowTem").text(weather.temperature+"º");
+                $("#nowHum").text(weather.humidity+"%");
+                $("#nowWindSpeed").text(weather.wind_speed+"km/h");
+
+                var today = new Date();
+                var d=1;
+                for(i=0; i<4; i++){
+                    today.setDate(today.getDate()+d);
+                    var day = today.getDay();
+
+                    $("#nextDay"+i).text(`${week[day]}`+"요일");
+                    // $("#nextWeatherIcon"+i).text(""); // 아이콘처리
+                    $("#nextTem"+i).text(weather.forecast[i].temperature.toFixed(0)+"º");
+                    $("#nextTemLow"+i).text(weather.forecast[i].templow.toFixed(0)+"º");
+                }
+
+
             }
         });
     }
@@ -180,39 +254,10 @@
             console.log("알 수 없는 명령")
         }
     }
+
 </script>
 <body>
 <div class="wrap">
-    <!-- <div class="header">
-        <div class="nav">
-            <ul class="tab-menu">
-                <li>위치</li>
-                <li>센서</li>
-            </ul>
-            <ul class="tab-contents">
-                <li>
-                    <ul>
-                        <li>HOME</li>
-                        <li>거실</li>
-                        <li>주방</li>
-                        <li>안방</li>
-                        <li>운동</li>
-                        <li>창고</li>
-                    </ul>
-                </li>
-                <li>
-                    <ul>
-                        <li>HOME</li>
-                        <li>온도</li>
-                        <li>습도</li>
-                        <li>공기질</li>
-                        <li>조명</li>
-                        <li>문열림</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div> -->
     <div class="contents">
         <div class="button-list">
             <ul>
@@ -323,60 +368,60 @@
             <div class="infobox__inner">
                 <div class="info">
                     <div class="location">대전시 유성구</div>
-                    <div class="date">2020.12.24(목)</div>
-                    <div class="time"><span>오후 05:30</span></div>
+                    <div class="date"><span id="clockDate"></span></div>
+                    <div class="time"><span id="clockTime"></span></div>
                 </div>
                 <div class="weather">
                     <div class="temperature">
-                        <div class="temperature__current">38º</div>
+                        <div id="nowTem" class="temperature__current">38º</div>
                         <div class="weather__etc">
-                            <div class="weather__humidity"><i class="fas fa-tint"></i>40%</div>
-                            <div class="weather__wind"><i class="fas fa-wind"></i>20.20km/h</div>
+                            <div class="weather__humidity"><i class="fas fa-tint"></i><span id="nowHum">40%</span></div>
+                            <div class="weather__wind"><i class="fas fa-wind"></i><span id="nowWindSpeed">20.20km/h</span></div>
                         </div>
                     </div>
                     <div class="weather__icon">
-                        <i class="fas fa-sun"></i>
-                        <span>맑음</span>
+                        <i id="newWeatherIcon" class="fas fa-sun"></i>
+                        <span id="nowWeather">맑음</span>
                     </div>
                     <div class="weekly">
                         <ul>
                             <li>
                                 <div class="weekly-weather">
-                                    <div class="weekly-day">금요일</div>
-                                    <div class="weekly-icon"><i class="fas fa-sun"></i></div>
+                                    <div id="nextDay0" class="weekly-day">금요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon0" class="fas fa-sun"></i></div>
                                     <div class="weelky-temp">
-                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i>9º</span>
-                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i>3º</span>
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem0"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow0"></span></span>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="weekly-weather">
-                                    <div class="weekly-day">토요일</div>
-                                    <div class="weekly-icon"><i class="fas fa-sun"></i></div>
+                                    <div id="nextDay1" class="weekly-day">토요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon1" class="fas fa-sun"></i></div>
                                     <div class="weelky-temp">
-                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i>9º</span>
-                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i>3º</span>
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem1"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow1"></span></span>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="weekly-weather">
-                                    <div class="weekly-day">일요일</div>
-                                    <div class="weekly-icon"><i class="fas fa-sun"></i></div>
+                                    <div id="nextDay2" class="weekly-day">일요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon2" class="fas fa-sun"></i></div>
                                     <div class="weelky-temp">
-                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i>9º</span>
-                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i>3º</span>
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem2"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow2"></span></span>
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="weekly-weather">
-                                    <div class="weekly-day">월요일</div>
-                                    <div class="weekly-icon"><i class="fas fa-sun"></i></div>
+                                    <div id="nextDay3" class="weekly-day">월요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon3" class="fas fa-sun"></i></div>
                                     <div class="weelky-temp">
-                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i>9º</span>
-                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i>3º</span>
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem3"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow3"></span></span>
                                     </div>
                                 </div>
                             </li>
