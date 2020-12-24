@@ -6,7 +6,7 @@ public class MyMqttClient implements MqttCallback {
 
     private MqttClient client;
 
-    public MyMqttClient init(String userName, String password, String serverURI, String clientId){
+    public void init(String userName, String password, String serverURI, String clientId){
 
         MqttConnectOptions option = new MqttConnectOptions();
 
@@ -22,7 +22,6 @@ public class MyMqttClient implements MqttCallback {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return this;
     }
 
     //구독 대상 전달

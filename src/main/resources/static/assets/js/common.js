@@ -18,55 +18,24 @@ $(function() {
     //     $('.temp').removeClass('red');
     // }
 
-    // 습도
-    const humidity = new CircleProgress('.humidity .progress', {
-        max: 100,
-        value: 90,
-        animationDuration: 400,
-        textFormat: (val) => val + '%'
-    });
-
-    if (humidity.value > 70) {
-        $('.humidity').addClass('blue');
-        $('.humidity').removeClass('red');
-    } else if (humidity.value < 40) {
-        $('.humidity').addClass('red');
-        $('.humidity').removeClass('blue');
-    } else {
-        $('.humidity').removeClass('blue');
-        $('.humidity').removeClass('red');
-    }
-
-
-    // 조명버튼
-    $('#lightBtn').on('click', function() {
-        $(this).toggleClass('active');
-        if ($(this).hasClass('light active')) {
-            $(this).children('.fa-lightbulb').removeClass('fas');
-            $(this).children('.fa-lightbulb').addClass('far');
-            integratedFun("light","ON");
-        }else{
-            $(this).children('.fa-lightbulb').removeClass('far');
-            $(this).children('.fa-lightbulb').addClass('fas');
-            integratedFun("light","OFF");
-        }
-    })
-
-    // 공기청정기 버튼
-    $('#aqBtn').on('click', function() {
-        $(this).toggleClass('active');
-        if ($(this).hasClass('airfresher active')) {
-            integratedFun("aq","ON");
-        }else{
-            integratedFun("aq","OFF");
-        }
-    })
-
-    // 문열기버튼
-    $('#openDoorBtn').on('click', function() {
-        integratedFun("door", "OPEN");
-    });
-
+    // // 습도
+    // const humidity = new CircleProgress('.humidity .progress', {
+    //     max: 100,
+    //     value: 90,
+    //     animationDuration: 400,
+    //     textFormat: (val) => val + '%'
+    // });
+    //
+    // if (humidity.value > 70) {
+    //     $('.humidity').addClass('blue');
+    //     $('.humidity').removeClass('red');
+    // } else if (humidity.value < 40) {
+    //     $('.humidity').addClass('red');
+    //     $('.humidity').removeClass('blue');
+    // } else {
+    //     $('.humidity').removeClass('blue');
+    //     $('.humidity').removeClass('red');
+    // }
 
     // 경고메시지 예제 추후 삭제
     $('.ex-button').on('click', function(e) {

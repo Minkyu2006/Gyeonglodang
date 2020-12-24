@@ -66,6 +66,15 @@ public class HomeDataRestController {
             data.put("temperatureData",sensorData);
         }
 
+        Optional<HomeData> humidity = homedataRepository.findByIdData("humidity");
+        if(!humidity.isPresent()) {
+            log.info("humidity 받아오기 실패");
+        }else{
+            sensorData = humidity.get();
+            log.info("습도 데이터 : "+sensorData);
+            data.put("humidity",sensorData);
+        }
+
         Optional<HomeData> airpurification = homedataRepository.findByIdData("airpurification");
         if(!airpurification.isPresent()) {
             log.info("airpurification 받아오기 실패");
@@ -125,6 +134,5 @@ public class HomeDataRestController {
         }
         return ResponseEntity.ok(res.success());
     }
-
 
 }
