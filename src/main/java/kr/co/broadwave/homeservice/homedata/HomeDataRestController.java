@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -113,7 +114,7 @@ public class HomeDataRestController {
 
         MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
 
-        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,String.valueOf(UUID.randomUUID()));
 
         client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
             arg.forEach((key, value)->{
