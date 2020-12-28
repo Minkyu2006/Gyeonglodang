@@ -42,7 +42,7 @@ public class HomeDataRestController {
     }
 
     @PostMapping("dataInfo")
-    public ResponseEntity<Map<String,Object>> homedata(){
+    public ResponseEntity<Map<String,Object>> homedata() throws MqttException {
 
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();
@@ -99,20 +99,46 @@ public class HomeDataRestController {
 
     }
 
+    //구독하기
+    public void mqttSubscribe(){
+        MyMqttClient client = new MyMqttClient();
+
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                boolean sub = client.subscribe("notice/alert");
+                log.info("경고창 구독여부 : "+sub);
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     @PostMapping("lightOnOff")
     public ResponseEntity<Map<String,Object>> lightOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
         AjaxResponse res = new AjaxResponse();
         MyMqttClient client = new MyMqttClient();
+
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
         log.info("조명 명령하기 : "+value);
 //        log.info("BROADWAVE_USERNAME : "+BROADWAVE_USERNAME);
 //        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
 //        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
-        if(value.equals("ON")){
-            client.sender("command/smart/lighton","{\"Dashboard\":\"lightONCommand\"}");
-        }else{
-            client.sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFCommand\"}");
-        }
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/lighton","{\"Dashboard\":\"lightONCommand\"}");
+                }else{
+                    client.sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         return ResponseEntity.ok(res.success());
     }
@@ -123,11 +149,19 @@ public class HomeDataRestController {
         MyMqttClient client = new MyMqttClient();
         log.info("공기청정기 명령하기 : "+value);
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
-        if(value.equals("ON")){
-            client.sender("command/smart/aqon","{\"Dashboard\":\"aqONCommand\"}");
-        }else{
-            client.sender("command/smart/aqoff","{\"Dashboard\":\"aqOFFCommand\"}");
-        }
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/aqon","{\"Dashboard\":\"aqONCommand\"}");
+                }else{
+                    client.sender("command/smart/aqoff","{\"Dashboard\":\"aqOFFCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         return ResponseEntity.ok(res.success());
     }
@@ -137,11 +171,35 @@ public class HomeDataRestController {
         AjaxResponse res = new AjaxResponse();
         MyMqttClient client = new MyMqttClient();
         log.info("문열기 명령하기 : "+value);
+
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
-        if(value.equals("OPEN")){
-            client.sender("command/door1/unlock","{\"Dashboard\":\"openDoorCommand\"}");
-        }
+
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("OPEN")){
+                    client.sender("command/door1/unlock","{\"Dashboard\":\"openDoorCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
         return ResponseEntity.ok(res.success());
     }
+
+//    @PostMapping("warning")
+//    public ResponseEntity<Map<String,Object>> warning() throws MqttException {
+//        AjaxResponse res = new AjaxResponse();
+//        MyMqttClient client = new MyMqttClient();
+//
+//        log.info("경고메세지 보내기");
+//        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+//        client.sender("notice/alert","{\"test\":\"test\"}");
+//
+//
+//        return ResponseEntity.ok(res.success());
+//    }
 
 }

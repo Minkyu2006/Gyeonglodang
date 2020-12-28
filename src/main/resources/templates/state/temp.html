@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/default}">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./assets/css/common_admin.css">
+    <script src="./assets/js/common_admin.js"></script>
+
+
+
+</head>
+<body>
+<div class="wrap">
+    <div class="header">
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="/admin" class="nav-link active"><span>HOME</span></a>
+                </li>
+                <li>
+                    <a href="../location/living.html" class="nav-link"><span>거실</span></a>
+                </li>
+                <li>
+                    <a href="../location/kitchen.html" class="nav-link"><span>주방</span></a>
+                </li>
+                <li>
+                    <a href="../location/room1.html" class="nav-link"><span>안방</span></a>
+                </li>
+                <li>
+                    <a href="../location/room2.html" class="nav-link"><span>운동</span></a>
+                </li>
+                <li>
+                    <a href="../location/room3.html" class="nav-link"><span>창고</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="contents">
+        <div class="button-list">
+            <ul>
+                <li>
+                    <button class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
+                </li>
+                <li>
+                    <button class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
+                </li>
+                <li>
+                    <button class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
+                </li>
+                <li>
+                    <button class="console-button electronic"><i class="fas fa-power-off"></i>전원<span>ON</span></button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-list">
+            <ul>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="/tempDetail" class="card-link">
+                            <h3 class="card-title">거실</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="26"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="temp_detail.html" class="card-link">
+                            <h3 class="card-title">주방</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="24"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="temp_detail.html" class="card-link">
+                            <h3 class="card-title">안방</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="25"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="temp_detail.html" class="card-link">
+                            <h3 class="card-title">운동</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="28"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="temp_detail.html" class="card-link">
+                            <h3 class="card-title">창고</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="18"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

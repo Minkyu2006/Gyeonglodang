@@ -47,6 +47,17 @@ public class MyMqttClient implements MqttCallback {
         return false;
     }
 
+    public void close(){
+        if(client != null){
+            try {
+                client.disconnect();
+                client.close();
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void connectionLost(Throwable arg0) {
 
@@ -60,7 +71,8 @@ public class MyMqttClient implements MqttCallback {
 
     @Override
     public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
-
+        System.out.println("Topic:" + arg0);
+        System.out.println("Message: " + arg1.toString());
     }
 
 }

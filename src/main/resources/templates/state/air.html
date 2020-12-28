@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/default}">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./assets/css/common_admin.css">
+    <script src="./assets/js/common_admin.js"></script>
+
+
+
+</head>
+
+
+<body>
+<div class="wrap">
+    <div class="header">
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="../index.html" class="nav-link active"><span>HOME</span></a>
+                </li>
+                <li>
+                    <a href="../location/living.html" class="nav-link"><span>거실</span></a>
+                </li>
+                <li>
+                    <a href="../location/kitchen.html" class="nav-link"><span>주방</span></a>
+                </li>
+                <li>
+                    <a href="../location/room1.html" class="nav-link"><span>안방</span></a>
+                </li>
+                <li>
+                    <a href="../location/room2.html" class="nav-link"><span>운동</span></a>
+                </li>
+                <li>
+                    <a href="../location/room3.html" class="nav-link"><span>창고</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="contents">
+        <div class="button-list">
+            <ul>
+                <li>
+                    <button class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
+                </li>
+                <li>
+                    <button class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
+                </li>
+                <li>
+                    <button class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
+                </li>
+                <li>
+                    <button class="console-button electronic"><i class="fas fa-power-off"></i>전원<span>ON</span></button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-list">
+            <ul>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">거실</h3>
+                            <div class="air good">
+                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+                                <div class="air-icon">
+                                    <i class="far fa-smile-wink"></i>
+                                    <!-- 변경시 fa-smile 삭제 .air에 클래스 추가 -->
+                                    <!-- 좋음일 때 air에 good추가 fa-smile-wink 변경 -->
+                                    <!-- 나쁨일 때 air에 bad 추가 fa-frown 변경 -->
+                                </div>
+                                <div class="air-state">좋음</div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">주방</h3>
+                            <div class="air bad">
+                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+                                <div class="air-icon">
+                                    <i class="far fa-frown"></i>
+                                </div>
+                                <div class="air-state">나쁨</div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">안방</h3>
+                            <div class="air">
+                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+                                <div class="air-icon">
+                                    <i class="far fa-smile"></i>
+                                </div>
+                                <div class="air-state">보통</div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">운동</h3>
+                            <div class="air">
+                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+                                <div class="air-icon">
+                                    <i class="far fa-smile"></i>
+                                </div>
+                                <div class="air-state">보통</div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">창고</h3>
+                            <div class="air">
+                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+                                <div class="air-icon">
+                                    <i class="far fa-smile"></i>
+                                </div>
+                                <div class="air-state">보통</div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
