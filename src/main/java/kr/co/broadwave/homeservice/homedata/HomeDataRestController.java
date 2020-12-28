@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author 민규
@@ -95,15 +96,37 @@ public class HomeDataRestController {
 
         res.addResponse("data",data);
 
+        mqttSubscribe();
+
         return ResponseEntity.ok(res.success());
 
     }
 
     //구독하기
     public void mqttSubscribe(){
-        MyMqttClient client = new MyMqttClient();
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+            arg.forEach((key, value)->{
+                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
+            });
+        };
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
 
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
+        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
+            arg.forEach((key, value)->{
+                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+            });
+        });
+
+        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
+            arg.forEach((key, value)->{
+                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
+            });
+        });
+
         new Thread( ()->{
             try {
                 Thread.sleep(100);
@@ -119,10 +142,18 @@ public class HomeDataRestController {
     @PostMapping("lightOnOff")
     public ResponseEntity<Map<String,Object>> lightOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
         AjaxResponse res = new AjaxResponse();
-        MyMqttClient client = new MyMqttClient();
 
-        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
         log.info("조명 명령하기 : "+value);
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+            arg.forEach((key, keyval)->{
+                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, keyval) );
+            });
+        };
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
 //        log.info("BROADWAVE_USERNAME : "+BROADWAVE_USERNAME);
 //        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
 //        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
@@ -146,9 +177,18 @@ public class HomeDataRestController {
     @PostMapping("aqOnOff")
     public ResponseEntity<Map<String,Object>> aqOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
         AjaxResponse res = new AjaxResponse();
-        MyMqttClient client = new MyMqttClient();
+//        MyMqttClient client = new MyMqttClient();
         log.info("공기청정기 명령하기 : "+value);
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+            arg.forEach((key, keyval)->{
+                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, keyval) );
+            });
+        };
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
         new Thread( ()->{
             try {
                 Thread.sleep(100);
@@ -169,9 +209,16 @@ public class HomeDataRestController {
     @PostMapping("opendoor")
     public ResponseEntity<Map<String,Object>> opendoor(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
         AjaxResponse res = new AjaxResponse();
-        MyMqttClient client = new MyMqttClient();
+//        MyMqttClient client = new MyMqttClient();
         log.info("문열기 명령하기 : "+value);
 
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+            arg.forEach((key, keyval)->{
+                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, keyval) );
+            });
+        };
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
 
         new Thread( ()->{
