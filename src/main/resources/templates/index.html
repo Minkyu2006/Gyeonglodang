@@ -172,9 +172,9 @@
                     // 공기청정기 셋팅
                     console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
                     var airpurification = JSON.parse(res.data.airpurification.r_data);
-                    console.log('airpurification 상태 : '+airpurification.power);
+                    console.log('airpurification 상태 : '+airpurification.rm1aq01);
                     console.log('');
-                    var airpurificationPower = airpurification.power;
+                    var airpurificationPower = airpurification.rm1aq01;
                     if(airpurificationPower==="on"){
                         var $aqBtn = $('#aqBtn');
                         $aqBtn.addClass("active")
@@ -209,6 +209,7 @@
                         $("#nextTem"+i).text(weather.forecast[i].temperature.toFixed(0)+"º");
                         $("#nextTemLow"+i).text(weather.forecast[i].templow.toFixed(0)+"º");
                     }
+
 
 
                 }

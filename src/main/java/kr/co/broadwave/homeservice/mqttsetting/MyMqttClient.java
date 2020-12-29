@@ -13,7 +13,6 @@ public class MyMqttClient implements MqttCallback{
     private Consumer<HashMap<Object, Object>> FNC2 = null; //커넥션이 끊긴 후 응답하는 함수
     private Consumer<HashMap<Object, Object>> FNC3 = null; //전송이 완료된 이후 응답하는 함수.
 
-
     /**
      * 기본 생성자로 Predicate를 받습니다. 해당 Predicate는 메시지가 도착한 행위에 대한 콜백함수입니다.
      * 해당 함수를 구현하지 않으면 클래스를 생성 할 수 없습니다.

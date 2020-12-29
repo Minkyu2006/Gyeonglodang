@@ -1,5 +1,6 @@
 package kr.co.broadwave.homeservice.homedata;
 
+import com.oracle.tools.packager.Log;
 import kr.co.broadwave.homeservice.common.AjaxResponse;
 import kr.co.broadwave.homeservice.mqttsetting.MyMqttClient;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +46,7 @@ public class HomeDataRestController {
     }
 
     @PostMapping("dataInfo")
-    public ResponseEntity<Map<String,Object>> homedata() throws MqttException {
+    public ResponseEntity<Map<String,Object>> homedata(HttpSession session){
 
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();
@@ -95,50 +97,68 @@ public class HomeDataRestController {
             data.put("weather",sensorData);
         }
 
+//        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
+//            arg.forEach((key, value)->{
+//                System.out.println("값 : "+value);
+//            });
+//        };
+//
+//        MyMqttClient client = new MyMqttClient(pdk);
+//
+//        client.initConnectionLost( (arg)->{  // 서버와의 연결이 끊기면 동작
+//            arg.forEach((key, value)->{
+//                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+//            });
+//        });
+//
+//        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,"notice");
+//        client.subscribe("notice/alert");
+
         res.addResponse("data",data);
-
-        mqttSubscribe();
-
         return ResponseEntity.ok(res.success());
 
     }
 
-    //구독하기
-    public void mqttSubscribe(){
-
-        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
-            arg.forEach((key, value)->{
-                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
-            });
-        };
-
-        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
-
-        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,String.valueOf(UUID.randomUUID()));
-
-        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
-            arg.forEach((key, value)->{
-                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
-            });
-        });
-
-        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
-            arg.forEach((key, value)->{
-                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
-            });
-        });
-
-        new Thread( ()->{
-            try {
-                Thread.sleep(100);
-                boolean sub = client.subscribe("notice/alert");
-                log.info("경고창 구독여부 : "+sub);
-                client.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
+//    //구독하기
+//    public void mqttSubscribe(String uuid){
+//        AjaxResponse res = new AjaxResponse();
+//        HashMap<String, Object> data = new HashMap<>();
+//
+//        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+//            arg.forEach((key, value)->{
+//                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
+//            });
+//        };
+//
+//        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+//
+//        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,uuid);
+//
+//        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
+//            arg.forEach((key, value)->{
+//                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+//            });
+//        });
+//
+//        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
+//            arg.forEach((key, value)->{
+//                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
+//                data.put("value",value);
+//                res.addResponse("data",data);
+//            });
+//        });
+//
+//        new Thread( ()->{
+//            try {
+//                Thread.sleep(100);
+//                boolean sub = client.subscribe("notice/alert");
+//                log.info("경고창 구독여부 : "+sub);
+////                client.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+//    }
 
     @PostMapping("lightOnOff")
     public ResponseEntity<Map<String,Object>> lightOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
@@ -146,11 +166,7 @@ public class HomeDataRestController {
 
         log.info("조명 명령하기 : "+value);
 
-        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
-            arg.forEach((key, keyval)->{
-                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, keyval) );
-            });
-        };
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
 
         MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
@@ -181,11 +197,7 @@ public class HomeDataRestController {
 //        MyMqttClient client = new MyMqttClient();
         log.info("공기청정기 명령하기 : "+value);
 
-        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
-            arg.forEach((key, keyval)->{
-                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, keyval) );
-            });
-        };
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
 
         MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
@@ -213,11 +225,7 @@ public class HomeDataRestController {
 //        MyMqttClient client = new MyMqttClient();
         log.info("문열기 명령하기 : "+value);
 
-        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
-            arg.forEach((key, keyval)->{
-                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, keyval) );
-            });
-        };
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
 
         MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
