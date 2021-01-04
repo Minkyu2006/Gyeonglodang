@@ -13,7 +13,7 @@
 
             dataInfo();
             realTime();
-
+            AutoStart();
             // 에어컨 개별제어
             $('.console-button.rear').on('click', function(e) {
                 $('.context').addClass('active');
@@ -105,9 +105,19 @@
             // $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }.${seconds < 10 ? `0${seconds }`  : seconds }`);
         }
 
+        // 시계호출
         function realTime() {
             clock();
-            setInterval(clock, 1000);
+        }
+
+        // 10초바다 새로고침
+        function AutoStart() {
+            setInterval(reflesh, 10000);
+        }
+
+        // 화면 새로고침
+        function reflesh() {
+            location.reload();
         }
 
         // 데이터 받아오는 함수
