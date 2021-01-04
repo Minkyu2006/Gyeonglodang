@@ -110,14 +110,11 @@
             clock();
         }
 
-        // 10초바다 새로고침
+        // 1분마다 새로고침
         function AutoStart() {
-            setInterval(reflesh, 10000);
-        }
-
-        // 화면 새로고침
-        function reflesh() {
-            location.reload();
+            // reload.location(); 현재페이지 새로고침
+            setInterval(clock, 60000);
+            setInterval(dataInfo, 60000);
         }
 
         // 데이터 받아오는 함수
@@ -138,11 +135,15 @@
                     console.log('light 상태 : '+light.rm2lt01);
                     console.log('');
                     var listhData = light.rm2lt01;
-                    if(listhData==="on"){
-                        var $lightBtn = $('#lightBtn');
+                    var $lightBtn = $('#lightBtn');
+                    if(listhData==="on") {
                         $lightBtn.addClass("active")
                         $lightBtn.children('.fa-lightbulb').removeClass('fas');
                         $lightBtn.children('.fa-lightbulb').addClass('far');
+                    }else{
+                        $lightBtn.removeClass("active")
+                        $lightBtn.children('.fa-lightbulb').addClass('fas');
+                        $lightBtn.children('.fa-lightbulb').removeClass('far');
                     }
 
                     // 온도셋팅
@@ -154,7 +155,7 @@
                     var temDataRm1 = temperature.rm1tm01; // 사무실 온도
                     var temDataRm2 = temperature.rm2tm01; // 회의실 온도
 
-                    const temp = new CircleProgress('.temp .progress', {
+                    const temp = new CircleProgress('#tem', {
                         max: 48,
                         value: temDataRm1,
                         animationDuration: 400,
@@ -178,7 +179,7 @@
                     var humDataRm1 = humidity.rm1hu01; // 사무실 습도
                     var humDataRm2 = humidity.rm1hu01; // 회의실 습도
 
-                    const hum = new CircleProgress('.humidity .progress', {
+                    const hum = new CircleProgress('#hum', {
                         max: 100,
                         value: humDataRm1,
                         animationDuration: 400,
@@ -199,9 +200,11 @@
                     console.log('airpurification 상태 : '+airpurification.rm1aq01);
                     console.log('');
                     var airpurificationPower = airpurification.rm1aq01;
+                    var $aqBtn = $('#aqBtn');
                     if(airpurificationPower==="on"){
-                        var $aqBtn = $('#aqBtn');
                         $aqBtn.addClass("active")
+                    }else{
+                        $aqBtn.removeClass("active")
                     }
 
                     // 에어컨 셋팅
@@ -210,9 +213,11 @@
                     console.log('aircondition 상태 : '+aircondition.rm1ac01);
                     console.log('');
                     var airconditionPower = aircondition.rm1ac01;
+                    var $airBtn = $('#airBtn');
                     if(airconditionPower==="cool"){
-                        var $airBtn = $('#airBtn');
                         $airBtn.addClass("active")
+                    }else{
+                        $airBtn.removeClass("active")
                     }
 
                     // 날씨셋팅
@@ -348,7 +353,7 @@
                             <h3 class="card-title">온도</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-                                <div class="progress"></div>
+                                <div id="tem" class="progress"></div>
                             </div>
                         </a>
                     </div>
@@ -359,7 +364,7 @@
                             <h3 class="card-title">습도</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div class="progress"></div>
+                                <div id="hum" class="progress"></div>
                             </div>
                         </a>
                     </div>
