@@ -1,6 +1,5 @@
 package kr.co.broadwave.homeservice.homedata;
 
-import com.oracle.tools.packager.Log;
 import kr.co.broadwave.homeservice.common.AjaxResponse;
 import kr.co.broadwave.homeservice.mqttsetting.MyMqttClient;
 import lombok.extern.slf4j.Slf4j;
