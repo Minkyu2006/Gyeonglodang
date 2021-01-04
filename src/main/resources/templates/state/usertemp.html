@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/default}">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+    <script src="./assets/js/common.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            // 문열기버튼
+            $('#openDoorBtn').on('click', function() {
+                doorOpen("OPEN");
+            });
+            // 퇴실버튼
+            $('#outBtn').on('click', function() {
+                outGo();
+            });
+
+            dataInfo();
+        });
+
+        function dataInfo() {
+            $.ajax({
+                url: '/homedata/dataInfo',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    alert('데이터받기 실패');
+                },
+                success: function (res) {
+
+
+                    // 온도셋팅
+                    console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
+                    var temperature = JSON.parse(res.data.temperatureData.r_data);
+                    console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
+                    console.log('회의실 온도 temperature rm2tm01 상태 : '+temperature.rm2tm01);
+                    console.log('');
+                    var temDataRm1 = temperature.rm1tm01; // 사무실 온도
+                    var temDataRm2 = temperature.rm2tm01; // 회의실 온도
+
+                    let temp = null;
+                    for(i=1; i<3; i++) {
+                        if(i===1) {
+                            temp = new CircleProgress('#room1', {
+                                max: 48,
+                                value: temDataRm1,
+                                animationDuration: 400,
+                                textFormat: (val) => val + '°C'
+                            });
+                        }else if(i===2){
+                            temp = new CircleProgress('#room2', {
+                                max: 48,
+                                value: temDataRm2,
+                                animationDuration: 400,
+                                textFormat: (val) => val + '°C'
+                            });
+                        }
+
+                        var $temp = $('.temp');
+                        if (temp.value > 26) {
+                            $temp.addClass('red').removeClass('blue');
+                        } else if (temp.value < 23) {
+                            $temp.addClass('blue').removeClass('red');
+                        } else {
+                            $temp.removeClass('blue').removeClass('red');
+                        }
+                    }
+
+
+                }
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="contents">
+        <div class="button-list">
+            <ul>
+                <li>
+                    <a href="/" class="console-button home"><i class="fas fa-home"></i>HOME</a>
+                </li>
+                <!-- 아래 li 추가 -->
+                <li>
+                    <p class="sub-title"><i class="fas fa-thermometer-half"></i>온도</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-list">
+            <ul>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">거실</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress" id="room1"></div>
+                            </div>
+                        </a>
+                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">주방</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress" id="room2"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">없음</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="25"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">없음</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="28"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a class="card-link">
+                            <h3 class="card-title">없음</h3>
+                            <div class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div class="progress temp-progress" data-temp="18"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="console">
+        <div class="buttons">
+            <ul>
+                <li><button id="outBtn" class="point-button exit"><i class="fas fa-sign-out-alt"></i>퇴실</button></li>
+                <li><button id="openDoorBtn" class="point-button open"><i class="fas fa-door-open"></i>문열림</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

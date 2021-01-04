@@ -18,5 +18,34 @@
 		<script src="./assets/js/circle-progress/circle-progress.js"></script>
 <!--		<script src="./assets/js/common.js"></script>-->
 <!--		<script src="./assets/js/common_admin.js"></script>-->
+
+		<script>
+			// 퇴실버튼
+			function outGo() {
+				$.ajax({
+					url: '/exitGo/outGo',
+					type: 'post',
+					cache: false,
+					error: function () {
+						alert('퇴실실패');
+					},
+					success: function () {
+						alert('퇴실성공');
+					}
+				});
+			}
+			//문열기
+			function doorOpen(value) {
+				var params = {
+					value: value
+				};
+				$.ajax({
+					url: '/homedata/opendoor',
+					type: 'post',
+					data: params,
+					cache: false
+				});
+			}
+		</script>
     </head>
 </html>

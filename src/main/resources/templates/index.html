@@ -14,6 +14,38 @@
             dataInfo();
             realTime();
 
+            // 에어컨 개별제어
+            $('.console-button.rear').on('click', function(e) {
+                $('.context').addClass('active');
+                e.preventDefault();
+            });
+            $('.context-pop__close').on('click', function(e) {
+                $('.context').removeClass('active');
+                e.preventDefault();
+            })
+
+            // 에어컨 온오프버튼
+            $('#airBtn').on('click', function() {
+                $(this).toggleClass('active');
+                if ($(this).hasClass('aircon active')) {
+                    console.log("에어컨온")
+                    integratedFun("air","ON");
+                }else{
+                    console.log("에어컨오프")
+                    integratedFun("air","OFF");
+                }
+            })
+
+            $('#air1').on('click', function() {
+                $(this).toggleClass('active');
+            })
+            $('#air2').on('click', function() {
+                $(this).toggleClass('active');
+            })
+            $('#air3').on('click', function() {
+                $(this).toggleClass('active');
+            })
+
             // 조명버튼
             $('#lightBtn').on('click', function() {
                 $(this).toggleClass('active');
@@ -36,14 +68,10 @@
                     integratedFun("aq","OFF");
                 }
             })
-            // 에어컨 버튼
-            $('#airConBtn').on('click', function() {
-                $(this).toggleClass('active');
-            })
 
             // 문열기버튼
             $('#openDoorBtn').on('click', function() {
-                integratedFun("door", "OPEN");
+                doorOpen("OPEN");
             });
             // 퇴실버튼
             $('#outBtn').on('click', function() {
@@ -82,20 +110,6 @@
             setInterval(clock, 1000);
         }
 
-        // 퇴실버튼
-        function outGo() {
-            $.ajax({
-                url: '/exitGo/outGo',
-                type: 'post',
-                cache: false,
-                error: function () {
-                    alert('퇴실실패');
-                },
-                success: function () {
-                    alert('퇴실성공');
-                }
-            });
-        }
         // 데이터 받아오는 함수
         function dataInfo() {
             $.ajax({
@@ -180,6 +194,17 @@
                         $aqBtn.addClass("active")
                     }
 
+                    // 에어컨 셋팅
+                    console.log('airconditionData Json 데이터 : '+ res.data.aircondition.r_data);
+                    var aircondition = JSON.parse(res.data.aircondition.r_data);
+                    console.log('aircondition 상태 : '+aircondition.rm1ac01);
+                    console.log('');
+                    var airconditionPower = aircondition.rm1ac01;
+                    if(airconditionPower==="cool"){
+                        var $airBtn = $('#airBtn');
+                        $airBtn.addClass("active")
+                    }
+
                     // 날씨셋팅
                     console.log('weather Json 데이터 : '+ res.data.weather.r_data);
                     var weather = JSON.parse(res.data.weather.r_data);
@@ -237,9 +262,9 @@
                     data: params,
                     cache: false
                 });
-            }else if(name==="door"){
+            }else if(name==="air"){
                 $.ajax({
-                    url: '/homedata/opendoor',
+                    url: '/homedata/airOnOff',
                     type: 'post',
                     data: params,
                     cache: false
@@ -282,7 +307,20 @@
         <div class="button-list">
             <ul>
                 <li>
-                    <button id="airConBtn" class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
+                    <!-- 개별에어컨 제어 추가로 수정 -->
+                    <button id="airBtn" class="console-button front aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
+                    <button id="airBtnSub" class="console-button rear"><i class="fas fa-sort-down"></i></button>
+                    <div class="context">
+                        <div class="context-pop">
+                            <h4 class="context-title">개별 에어컨 제어</h4>
+                            <ul>
+                                <li><button id="air1" class="console-button aircon"><i class="fas fa-wind"></i>거실<span>ON</span></button></li>
+                                <li><button id="air2" class="console-button aircon"><i class="fas fa-wind"></i>주방<span>ON</span></button></li>
+                                <li><button id="air3" class="console-button aircon"><i class="fas fa-wind"></i>안방<span>ON</span></button></li>
+                            </ul>
+                            <a href="#" class="context-pop__close"><i class="far fa-window-close"></i></a>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <button id="lightBtn" class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
@@ -296,7 +334,7 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="#" class="card-link">
+                        <a href="usertemp" class="card-link">
                             <h3 class="card-title">온도</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
@@ -307,7 +345,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="#" class="card-link">
+                        <a href="userhumidity" class="card-link">
                             <h3 class="card-title">습도</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
@@ -318,7 +356,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="#" class="card-link">
+                        <a href="userair" class="card-link">
                             <h3 class="card-title">공기질</h3>
                             <div class="air">
                                 <span class="card-icon"><i class="fas fa-air-freshener"></i></span>

@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -96,6 +95,15 @@ public class HomeDataRestController {
             data.put("weather",sensorData);
         }
 
+        Optional<HomeData> aircondition = homedataRepository.findByIdData("aircondition");
+        if(!aircondition.isPresent()) {
+            log.info("aircondition 받아오기 실패");
+        }else{
+            sensorData = aircondition.get();
+            log.info("날씨 데이터 : "+sensorData);
+            data.put("aircondition",sensorData);
+        }
+
 //        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
 //            arg.forEach((key, value)->{
 //                System.out.println("값 : "+value);
@@ -170,9 +178,6 @@ public class HomeDataRestController {
         MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
         client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
 
-//        log.info("BROADWAVE_USERNAME : "+BROADWAVE_USERNAME);
-//        log.info("BROADWAVE_PASSWORD : "+BROADWAVE_PASSWORD);
-//        log.info("BROADWAVE_URL : "+BROADWAVE_URL);
         new Thread( ()->{
             try {
                 Thread.sleep(100);
@@ -234,6 +239,33 @@ public class HomeDataRestController {
                 Thread.sleep(100);
                 if(value.equals("OPEN")){
                     client.sender("command/door1/unlock","{\"Dashboard\":\"openDoorCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        return ResponseEntity.ok(res.success());
+    }
+
+    @PostMapping("airOnOff")
+    public ResponseEntity<Map<String,Object>> airOnOff(@RequestParam(value="value", defaultValue="") String value){
+        AjaxResponse res = new AjaxResponse();
+        log.info("에어컨 명령하기 : "+value);
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/allairconon","{\"Dashboard\":\"airONCommand\"}");
+                }else{
+                    client.sender("command/smart/allairconoff","{\"Dashboard\":\"airOFFCommand\"}");
                 }
                 client.close();
             } catch (Exception e) {

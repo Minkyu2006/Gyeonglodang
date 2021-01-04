@@ -1,5 +1,4 @@
 @charset "utf-8";
-
 /* noto-sans-kr-regular - korean */
 @font-face {
     font-family: 'Noto Sans KR';
@@ -26,8 +25,6 @@
     url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.ttf') format('truetype'), /* Safari, Android, iOS */
     url('../fonts/notosanskr/noto-sans-kr-v12-korean-700.svg#NotoSansKR') format('svg'); /* Legacy iOS */
 }
-
-
 /* reset */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -85,7 +82,6 @@ table {
 button {
     font-family: 'Noto Sans KR', sans-serif;
 }
-
 .wrap {
     position: relative;
     overflow: hidden;
@@ -93,7 +89,6 @@ button {
     height: 100vh;
     background-color: #fff;
 }
-
 /* header */
 /* .header {
     position: fixed;
@@ -102,7 +97,6 @@ button {
     width: 15%;
     height: 100vh;
 } */
-
 /* contents */
 /* .contents {
     position: relative;
@@ -120,7 +114,6 @@ button {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 /* button-list */
 .button-list {}
 .button-list:before {
@@ -132,16 +125,61 @@ button {
     display: table;
     clear: both;
 }
-.button-list ul li {
+.button-list > ul > li {
     float: left;
+    position: relative;
     width: 33.3333%;
     min-width: 340px;
     padding: 10px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-
-
+/* context */
+.context {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .4);
+    z-index: 10;
+}
+.context.active {
+    display: block;
+}
+.context-title {
+    color: #222;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+.context-pop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40vw;
+    padding: 40px;
+    background-color: #fff;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.context-pop li + li {
+    margin-top: 10px;
+}
+.context-pop__close {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 54px;
+    height: 58px;
+    font-size: 54px;
+    color: #c4001d;
+    text-align: center;;
+}
 /* card-list */
 .card-list {
 }
@@ -154,7 +192,6 @@ button {
     display: table;
     clear: both;
 }
-
 /* card */
 .card {
     float: left;
@@ -204,7 +241,6 @@ button {
 .blue .card-icon {
     color: #039be5
 }
-
 a.console-button {
     display: block;
     text-align: center;
@@ -221,6 +257,22 @@ a.console-button {
     font-size: 44px;
     font-weight: 700;
     outline: none;
+}
+.console-button.front {
+    float: left;
+    width: 80%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.console-button.rear {
+    float: left;
+    width: 20%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.console-button.front.aircon + .console-button.rear {
+    background-color: #006db3;
+    color: #fff;
 }
 .console-button.home {
     background-color: #00701a;
@@ -257,11 +309,9 @@ a.console-button {
     background-color: #ffaaff;
     color: #790e8b;
 }
-
 /* 온습도 */
 .temp,
 .humidity {
-
 }
 .progress {
     text-align: center;
@@ -298,7 +348,6 @@ a.console-button {
 .blue .progress .circle-progress-text {
     fill: #039be5;
 }
-
 /* 공기질 */
 .air-icon {
     width: 250px;
@@ -328,7 +377,6 @@ a.console-button {
     font-size: 36px;
     font-weight: 700;
 }
-
 /* on/off */
 .power {
     width: 250px;
@@ -347,7 +395,6 @@ a.console-button {
 .power.active .power-icon i {
     color: #039be5;
 }
-
 /* door */
 .door {
     width: 250px;
@@ -369,7 +416,6 @@ a.console-button {
 .door.active .door-icon i {
     color: #039be5;
 }
-
 /* gas */
 .gas {
     width: 250px;
@@ -388,7 +434,6 @@ a.console-button {
 .gas.active .gas-icon i {
     color: #f4511e;
 }
-
 /* fire */
 .fire {
     width: 250px;
@@ -407,7 +452,6 @@ a.console-button {
 .fire.active .fire-icon i {
     color: #d50000;
 }
-
 /* console */
 .console {
     display: flex;
@@ -572,7 +616,6 @@ a.console-button {
 .weelky-temp i {
     margin-right: 2px;
 }
-
 .buttons {
     flex: 2;
     width: 100%;
@@ -614,7 +657,6 @@ a.console-button {
 .point-button.open {
     background-color: #448aff;
 }
-
 /* subpage */
 .sub-title {
     color: #222;
@@ -625,8 +667,6 @@ a.console-button {
 .sub-title i {
     margin-right: 10px;
 }
-
-
 /* alert */
 .alert {
     display: none;
