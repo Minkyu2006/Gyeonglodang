@@ -23,19 +23,19 @@ public class AdminController {
     // 관리자 - 온도페이지
     @RequestMapping("/temp")
     public String admintemp(){
-        return "state/temp";
+        return "adminstate/temp";
     }
 
     // 관리자 - 습도페이지
     @RequestMapping("/humidity")
     public String adminhumidity(){
-        return "state/humidity";
+        return "adminstate/humidity";
     }
 
     // 관리자 - 공기질페이지
     @RequestMapping("/air")
     public String adminair(){
-        return "state/air";
+        return "adminstate/air";
     }
 
 
@@ -43,7 +43,7 @@ public class AdminController {
     // 관리자전용 - 온도 상세보기(그래프)
     @RequestMapping("/tempDetail")
     public String temp_detail(){
-        return "state/temp_detail";
+        return "adminstate/temp_detail";
     }
 
 

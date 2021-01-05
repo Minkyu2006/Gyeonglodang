@@ -49,7 +49,7 @@ public class HomeDataRestController {
     }
 
     @PostMapping("dataInfo")
-    public ResponseEntity<Map<String,Object>> homedata(HttpSession session){
+    public ResponseEntity<Map<String,Object>> homedata(){
 
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();

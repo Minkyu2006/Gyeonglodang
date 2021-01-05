@@ -10,28 +10,8 @@
 
         $(function() {
 
-            // 에어컨 개별제어
-            $('.console-button.rear').on('click', function(e) {
-                $('.context').addClass('active');
-                e.preventDefault();
-            });
-            $('.context-pop__close').on('click', function(e) {
-                $('.context').removeClass('active');
-                e.preventDefault();
-            })
-
             dataInfo();
-
-            $('#air1').on('click', function() {
-                $(this).toggleClass('active');
-            })
-            $('#air2').on('click', function() {
-                $(this).toggleClass('active');
-            })
-            $('#air3').on('click', function() {
-                $(this).toggleClass('active');
-            })
-
+            AutoStart();
 
             // 조명버튼
             $('#lightBtn').on('click', function() {
@@ -76,6 +56,11 @@
 
         });
 
+        // 1분마다 새로고침
+        function AutoStart() {
+            setInterval(dataInfo, 60000);
+        }
+
         // 데이터 받아오는 함수
         function dataInfo() {
             $.ajax({
@@ -88,11 +73,11 @@
                 success: function (res) {
 
                     // 조명셋팅
-                    console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
+                    // console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
                     var light = JSON.parse(res.data.lightData.r_data);
-                    console.log('내자신');
-                    console.log('light 상태 : '+light.rm2lt01);
-                    console.log('');
+                    // console.log('내자신');
+                    // console.log('light 상태 : '+light.rm2lt01);
+                    // console.log('');
                     var listhData = light.rm2lt01;
                     var $lightBtn = $('#lightBtn');
                     if(listhData==="on") {
@@ -106,11 +91,11 @@
                     }
 
                     // 온도셋팅
-                    console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
+                    // console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
                     var temperature = JSON.parse(res.data.temperatureData.r_data);
-                    console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
-                    console.log('회의실 온도 temperature rm2 상태 : '+temperature.rm2tm01);
-                    console.log('');
+                    // console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
+                    // console.log('회의실 온도 temperature rm2 상태 : '+temperature.rm2tm01);
+                    // console.log('');
                     var temDataRm1 = temperature.rm1tm01; // 사무실 온도
                     var temDataRm2 = temperature.rm2tm01; // 회의실 온도
 
@@ -120,6 +105,7 @@
                         animationDuration: 400,
                         textFormat: (val) => val + '°C'
                     });
+                    temp.value = temDataRm1;
                     var $temp = $('.temp');
                     if (temp.value > 26) {
                         $temp.addClass('red').removeClass('blue');
@@ -130,11 +116,11 @@
                     }
 
                     // 습도셋팅
-                    console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
+                    // console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
                     var humidity = JSON.parse(res.data.humidity.r_data);
-                    console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
-                    console.log('회의실 습도 humidity rm2 상태 : '+humidity.rm2hu01);
-                    console.log('');
+                    // console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
+                    // console.log('회의실 습도 humidity rm2 상태 : '+humidity.rm2hu01);
+                    // console.log('');
                     var humDataRm1 = humidity.rm1hu01; // 사무실 습도
                     var humDataRm2 = humidity.rm1hu01; // 회의실 습도
 
@@ -144,6 +130,7 @@
                         animationDuration: 400,
                         textFormat: (val) => val + '%'
                     });
+                    hum.value = humDataRm1;
                     var $humidity = $('.humidity');
                     if (hum.value > 70) {
                         $humidity.addClass('blue').removeClass('red');
@@ -154,10 +141,10 @@
                     }
 
                     // 공기청정기 셋팅
-                    console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
+                    // console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
                     var airpurification = JSON.parse(res.data.airpurification.r_data);
-                    console.log('airpurification 상태 : '+airpurification.rm1aq01);
-                    console.log('');
+                    // console.log('airpurification 상태 : '+airpurification.rm1aq01);
+                    // console.log('');
                     var airpurificationPower = airpurification.rm1aq01;
                     var $aqBtn = $('#aqBtn');
                     if(airpurificationPower==="on"){
@@ -167,10 +154,10 @@
                     }
 
                     // 에어컨 셋팅
-                    console.log('airconditionData Json 데이터 : '+ res.data.aircondition.r_data);
+                    // console.log('airconditionData Json 데이터 : '+ res.data.aircondition.r_data);
                     var aircondition = JSON.parse(res.data.aircondition.r_data);
-                    console.log('aircondition 상태 : '+aircondition.rm1ac01);
-                    console.log('');
+                    // console.log('aircondition 상태 : '+aircondition.rm1ac01);
+                    // console.log('');
                     var airconditionPower = aircondition.rm1ac01;
                     var $airBtn = $('#airBtn');
                     if(airconditionPower==="cool"){
@@ -250,20 +237,7 @@
         <div class="button-list">
             <ul>
                 <li>
-                    <!-- 개별에어컨 제어 추가로 수정 -->
-                    <button id="airBtn" class="console-button front aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
-                    <button class="console-button rear"><i class="fas fa-sort-down"></i></button>
-                    <div class="context">
-                        <div class="context-pop">
-                            <h4 class="context-title">개별 에어컨 제어</h4>
-                            <ul>
-                                <li><button id="air1" class="console-button aircon"><i class="fas fa-wind"></i>거실<span>ON</span></button></li>
-                                <li><button id="air2" class="console-button aircon"><i class="fas fa-wind"></i>주방<span>ON</span></button></li>
-                                <li><button id="air3" class="console-button aircon"><i class="fas fa-wind"></i>안방<span>ON</span></button></li>
-                            </ul>
-                            <a href="#" class="context-pop__close"><i class="far fa-window-close"></i></a>
-                        </div>
-                    </div>
+                    <button id="airBtn" class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
                 </li>
                 <li>
                     <button id="lightBtn" class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
