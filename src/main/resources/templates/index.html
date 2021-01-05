@@ -93,12 +93,12 @@
                 //$("#stockValue").text(ev.data);
                 // 토픽 메세지 내용에 따라 화면 처리 로직
 
-
-                if (receiveData.type=="secure") {
+                if (receiveData.type=="secure" || receiveData.type=="gas" || receiveData.type=="smoke") {
                     // 경고메세지 표기
-                    warningMessage("secure");
+                    warningMessage(receiveData.type);
 
                 }
+
 
             };
             source.onerror = function(err) {
@@ -111,7 +111,30 @@
         function warningMessage(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
             if (stype=="secure") {
-                $('#alertarea').addClass("active");
+                $('#alertmsg').text("운영시간 외 움직임이 감지되어 관리자에게 알림이 송신되었습니다. (5초후 메세지창이닫힙니다)")
+                $('#alertarea').addClass('active');
+                setTimeout(function() {
+                    $('#alertarea').removeClass('active');
+                }, 5000)
+
+            }
+            if (stype=="smoke") {
+                //alertmsg
+                $('#alertmsg').text("경로당내 연기가 감지되었습니다. 화재발생에 주의 해주세요. (5초후 메세지창이닫힙니다)")
+                $('#alertarea').addClass('active');
+                setTimeout(function() {
+                    $('#alertarea').removeClass('active');
+                }, 5000)
+
+            }
+            if (stype=="gas") {
+                //alertmsg
+                $('#alertmsg').text("경로당내 가스가 감지되었습니다. 가스밸브를 확인 해주세요. (5초후 메세지창이닫힙니다)")
+                $('#alertarea').addClass('active');
+                setTimeout(function() {
+                    $('#alertarea').removeClass('active');
+                }, 5000)
+
             }
         }
 
@@ -470,7 +493,7 @@
         <div id="alertarea" class="alert">
             <div class="alert-pop">
                 <div class="alert-pop__icon"><i class="fas fa-exclamation-triangle"></i><span>경고</span></div>
-                <div class="alert-pop__text"><span>창문이 열려 있습니다.</span></div>
+                <div class="alert-pop__text"><span id="alertmsg">창문이 열려 있습니다.</span></div>
                 <a href="#" class="alert-pop__close"><i class="far fa-window-close"></i></a>
             </div>
         </div>

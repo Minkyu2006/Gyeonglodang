@@ -5,8 +5,9 @@
       layout:decorate ="~{layout/default}">
 
 <head>
-
     <script type="text/javascript">
+
+
         $().ready(function() {
 
 
@@ -78,7 +79,7 @@
                 outGo();
             });
 
-            sseSubcribe()
+            sseSubcribe();
 
         });
         // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
@@ -92,11 +93,11 @@
 
                 //$("#stockValue").text(ev.data);
                 // 토픽 메세지 내용에 따라 화면 처리 로직
+                //$(".my_audio").trigger('load');
 
-
-                if (receiveData.type=="secure") {
+                if (receiveData.type=="secure" || receiveData.type=="gas" || receiveData.type=="smoke") {
                     // 경고메세지 표기
-                    warningMessage("secure");
+                    warningMessage(receiveData.type);
 
                 }
 
@@ -111,7 +112,31 @@
         function warningMessage(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
             if (stype=="secure") {
-                $('#alertarea').addClass("active");
+                //alertmsg
+                $('#alertmsg').text("운영시간 외 움직임이 감지되어 관리자에게 알림이 송신되었습니다. (5초후 메세지창이닫힙니다)")
+                $('#alertarea').addClass('active');
+                setTimeout(function() {
+                    $('#alertarea').removeClass('active');
+                }, 5000)
+
+            }
+            if (stype=="smoke") {
+                //alertmsg
+                $('#alertmsg').text("경로당내 연기가 감지되었습니다. 화재발생에 주의 해주세요. (5초후 메세지창이닫힙니다)")
+                $('#alertarea').addClass('active');
+                setTimeout(function() {
+                    $('#alertarea').removeClass('active');
+                }, 5000)
+
+            }
+            if (stype=="gas") {
+                //alertmsg
+                $('#alertmsg').text("경로당내 가스가 감지되었습니다. 가스밸브를 확인 해주세요. (5초후 메세지창이닫힙니다)")
+                $('#alertarea').addClass('active');
+                setTimeout(function() {
+                    $('#alertarea').removeClass('active');
+                }, 5000)
+
             }
         }
 
@@ -466,11 +491,15 @@
             </ul>
         </div>
 <!--        <audio id="recordtest" type="audio/mp3" src="/static/assets/record/doorrecordtest.mp3"></audio>-->
+
+        <audio class="my_audio" controls preload="none">
+            <source src="./assets/record/doorrecordtest.mp3" type="audio/mpeg">
+        </audio>
         <a href="#" onclick="warning();" class="ex-button" style="position: absolute;right: 20px;bottom: 20px;border: 1px solid #222;padding: 20px;font-size: 24px;color: #222;">경고메시지 예제</a>
         <div id="alertarea" class="alert">
             <div class="alert-pop">
                 <div class="alert-pop__icon"><i class="fas fa-exclamation-triangle"></i><span>경고</span></div>
-                <div class="alert-pop__text"><span>창문이 열려 있습니다.</span></div>
+                <div class="alert-pop__text"><span id="alertmsg">창문이 열려 있습니다.</span></div>
                 <a href="#" class="alert-pop__close"><i class="far fa-window-close"></i></a>
             </div>
         </div>
