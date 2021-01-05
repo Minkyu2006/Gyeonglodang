@@ -12,7 +12,6 @@ logging.file.max-history=5
 broadwave.ha.iot.username=***
 broadwave.ha.iot.password=***
 broadwave.ha.iot.url=***
-broadwave.ha.iot.clientname=noticemqttdev***
 
 # ===============================
 # = DATA SOURCE

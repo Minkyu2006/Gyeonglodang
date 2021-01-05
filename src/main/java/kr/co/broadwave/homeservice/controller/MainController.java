@@ -20,6 +20,11 @@ public class MainController {
         return "index";
     }
 
+    @RequestMapping("/indextest")
+    public String indextest() {
+        return "indextest";
+    }
+
     // 사용자 - 온도페이지
     @RequestMapping("/usertemp")
     public String usertemp() {
