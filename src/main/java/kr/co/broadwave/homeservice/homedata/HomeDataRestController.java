@@ -117,9 +117,28 @@ public class HomeDataRestController {
             log.info("doorsensor 받아오기 실패");
         }else{
             sensorData = doorsensor.get();
-            log.info("날씨 데이터 : "+sensorData);
+            log.info("문센서 데이터 : "+sensorData);
             data.put("doorsensor",sensorData);
         }
+
+        Optional<HomeData> gas = homeDataService.findByIdData("gas");
+        if(!gas.isPresent()) {
+            log.info("gas 받아오기 실패");
+        }else{
+            sensorData = gas.get();
+            log.info("가스 데이터 : "+gas);
+            data.put("gas",sensorData);
+        }
+
+        Optional<HomeData> smoke = homeDataService.findByIdData("smoke");
+        if(!smoke.isPresent()) {
+            log.info("smoke 받아오기 실패");
+        }else{
+            sensorData = smoke.get();
+            log.info("화재 데이터 : "+smoke);
+            data.put("smoke",sensorData);
+        }
+
 //        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
 //            arg.forEach((key, value)->{
 //                System.out.println("값 : "+value);

@@ -179,6 +179,32 @@
                         $doorStatus.removeClass("active")
                     }
 
+                    // 가스 셋팅
+                    console.log('gas Json 데이터 : '+ res.data.gas.r_data);
+                    var gas = JSON.parse(res.data.gas.r_data);
+                    console.log('gas 상태 : '+gas.rm1ga01);
+                    console.log('');
+                    var gasStatus = gas.rm1ga01;
+                    var $gas = $('#gas');
+                    if(gasStatus==="clear"){
+                        $gas.removeClass("active")
+                    }else{
+                        $gas.addClass("active")
+                    }
+
+                    // 화제 셋팅
+                    console.log('smoke Json 데이터 : '+ res.data.smoke.r_data);
+                    var smoke = JSON.parse(res.data.smoke.r_data);
+                    console.log('smoke 상태 : '+smoke.rm1sm01);
+                    console.log('');
+                    var smokeStatus = smoke.rm1sm01;
+                    var $smoke = $('#smoke');
+                    if(smokeStatus==="clear"){
+                        $smoke.removeClass("active")
+                    }else{
+                        $smoke.addClass("active")
+                    }
+
                 }
             });
         }
@@ -328,7 +354,7 @@
                     <div class="card-inner">
                         <a class="card-link">
                             <h3 class="card-title">가스</h3>
-                            <div class="gas">
+                            <div id="gas" class="gas">
                                 <span class="card-icon"><i class="fas fa-burn"></i></span>
                                 <div class="gas-icon">
                                     <i class="fas fa-burn"></i>
@@ -341,7 +367,7 @@
                     <div class="card-inner">
                         <a class="card-link">
                             <h3 class="card-title">화재</h3>
-                            <div class="fire">
+                            <div id="smoke" class="fire">
                                 <span class="card-icon"><i class="fas fa-fire-extinguisher"></i></span>
                                 <div class="fire-icon">
                                     <i class="fas fa-fire-extinguisher"></i>

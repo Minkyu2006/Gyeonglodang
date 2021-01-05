@@ -27,8 +27,25 @@
 					error: function () {
 						alert('퇴실실패');
 					},
-					success: function () {
-						alert('퇴실성공');
+					success: function (res) {
+						var doorsensor = JSON.parse(res.data.doorsensor.r_data);
+						var doorsensorStatus = doorsensor.rm1dr01;
+						var $doorStatus = $('#doorStatus');
+						if(doorsensorStatus==="off"){
+							$doorStatus.removeClass("active")
+							$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.")
+							$('#alertarea').addClass('active');
+							setTimeout(function() {
+								$('#alertarea').removeClass('active');
+							}, 5000)
+						}else{
+							$doorStatus.addClass("active")
+							$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.<br>(현재 사무실 문이 열려있습니다.)")
+							$('#alertarea').addClass('active');
+							setTimeout(function() {
+								$('#alertarea').removeClass('active');
+							}, 5000)
+						}
 					}
 				});
 			}

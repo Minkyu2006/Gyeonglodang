@@ -1,6 +1,8 @@
 package kr.co.broadwave.homeservice.exitGo;
 
 import kr.co.broadwave.homeservice.common.AjaxResponse;
+import kr.co.broadwave.homeservice.homedata.HomeData;
+import kr.co.broadwave.homeservice.homedata.HomeDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,15 +27,18 @@ import java.util.Optional;
 public class ExitGoRestController {
 
     private final ExitGoService exitGoService;
+    private final HomeDataService homeDataService;
 
     @Autowired
-    public ExitGoRestController(ExitGoService exitGoService) {
+    public ExitGoRestController(ExitGoService exitGoService,HomeDataService homeDataService) {
         this.exitGoService = exitGoService;
+        this.homeDataService = homeDataService;
     }
 
     @PostMapping("outGo")
     public ResponseEntity<Map<String,Object>> outGo() {
         AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
 
         log.info("퇴실버튼 클릭");
 
@@ -56,6 +62,17 @@ public class ExitGoRestController {
             exitGoService.save(exitGoupdate);
         }
 
+        HomeData sensorData;
+        Optional<HomeData> doorsensor = homeDataService.findByIdData("doorsensor");
+        if(!doorsensor.isPresent()) {
+            log.info("doorsensor 받아오기 실패");
+        }else{
+            sensorData = doorsensor.get();
+            log.info("날씨 데이터 : "+sensorData);
+            data.put("doorsensor",sensorData);
+        }
+
+        res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
     }
 
