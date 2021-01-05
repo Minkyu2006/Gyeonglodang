@@ -1,39 +1,41 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate ="~{layout/default}">
+      layout:decorate ="~{layout/admindefault}">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="./assets/css/common_admin.css">
-    <script src="./assets/js/common_admin.js"></script>
+    <script type="text/javascript">
 
+        $(function() {
 
+        })
 
+    </script>
 </head>
+
 <body>
 <div class="wrap">
     <div class="header">
         <div class="nav">
             <ul>
                 <li>
-                    <a href="../index.html" class="nav-link"><span>HOME</span></a>
+                    <a href="admin" class="nav-link"><span>HOME</span></a>
                 </li>
                 <li>
-                    <a href="living.html" class="nav-link"><span>거실</span></a>
+                    <a href="living" class="nav-link"><span>거실</span></a>
                 </li>
                 <li>
-                    <a href="kitchen.html" class="nav-link"><span>주방</span></a>
+                    <a href="kitchen" class="nav-link"><span>주방</span></a>
                 </li>
                 <li>
-                    <a href="room1.html" class="nav-link active"><span>안방</span></a>
+                    <a href="inner" class="nav-link"><span>안방</span></a>
                 </li>
                 <li>
-                    <a href="room2.html" class="nav-link"><span>운동</span></a>
+                    <a href="exercise" class="nav-link active"><span>운동</span></a>
                 </li>
                 <li>
-                    <a href="room3.html" class="nav-link"><span>창고</span></a>
+                    <a href="warehouse" class="nav-link"><span>창고</span></a>
                 </li>
             </ul>
         </div>
@@ -43,16 +45,7 @@
         <div class="button-list">
             <ul>
                 <li>
-                    <button class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button electronic"><i class="fas fa-power-off"></i>전원<span>ON</span></button>
+                    <a href="#" class="console-button back"><i class="fas fa-undo-alt"></i>뒤로가기</a>
                 </li>
             </ul>
         </div>

@@ -173,8 +173,8 @@ button {
 }
 .button-list ul li {
     float: left;
-    width: 25%;
-    min-width: 340px;
+    width: 20%;
+    min-width: 300px;
     padding: 10px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -296,6 +296,10 @@ a.console-button {
     border: 1px solid #790e8b;
     background-color: #ffaaff;
     color: #790e8b;
+}
+.console-button.battery:hover {
+    background-color: #32cb00;
+    color: #fff;
 }
 
 /* 온습도 */
@@ -450,7 +454,7 @@ a.console-button {
 
 /* chart */
 .chart {
-    width: 90%;
+    width: 100%;
     height: calc(100% - 180px);
 }
 
@@ -650,6 +654,125 @@ a.console-button {
     background-color: #448aff;
 }
 
+/* battery */
+.battery-wrap {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+.battery-head {
+    width: 100%;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.battery-head:before {
+    content: " ";
+    display: table;
+}
+.battery-head:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+.battery-head h3 {
+    float: left;
+    font-size: 36px;
+}
+.battery-head h3 i {
+    margin-right: 10px;
+}
+.battery-check {
+    float: right;
+    font-size: 36px;
+}
+.battery-check input[type=checkbox] {
+    width: 36px;
+    height: 36px;
+    vertical-align: top;
+}
+.battery-contents {
+    overflow: auto;
+    position: relative;
+    width: 100%;
+    height: calc(100% - 62px);
+}
+.battery-contents:before {
+    content: " ";
+    display: table;
+}
+.battery-contents:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+.battery-section {
+    float: left;
+    width: 33.3333%;
+    height: 498px;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.battery-inner {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 2px 5px rgba(0,  0, 0, .4);
+    box-shadow: 0 2px 5px rgba(0,  0, 0, .4);
+}
+.battery-inner ul {
+    overflow: auto;
+    display: block;
+    position: relative;
+    width: 100%;
+    height: calc(100% - 44px);
+}
+.battery-inner ul li + li {
+    border-top: 4px dotted #ddd
+}
+.battery-title {
+    width: 100%;
+    padding: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.battery-item {
+    position: relative;
+    width: 100%;
+    padding: 10px 10px 10px 50px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+.battery-item:before {
+    content: " ";
+    display: table;
+}
+.battery-item:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+.battery-item i {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.battery-name {
+    float: left;
+    width: calc(100% - 50px);
+}
+.battery-percent {
+    float: left;
+    width: 50px;
+    text-align: right;
+}
 
 
 /* alert */

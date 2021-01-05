@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/admindefault}">
+
+<head>
+    <script type="text/javascript">
+
+        $(function() {
+
+        })
+
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="header">
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="admin" class="nav-link active"><span>HOME</span></a>
+                </li>
+                <li>
+                    <a href="living" class="nav-link"><span>거실</span></a>
+                </li>
+                <li>
+                    <a href="kitchen" class="nav-link"><span>주방</span></a>
+                </li>
+                <li>
+                    <a href="inner" class="nav-link"><span>안방</span></a>
+                </li>
+                <li>
+                    <a href="exercise" class="nav-link"><span>운동</span></a>
+                </li>
+                <li>
+                    <a href="warehouse" class="nav-link"><span>창고</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="contents">
+        <div class="battery-wrap">
+            <div class="battery-head">
+                <h3><i class="fas fa-battery-full"></i>배터리</h3>
+                <div class="battery-check">
+                    <input type="checkbox" id="battery-check">
+                    <label for="battery-check">30% 이하만 표시</label>
+                </div>
+            </div>
+            <div class="battery-contents">
+                <div class="battery-section">
+                    <div class="battery-inner">
+                        <h4 class="battery-title">거실</h4>
+                        <ul>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="battery-section">
+                    <div class="battery-inner">
+                        <h4 class="battery-title">주방</h4>
+                        <ul>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">가스센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="battery-section">
+                    <div class="battery-inner">
+                        <h4 class="battery-title">안방</h4>
+                        <ul>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="battery-section">
+                    <div class="battery-inner">
+                        <h4 class="battery-title">운동</h4>
+                        <ul>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="battery-section">
+                    <div class="battery-inner">
+                        <h4 class="battery-title">창고</h4>
+                        <ul>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-full"></i>
+                                    <span class="battery-name">복합센서01</span>
+                                    <span class="battery-percent">100%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-three-quarters"></i>
+                                    <span class="battery-name">복합센서02</span>
+                                    <span class="battery-percent">75%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-half"></i>
+                                    <span class="battery-name">도어센서01</span>
+                                    <span class="battery-percent">50%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-quarter"></i>
+                                    <span class="battery-name">도어센서02</span>
+                                    <span class="battery-percent">25%</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="battery-item">
+                                    <i class="fas fa-battery-empty"></i>
+                                    <span class="battery-name">연기센서01</span>
+                                    <span class="battery-percent">0%</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

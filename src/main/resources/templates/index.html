@@ -140,7 +140,7 @@
         function AutoStart() {
             // reload.location(); 현재페이지 새로고침
             setInterval(clock, 60000);
-            setInterval(dataInfo, 6000);
+            setInterval(dataInfo, 60000);
         }
 
         // 데이터 받아오는 함수
@@ -177,24 +177,11 @@
                     var temperature = JSON.parse(res.data.temperatureData.r_data);
                     console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
                     console.log('회의실 온도 temperature rm2 상태 : '+temperature.rm2tm01);
-                    console.log('');
                     var temDataRm1 = temperature.rm1tm01; // 사무실 온도
                     var temDataRm2 = temperature.rm2tm01; // 회의실 온도
 
-                    const temp = new CircleProgress('#tem', {
-                        max: 48,
-                        value: temDataRm1,
-                        animationDuration: 400,
-                        textFormat: (val) => val + '°C'
-                    });
-                    var $temp = $('.temp');
-                    if (temp.value > 26) {
-                        $temp.addClass('red').removeClass('blue');
-                    } else if (temp.value < 23) {
-                        $temp.addClass('blue').removeClass('red');
-                    } else {
-                        $temp.removeClass('blue').removeClass('red');
-                    }
+                    tempRefresh(temDataRm1);
+                    console.log('');
 
                     // 습도셋팅
                     console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
@@ -205,12 +192,13 @@
                     var humDataRm1 = humidity.rm1hu01; // 사무실 습도
                     var humDataRm2 = humidity.rm1hu01; // 회의실 습도
 
-                    const hum = new CircleProgress('#hum', {
+                    const hum = new CircleProgress('#humChart', {
                         max: 100,
                         value: humDataRm1,
                         animationDuration: 400,
                         textFormat: (val) => val + '%'
                     });
+                    hum.value = humDataRm1;
                     var $humidity = $('.humidity');
                     if (hum.value > 70) {
                         $humidity.addClass('blue').removeClass('red');
@@ -280,6 +268,28 @@
 
                 }
             });
+        }
+
+        function tempRefresh(value) {
+            // console.log('받은 온도 : '+value);
+
+            // 값은 받아오나, 텍스트를 리프레쉬할수없음.
+            const cp = new CircleProgress('#temChart', {
+                max: 48,
+                value: value,
+                animationDuration: 400,
+                textFormat: (value) => value + '°C'
+            });
+            cp.value = value;
+
+            var $temp = $('#tempMaster');
+            if (value > 26) {
+                $temp.addClass('red').removeClass('blue');
+            } else if (value < 23) {
+                $temp.addClass('blue').removeClass('red');
+            } else {
+                $temp.removeClass('blue').removeClass('red');
+            }
         }
 
         // 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
@@ -372,9 +382,9 @@
                     <div class="card-inner">
                         <a href="usertemp" class="card-link">
                             <h3 class="card-title">온도</h3>
-                            <div class="temp">
+                            <div id="tempMaster" class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-                                <div id="tem" class="progress"></div>
+                                <div id="temChart" class="progress temp-progress"></div>
                             </div>
                         </a>
                     </div>
@@ -385,7 +395,7 @@
                             <h3 class="card-title">습도</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div id="hum" class="progress"></div>
+                                <div id="humChart" class="progress humidity-progress"></div>
                             </div>
                         </a>
                     </div>

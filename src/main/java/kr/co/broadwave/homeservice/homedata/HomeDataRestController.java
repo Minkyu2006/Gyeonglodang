@@ -288,7 +288,7 @@ public class HomeDataRestController {
         sseMvcExecutor.execute(() -> {
             try {
 
-                String clientid ="LoaclDashboartClient" + UUID.randomUUID().toString();
+                String clientid ="LoaclDashboartClient";
 
                 AtomicInteger atomicInt = new AtomicInteger(0);
                 final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
@@ -318,8 +318,8 @@ public class HomeDataRestController {
                     });
                 });
 
-                boolean sub = client.subscribe("notice/alert");
-
+                client.subscribe("notice/alert");
+//                client.close();
             } catch (Exception ex) {
                 emitter.completeWithError(ex);
             }

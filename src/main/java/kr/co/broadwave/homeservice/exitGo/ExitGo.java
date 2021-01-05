@@ -8,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * @author 민규
+ * Date : 2020-12-24
+ * Time :
+ * Remark : 퇴실엔티티
+ */
 @Entity
 @Getter
 @Setter

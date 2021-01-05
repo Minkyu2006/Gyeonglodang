@@ -64,3 +64,6 @@ spring.datasource.hikari.data-source-properties.maintainTimeStats=false
 
 #Async timeout sse(ServerSend Event)
 spring.mvc.async.request-timeout: 3600000
+
+#Async timeout sse(ServerSend Event)
+spring.mvc.async.request-timeout: 3600000
