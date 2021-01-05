@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/default}">
+
+<head>
+
+    <script type="text/javascript">
+        $().ready(function() {
+
+
+            dataInfo();
+            realTime();
+            AutoStart();
+
+            // 에어컨 개별제어
+            $('.console-button.rear').on('click', function(e) {
+                $('.context').addClass('active');
+                e.preventDefault();
+            });
+            $('.context-pop__close').on('click', function(e) {
+                $('.context').removeClass('active');
+                e.preventDefault();
+            })
+
+            // 에어컨 온오프버튼
+            $('#airBtn').on('click', function() {
+                $(this).toggleClass('active');
+                if ($(this).hasClass('aircon active')) {
+                    console.log("에어컨온")
+                    integratedFun("air","ON");
+                }else{
+                    console.log("에어컨오프")
+                    integratedFun("air","OFF");
+                }
+            })
+
+            $('#air1').on('click', function() {
+                $(this).toggleClass('active');
+            })
+            $('#air2').on('click', function() {
+                $(this).toggleClass('active');
+            })
+            $('#air3').on('click', function() {
+                $(this).toggleClass('active');
+            })
+
+            // 조명버튼
+            $('#lightBtn').on('click', function() {
+                $(this).toggleClass('active');
+                if ($(this).hasClass('light active')) {
+                    $(this).children('.fa-lightbulb').removeClass('fas');
+                    $(this).children('.fa-lightbulb').addClass('far');
+                    integratedFun("light","ON");
+                }else{
+                    $(this).children('.fa-lightbulb').removeClass('far');
+                    $(this).children('.fa-lightbulb').addClass('fas');
+                    integratedFun("light","OFF");
+                }
+            })
+            // 공기청정기 버튼
+            $('#aqBtn').on('click', function() {
+                $(this).toggleClass('active');
+                if ($(this).hasClass('airfresher active')) {
+                    integratedFun("aq","ON");
+                }else{
+                    integratedFun("aq","OFF");
+                }
+            })
+
+            // 문열기버튼
+            $('#openDoorBtn').on('click', function() {
+                doorOpen("OPEN");
+            });
+            // 퇴실버튼
+            $('#outBtn').on('click', function() {
+                outGo();
+            });
+
+            sseSubcribe()
+
+        });
+        // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
+        function sseSubcribe() {
+            //alert("test");
+            source = new EventSource("/homedata/mqttsubcribe");
+            console.log("create EventSource");
+            source.onmessage = function(ev) {
+                console.log("Notice Alert Topic 수신: ", ev.data);
+                var receiveData = JSON.parse(ev.data);
+
+                //$("#stockValue").text(ev.data);
+                // 토픽 메세지 내용에 따라 화면 처리 로직
+
+
+                if (receiveData.type=="secure") {
+                    // 경고메세지 표기
+                    warningMessage("secure");
+
+                }
+
+            };
+            source.onerror = function(err) {
+                console.log("sse on err: ", err);
+                stop();
+            };
+        }
+
+        //경고메세지
+        function warningMessage(stype) {
+            //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
+            if (stype=="secure") {
+                $('#alertarea').addClass("active");
+            }
+        }
+
+        function warningAudioPlay(stype) {
+            //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
+            // promice 오류
+            if (stype=="secure") {
+                // var audioElement = document.createElement('audio');
+                // audioElement.setAttribute('src', './assets/record/doorrecordtest.mp3');
+                // audioElement.play();
+
+
+            }
+
+        }
+
+
+
+        var week = ['일', '월', '화', '수', '목', '금', '토'];
+        function clock() {
+
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var clockDate = date.getDate();
+            var day = date.getDay();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            // var seconds = date.getSeconds();
+
+            var ampm;
+            if(hours<=12){
+                ampm="오후"
+            }else{
+                ampm="오전"
+            }
+
+            // 초까지 받아온 후
+            $("#clockDate").text(`${year}.${month+1}.${clockDate}(${week[day]})`);
+            $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }`);
+            // $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }.${seconds < 10 ? `0${seconds }`  : seconds }`);
+        }
+
+        // 시계호출
+        function realTime() {
+            clock();
+        }
+
+        // 1분마다 새로고침
+        function AutoStart() {
+            // reload.location(); 현재페이지 새로고침
+            setInterval(clock, 60000);
+            setInterval(dataInfo, 60000);
+        }
+
+        // 데이터 받아오는 함수
+        function dataInfo() {
+            $.ajax({
+                url: '/homedata/dataInfo',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    alert('데이터받기 실패');
+                },
+                success: function (res) {
+
+                    // 조명셋팅
+                    console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
+                    var light = JSON.parse(res.data.lightData.r_data);
+                    console.log('내자신');
+                    console.log('light 상태 : '+light.rm2lt01);
+                    console.log('');
+                    var listhData = light.rm2lt01;
+                    var $lightBtn = $('#lightBtn');
+                    if(listhData==="on") {
+                        $lightBtn.addClass("active")
+                        $lightBtn.children('.fa-lightbulb').removeClass('fas');
+                        $lightBtn.children('.fa-lightbulb').addClass('far');
+                    }else{
+                        $lightBtn.removeClass("active")
+                        $lightBtn.children('.fa-lightbulb').addClass('fas');
+                        $lightBtn.children('.fa-lightbulb').removeClass('far');
+                    }
+
+                    // 온도셋팅
+                    console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
+                    var temperature = JSON.parse(res.data.temperatureData.r_data);
+                    console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
+                    console.log('회의실 온도 temperature rm2 상태 : '+temperature.rm2tm01);
+                    var temDataRm1 = temperature.rm1tm01; // 사무실 온도
+                    var temDataRm2 = temperature.rm2tm01; // 회의실 온도
+
+                    tempRefresh(temDataRm1);
+                    console.log('');
+
+                    // 습도셋팅
+                    console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
+                    var humidity = JSON.parse(res.data.humidity.r_data);
+                    console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
+                    console.log('회의실 습도 humidity rm2 상태 : '+humidity.rm2hu01);
+                    console.log('');
+                    var humDataRm1 = humidity.rm1hu01; // 사무실 습도
+                    var humDataRm2 = humidity.rm1hu01; // 회의실 습도
+
+                    const hum = new CircleProgress('#humChart', {
+                        max: 100,
+                        value: humDataRm1,
+                        animationDuration: 400,
+                        textFormat: (val) => val + '%'
+                    });
+                    hum.value = humDataRm1;
+                    var $humidity = $('.humidity');
+                    if (hum.value > 70) {
+                        $humidity.addClass('blue').removeClass('red');
+                    } else if (hum.value < 40) {
+                        $humidity.addClass('red').removeClass('blue');
+                    } else {
+                        $humidity.removeClass('blue').removeClass('red');
+                    }
+
+                    // 공기청정기 셋팅
+                    console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
+                    var airpurification = JSON.parse(res.data.airpurification.r_data);
+                    console.log('airpurification 상태 : '+airpurification.rm1aq01);
+                    console.log('');
+                    var airpurificationPower = airpurification.rm1aq01;
+                    var $aqBtn = $('#aqBtn');
+                    if(airpurificationPower==="on"){
+                        $aqBtn.addClass("active")
+                    }else{
+                        $aqBtn.removeClass("active")
+                    }
+
+                    // 에어컨 셋팅
+                    console.log('airconditionData Json 데이터 : '+ res.data.aircondition.r_data);
+                    var aircondition = JSON.parse(res.data.aircondition.r_data);
+                    console.log('aircondition 상태 : '+aircondition.rm1ac01);
+                    console.log('');
+                    var airconditionPower = aircondition.rm1ac01;
+                    var $airBtn = $('#airBtn');
+                    if(airconditionPower==="cool"){
+                        $airBtn.addClass("active")
+                    }else{
+                        $airBtn.removeClass("active")
+                    }
+
+                    // 날씨셋팅
+                    console.log('weather Json 데이터 : '+ res.data.weather.r_data);
+                    var weather = JSON.parse(res.data.weather.r_data);
+                    console.log('오늘 날씨 상태 : '+weather.condition);
+                    console.log('오늘 날씨 온도 : '+weather.temperature);
+                    console.log('오늘 날씨 습도 : '+weather.humidity);
+                    console.log('오늘 날씨 풍속 : '+weather.wind_speed);
+                    console.log('다음날 날씨 리스트 : '+weather.forecast)
+                    console.log('');
+                    if(weather.condition==="sunny"){
+                        $("#nowWeather").text("맑음");
+                    }else{
+                        $("#nowWeather").text("흐림");
+                    }
+                    $("#nowTem").text(Number(weather.temperature).toFixed(1)+"º");
+                    $("#nowHum").text(Number(weather.humidity).toFixed(0)+"%");
+                    $("#nowWindSpeed").text(Number(weather.wind_speed).toFixed(1)+"km/h");
+
+                    var today = new Date();
+                    var d=1;
+                    for(i=0; i<4; i++){
+                        today.setDate(today.getDate()+d);
+                        var day = today.getDay();
+
+                        $("#nextDay"+i).text(`${week[day]}`+"요일");
+                        // $("#nextWeatherIcon"+i).text(""); // 아이콘처리
+                        $("#nextTem"+i).text(weather.forecast[i].temperature.toFixed(0)+"º");
+                        $("#nextTemLow"+i).text(weather.forecast[i].templow.toFixed(0)+"º");
+                    }
+
+
+
+                }
+            });
+        }
+
+        function tempRefresh(value) {
+            // console.log('받은 온도 : '+value);
+
+            // 값은 받아오나, 텍스트를 리프레쉬할수없음.
+            const cp = new CircleProgress('#temChart', {
+                max: 48,
+                value: value,
+                animationDuration: 400,
+                textFormat: (value) => value + '°C'
+            });
+            cp.value = value;
+
+            var $temp = $('#tempMaster');
+            if (value > 26) {
+                $temp.addClass('red').removeClass('blue');
+            } else if (value < 23) {
+                $temp.addClass('blue').removeClass('red');
+            } else {
+                $temp.removeClass('blue').removeClass('red');
+            }
+        }
+
+        // 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
+        function integratedFun(name,value) {
+            // console.log("name : "+name);
+            // console.log("value : "+value);
+            var params = {
+                value: value
+            };
+            if(name==="light"){
+                $.ajax({
+                    url: '/homedata/lightOnOff',
+                    type: 'post',
+                    data: params,
+                    cache: false
+                });
+            }else if(name==="aq"){
+                $.ajax({
+                    url: '/homedata/aqOnOff',
+                    type: 'post',
+                    data: params,
+                    cache: false
+                });
+            }else if(name==="air"){
+                $.ajax({
+                    url: '/homedata/airOnOff',
+                    type: 'post',
+                    data: params,
+                    cache: false
+                });
+            }else{
+                alert("알 수 없는 명령");
+                console.log("알 수 없는 명령")
+            }
+        }
+
+
+
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <div class="contents">
+        <div class="button-list">
+            <ul>
+                <li>
+                    <!-- 개별에어컨 제어 추가로 수정 -->
+                    <button id="airBtn" class="console-button front aircon"><i class="fas fa-wind"></i>에어컨(T)<span>ON</span></button>
+                    <button id="airBtnSub" class="console-button rear"><i class="fas fa-sort-down"></i></button>
+                    <div class="context">
+                        <div class="context-pop">
+                            <h4 class="context-title">개별 에어컨 제어</h4>
+                            <ul>
+                                <li><button id="air1" class="console-button aircon"><i class="fas fa-wind"></i>거실<span>ON</span></button></li>
+                                <li><button id="air2" class="console-button aircon"><i class="fas fa-wind"></i>주방<span>ON</span></button></li>
+                                <li><button id="air3" class="console-button aircon"><i class="fas fa-wind"></i>안방<span>ON</span></button></li>
+                            </ul>
+                            <a href="#" class="context-pop__close"><i class="far fa-window-close"></i></a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <button id="lightBtn" class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
+                </li>
+                <li>
+                    <button id="aqBtn" class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
+                </li>
+            </ul>
+        </div>
+        <div class="card-list">
+            <ul>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="usertemp" class="card-link">
+                            <h3 class="card-title">온도</h3>
+                            <div id="tempMaster" class="temp">
+                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+                                <div id="temChart" class="progress temp-progress"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="userhumidity" class="card-link">
+                            <h3 class="card-title">습도</h3>
+                            <div class="humidity">
+                                <span class="card-icon"><i class="fas fa-tint"></i></span>
+                                <div id="humChart" class="progress humidity-progress"></div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="userair" class="card-link">
+                            <h3 class="card-title">공기질</h3>
+                            <div class="air">
+                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+                                <div class="air-icon">
+                                    <i class="far fa-smile"></i>
+                                    <!-- 변경시 fa-smile 삭제 .air에 클래스 추가 -->
+                                    <!-- 좋음일 때 air에 good추가 fa-smile-wink 변경 -->
+                                    <!-- 나쁨일 때 air에 bad 추가 fa-frown 변경 -->
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="#" class="card-link">
+                            <h3 class="card-title">창문</h3>
+                            <div class="door active">
+                                <span class="card-icon"><i class="fas fa-lock"></i></span>
+                                <div class="door-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <span>아이콘 이미지 교체 필요</span>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="#" class="card-link">
+                            <h3 class="card-title">가스</h3>
+                            <div class="gas active">
+                                <span class="card-icon"><i class="fas fa-burn"></i></span>
+                                <div class="gas-icon">
+                                    <i class="fas fa-burn"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="card-inner">
+                        <a href="#" class="card-link">
+                            <h3 class="card-title">화재</h3>
+                            <div class="fire active">
+                                <span class="card-icon"><i class="fas fa-fire-extinguisher"></i></span>
+                                <div class="fire-icon">
+                                    <i class="fas fa-fire-extinguisher"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+<!--        <audio id="recordtest" type="audio/mp3" src="/static/assets/record/doorrecordtest.mp3"></audio>-->
+        <a href="#" onclick="warning();" class="ex-button" style="position: absolute;right: 20px;bottom: 20px;border: 1px solid #222;padding: 20px;font-size: 24px;color: #222;">경고메시지 예제</a>
+        <div id="alertarea" class="alert">
+            <div class="alert-pop">
+                <div class="alert-pop__icon"><i class="fas fa-exclamation-triangle"></i><span>경고</span></div>
+                <div class="alert-pop__text"><span>창문이 열려 있습니다.</span></div>
+                <a href="#" class="alert-pop__close"><i class="far fa-window-close"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="console">
+        <div class="infobox">
+            <div class="infobox__inner">
+                <div class="info">
+                    <div class="location">대전시 유성구</div>
+                    <div class="date"><span id="clockDate"></span></div>
+                    <div class="time"><span id="clockTime"></span></div>
+                </div>
+                <div class="weather">
+                    <div class="temperature">
+                        <div id="nowTem" class="temperature__current">38º</div>
+                        <div class="weather__etc">
+                            <div class="weather__humidity"><i class="fas fa-tint"></i><span id="nowHum">40%</span></div>
+                            <div class="weather__wind"><i class="fas fa-wind"></i><span id="nowWindSpeed">20.20km/h</span></div>
+                        </div>
+                    </div>
+                    <div class="weather__icon">
+                        <i id="newWeatherIcon" class="fas fa-sun"></i>
+                        <span id="nowWeather">맑음</span>
+                    </div>
+                    <div class="weekly">
+                        <ul>
+                            <li>
+                                <div class="weekly-weather">
+                                    <div id="nextDay0" class="weekly-day">금요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon0" class="fas fa-sun"></i></div>
+                                    <div class="weelky-temp">
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem0"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow0"></span></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="weekly-weather">
+                                    <div id="nextDay1" class="weekly-day">토요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon1" class="fas fa-sun"></i></div>
+                                    <div class="weelky-temp">
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem1"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow1"></span></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="weekly-weather">
+                                    <div id="nextDay2" class="weekly-day">일요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon2" class="fas fa-sun"></i></div>
+                                    <div class="weelky-temp">
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem2"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow2"></span></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="weekly-weather">
+                                    <div id="nextDay3" class="weekly-day">월요일</div>
+                                    <div class="weekly-icon"><i id="nextWeatherIcon3" class="fas fa-sun"></i></div>
+                                    <div class="weelky-temp">
+                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem3"></span></span>
+                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow3"></span></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <ul>
+                <li><button id="outBtn" class="point-button exit"><i class="fas fa-sign-out-alt"></i>퇴실</button></li>
+                <li><button id="openDoorBtn" class="point-button open"><i class="fas fa-door-open"></i>문열림</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

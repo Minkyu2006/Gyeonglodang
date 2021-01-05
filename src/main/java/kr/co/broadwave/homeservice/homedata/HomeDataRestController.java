@@ -283,7 +283,7 @@ public class HomeDataRestController {
 
     @GetMapping(path="mqttsubcribe",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseBodyEmitter mqttSubcribe() {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(-1L);
         ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
         sseMvcExecutor.execute(() -> {
             try {
