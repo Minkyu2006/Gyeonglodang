@@ -10,7 +10,7 @@
 
     <script type="text/javascript">
         $(function() {
-
+            sseSubcribe();
             dataInfo();
             realTime();
             AutoStart();
@@ -79,6 +79,19 @@
             });
 
         });
+        function sseSubcribe() {
+            //alert("test");
+            // source = new EventSource("/api/v1/watch");
+            // console.log("create EventSource");
+            // source.onmessage = function(ev) {
+            //     console.log("on message: ", ev.data);
+            //     $("#stockValue").text(ev.data);
+            // };
+            // source.onerror = function(err) {
+            //     console.log("on err: ", err);
+            //     stop();
+            // };
+        }
 
         var week = ['일', '월', '화', '수', '목', '금', '토'];
         function clock() {
