@@ -7,19 +7,32 @@
 
 		<title>Dashboard</title>
 
-		<link rel="stylesheet" href="./assets/css/fontawesome/all.min.css">
-		<link rel="stylesheet" href="./assets/css/fontawesome/brands.min.css">
-		<link rel="stylesheet" href="./assets/css/fontawesome/regular.min.css">
-		<link rel="stylesheet" href="./assets/css/fontawesome/solid.min.css">
-		<script src="./assets/js/jquery.min.js"></script>
-		<script src="./assets/js/circle-progress/circle-progress.js"></script>
-		<link rel="stylesheet" type="text/css" href="./assets/css/common_admin.css">
-		<script src="./assets/js/common_admin.js"></script>
+		<link rel="stylesheet" href="/assets/js/charts/Chart.min.css"/>
+		<link rel="stylesheet" href="/assets/css/fontawesome/all.min.css">
+		<link rel="stylesheet" href="/assets/css/fontawesome/brands.min.css">
+		<link rel="stylesheet" href="/assets/css/fontawesome/regular.min.css">
+		<link rel="stylesheet" href="/assets/css/fontawesome/solid.min.css">
+		<link rel="stylesheet" href="/assets/css/common_admin.css">
+
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/circle-progress/circle-progress.js"></script>
+		<script src="/assets/js/common_admin.js"></script>
+		<script src="/assets/js/charts/Chart.min.js"></script>
+		<script src="/assets/js/charts/ChartBundle.min.js"></script>
 
 		<script>
 
 			function AutoStart() {
 				setInterval(dataInfo, 5000); // 5초마다 데이터불러와 실행
+			}
+
+			function temLink(room){
+				console.log("room : "+room);
+				location.href="/tempdetail/"+room;
+			}
+			function humLink(room){
+				console.log("room : "+room);
+				location.href="/humdetail/"+room;
 			}
 
 		</script>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/admindefault}">
+
+<head>
+
+    <script type="text/javascript">
+
+        $(function(){
+            curveGraph();
+        });
+
+        var humChart=null;
+        function curveGraph() {
+            $.ajax({
+                url: '/chart/humhistory',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    alert("데이터부르기 실패")
+                },
+                success: function (res) {
+
+                    var humidity;
+                    var hum = []; // 습도 히스토리
+                    var timeStamp = []; // 시간 히스토리
+                    var $room = $("#room").val();
+                    var label;
+                    if($room === "rm1hu01"){
+                        label = "거실 습도 그래프";
+                    }else{
+                        label = "주방 습도 그래프";
+                    }
+                    $.each(res.data.datarow, function (key, value) {
+                        humidity = value.sensordata[$room];
+                        timeStamp.push(parseInt(value.timestamp));
+                        hum.push(humidity);
+                    });
+                    // console.log("timeStamp : "+timeStamp);
+                    // console.log("hum : "+hum);
+
+                    var ctx = document.getElementById('humChart').getContext("2d");
+                    var chartData = {
+                        labels: timeStamp,
+                        datasets: [{
+                            label: label,
+                            yAxisID: 'temp',
+                            backgroundColor: "#0efff8",
+                            borderWidth: 3,
+                            borderColor: "#0efff8",
+                            data: hum,
+                            fill: false
+                        }]
+                    };
+
+                    humChart = new Chart(ctx, {
+                    type: 'line',
+                        data: chartData,
+                        options: {
+                            elements: {
+                                point:{
+                                    radius: 0
+                                }
+                            },
+                            legend:{
+                                posiont:'top',
+                                labels: {
+                                    fontColor: '#000000',
+                                    fontSize: 15
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            stacked : true,
+                            tooltips: { //팁(모드설정)
+                                titleFontSize: 15,
+                                bodyFontSize: 15,
+                                caretPadding: 10,
+                                borderWidth:3,
+                                borderColor : 'rgb(138,109,255)',
+                                mode: 'index',
+                                intersect: false,
+                                caretSize:0
+                            },
+                            hover: { //점 나오기
+                                mode: 'index',
+                                intersect: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        drawOnChartArea: false
+                                    },
+                                    display: true,
+                                    type: 'time',
+                                    time: {
+                                        tooltipFormat: 'YYYY' + '년' + 'MM' + '월' + 'DD' + '일 ' + 'HH:mm:ss a',
+                                    },
+                                    ticks: {
+                                        fontSize: 15
+                                    },
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        fontSize: 15
+                                    },
+                                    id: 'temp',
+                                    display: true,
+                                    position: 'left',
+                                }]
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="header">
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="/admin" class="nav-link"><span>HOME</span></a>
+                </li>
+                <li>
+                    <a href="/living" class="nav-link"><span>거실</span></a>
+                </li>
+                <li>
+                    <a href="/kitchen" class="nav-link"><span>주방</span></a>
+                </li>
+                <li>
+                    <a href="/inner" class="nav-link"><span>안방</span></a>
+                </li>
+                <li>
+                    <a href="/exercise" class="nav-link"><span>운동</span></a>
+                </li>
+                <li>
+                    <a href="/warehouse" class="nav-link"><span>창고</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <input type="hidden" id="room" th:value="${room}" />
+    <div class="contents">
+        <div class="button-list">
+            <!-- 장소별 페이지 버튼 리스트 수정 -->
+            <ul>
+                <li>
+                    <a href="javascript:history.back()" class="console-button back"><i class="fas fa-undo-alt"></i>뒤로가기</a>
+                </li>
+            </ul>
+        </div>
+        <div class="chart">
+            <canvas id='humChart'></canvas>
+        </div>
+    </div>
+</div>
+</body>
+</html>

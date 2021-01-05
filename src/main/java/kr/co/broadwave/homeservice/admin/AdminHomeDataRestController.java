@@ -41,7 +41,7 @@ public class AdminHomeDataRestController {
         this.homeDataService = homeDataService;
     }
 
-    // 관리자페이지 전용
+    // 관리자페이지 전용(모든 온도나타내기)
     @PostMapping("adminTempDataInfo")
     public ResponseEntity<Map<String,Object>> adminTempDataInfo(){
 
@@ -63,5 +63,48 @@ public class AdminHomeDataRestController {
         return ResponseEntity.ok(res.success());
     }
 
+    // 관리자페이지 전용(모든 습도나타내기)
+    @PostMapping("adminhumDataInfo")
+    public ResponseEntity<Map<String,Object>> adminhumDataInfo(){
+
+        AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
+
+        HomeData sensorData;
+
+        Optional<HomeData> humidity = homeDataService.findByIdData("humidity");
+        if(!humidity.isPresent()) {
+            log.info("humidity 받아오기 실패");
+        }else{
+            sensorData = humidity.get();
+            log.info("온도 데이터 : "+sensorData);
+            data.put("humidityData",sensorData);
+        }
+
+        res.addResponse("data",data);
+        return ResponseEntity.ok(res.success());
+    }
+
+    // 관리자페이지 전용(모든 배터리가져오기)
+    @PostMapping("adminBatteryDataInfo")
+    public ResponseEntity<Map<String,Object>> adminBatteryDataInfo(){
+
+        AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
+
+        HomeData sensorData;
+
+        Optional<HomeData> battery = homeDataService.findByIdData("battery");
+        if(!battery.isPresent()) {
+            log.info("batteryData 받아오기 실패");
+        }else{
+            sensorData = battery.get();
+            log.info("온도 데이터 : "+sensorData);
+            data.put("batteryData",sensorData);
+        }
+
+        res.addResponse("data",data);
+        return ResponseEntity.ok(res.success());
+    }
 
 }

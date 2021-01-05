@@ -109,6 +109,14 @@ public class HomeDataRestController {
             data.put("aircondition",sensorData);
         }
 
+        Optional<HomeData> doorsensor = homeDataService.findByIdData("doorsensor");
+        if(!doorsensor.isPresent()) {
+            log.info("doorsensor 받아오기 실패");
+        }else{
+            sensorData = doorsensor.get();
+            log.info("날씨 데이터 : "+sensorData);
+            data.put("doorsensor",sensorData);
+        }
 //        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
 //            arg.forEach((key, value)->{
 //                System.out.println("값 : "+value);

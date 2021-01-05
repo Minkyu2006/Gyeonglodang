@@ -2,14 +2,66 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate ="~{layout/default}">
+      layout:decorate ="~{layout/admindefault}">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="./assets/css/common_admin.css">
-    <script src="./assets/js/common_admin.js"></script>
+    <script type="text/javascript">
+
+        $(function() {
+            dataInfo();
+            AutoStart();
+        })
+
+        function dataInfo() {
+            $.ajax({
+                url: '/adminhomedata/adminhumDataInfo',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    // alert('데이터받기 실패');
+                },
+                success: function (res) {
+
+                    // 온도셋팅
+                    console.log('humidityData Json 데이터 : '+ res.data.humidityData.r_data);
+                    var humidity = JSON.parse(res.data.humidityData.r_data);
+                    console.log('사무실 습도 humidity rm1hu01 상태 : '+humidity.rm1hu01);
+                    console.log('회의실 습도 humidity rm2hu01 상태 : '+humidity.rm2hu01);
+                    console.log('');
+                    var humDataRm1 = humidity.rm1hu01; // 사무실 온도
+                    var humDataRm2 = humidity.rm2hu01; // 회의실 온도
+
+                    let hum = null;
+                    for(i=1; i<3; i++) {
+                        hum = new CircleProgress('#room'+i, {
+                            max: 100,
+                            value: humDataRm1,
+                            animationDuration: 400,
+                            textFormat: (val) => val + '%'
+                        });
+
+                        if(i===1) {
+                            hum.value = humDataRm1;
+                        }else if(i===2){
+                            hum.value = humDataRm2;
+                        }
+
+                        var $humidity = $('.humidity');
+                        if (hum.value > 70) {
+                            $humidity.addClass('blue').removeClass('red');
+                        } else if (hum.value < 40) {
+                            $humidity.addClass('red').removeClass('blue');
+                        } else {
+                            $humidity.removeClass('blue').removeClass('red');
+                        }
+                    }
 
 
+                }
+            });
+        }
 
+    </script>
 </head>
 <body>
 <div class="wrap">
@@ -17,22 +69,22 @@
         <div class="nav">
             <ul>
                 <li>
-                    <a href="../index.html" class="nav-link active"><span>HOME</span></a>
+                    <a href="/admin" class="nav-link active"><span>HOME</span></a>
                 </li>
                 <li>
-                    <a href="../location/living.html" class="nav-link"><span>거실</span></a>
+                    <a href="/living" class="nav-link"><span>거실</span></a>
                 </li>
                 <li>
-                    <a href="../location/kitchen.html" class="nav-link"><span>주방</span></a>
+                    <a href="/kitchen" class="nav-link"><span>주방</span></a>
                 </li>
                 <li>
-                    <a href="../location/inner.html" class="nav-link"><span>안방</span></a>
+                    <a href="/inner" class="nav-link"><span>안방</span></a>
                 </li>
                 <li>
-                    <a href="../location/exercise.html" class="nav-link"><span>운동</span></a>
+                    <a href="/exercise" class="nav-link"><span>운동</span></a>
                 </li>
                 <li>
-                    <a href="../location/warehouse.html" class="nav-link"><span>창고</span></a>
+                    <a href="/warehouse" class="nav-link"><span>창고</span></a>
                 </li>
             </ul>
         </div>
@@ -42,16 +94,7 @@
         <div class="button-list">
             <ul>
                 <li>
-                    <button class="console-button aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button electronic"><i class="fas fa-power-off"></i>전원<span>ON</span></button>
+                    <a href="javascript:history.back()" class="console-button back"><i class="fas fa-undo-alt"></i>뒤로가기</a>
                 </li>
             </ul>
         </div>
@@ -60,11 +103,11 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a class="card-link">
+                        <a style="cursor:pointer" onclick="humLink('rm1hu01');" class="card-link">
                             <h3 class="card-title">거실</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div class="progress humidity-progress" data-percent="80"></div>
+                                <div class="progress" id="room1"></div>
                             </div>
                         </a>
                         <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
@@ -72,11 +115,11 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a class="card-link">
+                        <a style="cursor:pointer" onclick="humLink('rm2hu01');" class="card-link">
                             <h3 class="card-title">주방</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div class="progress humidity-progress" data-percent="70"></div>
+                                <div class="progress" id="room2"></div>
                             </div>
                         </a>
                     </div>
@@ -87,7 +130,7 @@
                             <h3 class="card-title">안방</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div class="progress humidity-progress" data-percent="60"></div>
+                                <div class="progress" id="room3"></div>
                             </div>
                         </a>
                     </div>
@@ -98,7 +141,7 @@
                             <h3 class="card-title">운동</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div class="progress humidity-progress" data-percent="40"></div>
+                                <div class="progress" id="room4"></div>
                             </div>
                         </a>
                     </div>
@@ -109,7 +152,7 @@
                             <h3 class="card-title">창고</h3>
                             <div class="humidity">
                                 <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div class="progress humidity-progress" data-percent="30"></div>
+                                <div class="progress" id="room5"></div>
                             </div>
                         </a>
                     </div>

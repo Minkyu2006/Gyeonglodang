@@ -70,22 +70,22 @@
         <div class="nav">
             <ul>
                 <li>
-                    <a href="admin" class="nav-link active"><span>HOME</span></a>
+                    <a href="/admin" class="nav-link active"><span>HOME</span></a>
                 </li>
                 <li>
-                    <a href="living" class="nav-link"><span>거실</span></a>
+                    <a href="/living" class="nav-link"><span>거실</span></a>
                 </li>
                 <li>
-                    <a href="kitchen" class="nav-link"><span>주방</span></a>
+                    <a href="/kitchen" class="nav-link"><span>주방</span></a>
                 </li>
                 <li>
-                    <a href="inner" class="nav-link"><span>안방</span></a>
+                    <a href="/inner" class="nav-link"><span>안방</span></a>
                 </li>
                 <li>
-                    <a href="exercise" class="nav-link"><span>운동</span></a>
+                    <a href="/exercise" class="nav-link"><span>운동</span></a>
                 </li>
                 <li>
-                    <a href="warehouse" class="nav-link"><span>창고</span></a>
+                    <a href="/warehouse" class="nav-link"><span>창고</span></a>
                 </li>
             </ul>
         </div>
@@ -96,7 +96,7 @@
             <!-- 장소별 페이지 버튼 리스트 수정 -->
             <ul>
                 <li>
-                    <a href="#" class="console-button back"><i class="fas fa-undo-alt"></i>뒤로가기</a>
+                    <a href="javascript:history.back()" class="console-button back"><i class="fas fa-undo-alt"></i>뒤로가기</a>
                 </li>
             </ul>
         </div>
@@ -105,7 +105,7 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="tempDetail/living" class="card-link">
+                        <a style="cursor:pointer" onclick="temLink('rm1tm01');" class="card-link">
                             <h3 class="card-title">거실</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
@@ -116,7 +116,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="tempDetail/kitchen" class="card-link">
+                        <a style="cursor:pointer" onclick="temLink('rm2tm01');" class="card-link">
                             <h3 class="card-title">주방</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>

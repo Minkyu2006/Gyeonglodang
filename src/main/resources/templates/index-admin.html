@@ -166,6 +166,19 @@
                         $airBtn.removeClass("active")
                     }
 
+                    // 창문 셋팅
+                    console.log('doorsensor Json 데이터 : '+ res.data.doorsensor.r_data);
+                    var doorsensor = JSON.parse(res.data.doorsensor.r_data);
+                    console.log('doorsensor 상태 : '+doorsensor.rm1dr01);
+                    console.log('');
+                    var doorsensorStatus = doorsensor.rm1dr01;
+                    var $doorStatus = $('#doorStatus');
+                    if(doorsensorStatus==="off"){
+                        $doorStatus.addClass("active")
+                    }else{
+                        $doorStatus.removeClass("active")
+                    }
+
                 }
             });
         }
@@ -301,7 +314,7 @@
                     <div class="card-inner">
                         <a class="card-link">
                             <h3 class="card-title">창문</h3>
-                            <div class="door">
+                            <div id="doorStatus" class="door">
                                 <span class="card-icon"><i class="fas fa-lock"></i></span>
                                 <div class="door-icon">
                                     <i class="fas fa-lock"></i>
