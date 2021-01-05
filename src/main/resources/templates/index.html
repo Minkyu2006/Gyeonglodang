@@ -7,12 +7,13 @@
 <head>
 
     <script type="text/javascript">
-        $(function() {
+        $().ready(function() {
+
 
             dataInfo();
             realTime();
             AutoStart();
-            sseSubcribe();
+
             // 에어컨 개별제어
             $('.console-button.rear').on('click', function(e) {
                 $('.context').addClass('active');
@@ -77,23 +78,27 @@
                 outGo();
             });
 
-        });
+            sseSubcribe()
 
+        });
         // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
         function sseSubcribe() {
             //alert("test");
             source = new EventSource("/homedata/mqttsubcribe");
             console.log("create EventSource");
             source.onmessage = function(ev) {
-                console.log("================on message: ", ev.data);
+                console.log("Notice Alert Topic 수신: ", ev.data);
+                var receiveData = JSON.parse(ev.data);
+
                 //$("#stockValue").text(ev.data);
                 // 토픽 메세지 내용에 따라 화면 처리 로직
 
 
-                // 경고메세지 표기
-                $('#alertarea').addClass("active");
+                if (receiveData.type=="secure") {
+                    // 경고메세지 표기
+                    warningMessage("secure");
 
-                //warning();
+                }
 
             };
             source.onerror = function(err) {
@@ -101,6 +106,29 @@
                 stop();
             };
         }
+
+        //경고메세지
+        function warningMessage(stype) {
+            //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
+            if (stype=="secure") {
+                $('#alertarea').addClass("active");
+            }
+        }
+
+        function warningAudioPlay(stype) {
+            //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
+            // promice 오류
+            if (stype=="secure") {
+                // var audioElement = document.createElement('audio');
+                // audioElement.setAttribute('src', './assets/record/doorrecordtest.mp3');
+                // audioElement.play();
+
+
+            }
+
+        }
+
+
 
         var week = ['일', '월', '화', '수', '목', '금', '토'];
         function clock() {
@@ -322,24 +350,7 @@
             }
         }
 
-        //경고메세지
-        function warning() {
 
-            // audioPlay();
-
-        }
-
-        //오디오실행하는함수? -> 경로를 어떻게하는지 모르곘음.
-        var currentSound = undefined;
-        function audioPlay() {
-            if(currentSound) {
-                currentSound.pause();
-                currentSound.currentTime = 0;
-            }
-            // TODO: mp3 파일 경로는 맞게 수정해주세요!
-            currentSound = new Audio('doorrecordtest.mp3');
-            currentSound.play()
-        }
 
     </script>
 </head>

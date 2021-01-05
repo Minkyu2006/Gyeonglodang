@@ -29,8 +29,9 @@ public class MyMqttClient implements MqttCallback{
     public MyMqttClient init(String userName, String password, String serverURI, String clientId){
         option = new MqttConnectOptions();
         option.setCleanSession(true);
-        option.setKeepAliveInterval(30);
+        option.setKeepAliveInterval(180);
         option.setUserName(userName);
+        //option.setAutomaticReconnect(true);
         option.setPassword(password.toCharArray());
         try {
             client = new MqttClient(serverURI, clientId);

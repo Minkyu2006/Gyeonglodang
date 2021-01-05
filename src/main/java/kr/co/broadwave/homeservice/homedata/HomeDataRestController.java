@@ -314,9 +314,21 @@ public class HomeDataRestController {
 
                 client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
                     arg.forEach((key, value)->{
-                        System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+                        //System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+                        log.error("notice/alert 컨넥션 끊킴 ");
+                        //client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
                     });
                 });
+//                new Thread( ()->{
+//                    try {
+//                        Thread.sleep(100);
+//                        boolean sub = client.subscribe("notice/alert");
+//                        log.info("경고창 구독여부 : "+sub);
+//                        //client.close();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }).start();
 
                 client.subscribe("notice/alert");
 //                client.close();

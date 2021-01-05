@@ -104,48 +104,48 @@ public class WatchRestcontroller {
 //
 //    }
 
-//    @RequestMapping("mqtt")
-//    public String mqttsubcribe(){
-////        AjaxResponse res = new AjaxResponse();
-////        HashMap<String, Object> data = new HashMap<>();
-//        String clientid ="testuuid";
-//
-//        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+    @RequestMapping("mqtt")
+    public String mqttsubcribe(){
+//        AjaxResponse res = new AjaxResponse();
+//        HashMap<String, Object> data = new HashMap<>();
+        String clientid ="testuuid";
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+            arg.forEach((key, value)->{
+                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
+            });
+        };
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
+
+        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
+            arg.forEach((key, value)->{
+                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+            });
+        });
+
+//        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
 //            arg.forEach((key, value)->{
-//                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
-//            });
-//        };
-//
-//        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
-//
-//        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
-//
-//        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
-//            arg.forEach((key, value)->{
-//                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+//                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
+//                data.put("value",value);
+//                res.addResponse("data",data);
 //            });
 //        });
-//
-////        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
-////            arg.forEach((key, value)->{
-////                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
-////                data.put("value",value);
-////                res.addResponse("data",data);
-////            });
-////        });
-//        boolean sub = client.subscribe("notice/alert");
-//
-////        new Thread( ()->{
-////            try {
-////                Thread.sleep(100);
-////                boolean sub = client.subscribe("notice/alert");
-////                log.info("경고창 구독여부 : "+sub);
-//////                client.close();
-////            } catch (Exception e) {
-////                e.printStackTrace();
-////            }
-////        }).start();
-//
-//        return "MQTTTEST";
-//    }
+        boolean sub = client.subscribe("notice/alert");
+
+//        new Thread( ()->{
+//            try {
+//                Thread.sleep(100);
+//                boolean sub = client.subscribe("notice/alert");
+//                log.info("경고창 구독여부 : "+sub);
+////                client.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+
+        return "MQTTTEST";
+    }
 }
