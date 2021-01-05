@@ -18,30 +18,9 @@
 
 		<script>
 
-			$(function() {
-				console.log("관리자 에어컨 개별제어 제이쿼리");
-				// 에어컨 개별제어
-				$('.console-button.rear').on('click', function(e) {
-					$('.context').addClass('active');
-					e.preventDefault();
-				});
-				$('.context-pop__close').on('click', function(e) {
-					$('.context').removeClass('active');
-					e.preventDefault();
-				})
-
-				$('#air1').on('click', function() {
-					$(this).toggleClass('active');
-				})
-				$('#air2').on('click', function() {
-					$(this).toggleClass('active');
-				})
-				$('#air3').on('click', function() {
-					$(this).toggleClass('active');
-				})
-
-			});
-
+			function AutoStart() {
+				setInterval(dataInfo, 5000); // 5초마다 데이터불러와 실행
+			}
 
 		</script>
     </head>
