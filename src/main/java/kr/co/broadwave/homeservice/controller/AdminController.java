@@ -2,6 +2,8 @@ package kr.co.broadwave.homeservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -38,15 +40,6 @@ public class AdminController {
         return "adminstate/air";
     }
 
-
-
-    // 관리자전용 - 온도 상세보기(그래프)
-    @RequestMapping("/tempDetail")
-    public String temp_detail(){
-        return "adminstate/temp_detail";
-    }
-
-
     // 관리자 - 거실페이지
     @RequestMapping("/living")
     public String living(){
@@ -81,6 +74,13 @@ public class AdminController {
     @RequestMapping("/battery")
     public String battery(){
         return "location/battery";
+    }
+
+    // 관리자전용 - 온도 상세보기(그래프)
+    @RequestMapping("/tempDetail/{roomNum}")
+    public String temp_detail(@PathVariable String roomNum){
+
+        return "adminstate/temp_detail";
     }
 
 }

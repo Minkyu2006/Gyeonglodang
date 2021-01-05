@@ -41,11 +41,11 @@ public class HomeDataRestController {
     @Value("${broadwave.ha.iot.url}")
     private String BROADWAVE_URL;
 
-    private final HomeDataService homedataRepository;
+    private final HomeDataService homeDataService;
 
     @Autowired
-    public HomeDataRestController(HomeDataService homedataRepository) {
-        this.homedataRepository = homedataRepository;
+    public HomeDataRestController(HomeDataService homeDataService) {
+        this.homeDataService = homeDataService;
     }
 
     @PostMapping("dataInfo")
@@ -55,7 +55,7 @@ public class HomeDataRestController {
         HashMap<String, Object> data = new HashMap<>();
 
         HomeData sensorData;
-        Optional<HomeData> light = homedataRepository.findByIdData("light");
+        Optional<HomeData> light = homeDataService.findByIdData("light");
         if(!light.isPresent()) {
             log.info("light 받아오기 실패");
         }else{
@@ -64,7 +64,7 @@ public class HomeDataRestController {
             data.put("lightData",sensorData);
         }
 
-        Optional<HomeData> temperature = homedataRepository.findByIdData("temperature");
+        Optional<HomeData> temperature = homeDataService.findByIdData("temperature");
         if(!temperature.isPresent()) {
             log.info("temperature 받아오기 실패");
         }else{
@@ -73,7 +73,7 @@ public class HomeDataRestController {
             data.put("temperatureData",sensorData);
         }
 
-        Optional<HomeData> humidity = homedataRepository.findByIdData("humidity");
+        Optional<HomeData> humidity = homeDataService.findByIdData("humidity");
         if(!humidity.isPresent()) {
             log.info("humidity 받아오기 실패");
         }else{
@@ -82,7 +82,7 @@ public class HomeDataRestController {
             data.put("humidity",sensorData);
         }
 
-        Optional<HomeData> airpurification = homedataRepository.findByIdData("airpurification");
+        Optional<HomeData> airpurification = homeDataService.findByIdData("airpurification");
         if(!airpurification.isPresent()) {
             log.info("airpurification 받아오기 실패");
         }else{
@@ -91,7 +91,7 @@ public class HomeDataRestController {
             data.put("airpurification",sensorData);
         }
 
-        Optional<HomeData> weather = homedataRepository.findByIdData("weather");
+        Optional<HomeData> weather = homeDataService.findByIdData("weather");
         if(!weather.isPresent()) {
             log.info("weather 받아오기 실패");
         }else{
@@ -100,7 +100,7 @@ public class HomeDataRestController {
             data.put("weather",sensorData);
         }
 
-        Optional<HomeData> aircondition = homedataRepository.findByIdData("aircondition");
+        Optional<HomeData> aircondition = homeDataService.findByIdData("aircondition");
         if(!aircondition.isPresent()) {
             log.info("aircondition 받아오기 실패");
         }else{

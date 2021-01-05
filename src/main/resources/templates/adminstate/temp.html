@@ -8,8 +8,58 @@
     <script type="text/javascript">
 
         $(function() {
-
+            dataInfo();
+            AutoStart();
         })
+
+        function dataInfo() {
+            $.ajax({
+                url: '/adminhomedata/adminTempDataInfo',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    alert('데이터받기 실패');
+                },
+                success: function (res) {
+
+                    // 온도셋팅
+                    console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
+                    var temperature = JSON.parse(res.data.temperatureData.r_data);
+                    console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
+                    console.log('회의실 온도 temperature rm2tm01 상태 : '+temperature.rm2tm01);
+                    console.log('');
+                    var temDataRm1 = temperature.rm1tm01; // 사무실 온도
+                    var temDataRm2 = temperature.rm2tm01; // 회의실 온도
+
+                    let temp = null;
+                    for(i=1; i<3; i++) {
+                        temp = new CircleProgress('#room'+i, {
+                            max: 48,
+                            value: temDataRm1,
+                            animationDuration: 400,
+                            textFormat: (val) => val + '°C'
+                        });
+
+                        if(i===1) {
+                            temp.value = temDataRm1;
+                        }else if(i===2){
+                            temp.value = temDataRm2;
+                        }
+
+                        var $temp = $('.temp');
+                        if (temp.value > 26) {
+                            $temp.addClass('red').removeClass('blue');
+                        } else if (temp.value < 23) {
+                            $temp.addClass('blue').removeClass('red');
+                        } else {
+                            $temp.removeClass('blue').removeClass('red');
+                        }
+                    }
+
+
+                }
+            });
+        }
 
     </script>
 </head>
@@ -55,29 +105,29 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="temp-detail.html" class="card-link">
+                        <a href="tempDetail/living" class="card-link">
                             <h3 class="card-title">거실</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-                                <div class="progress temp-progress" data-temp="26"></div>
+                                <div class="progress" id="room1"></div>
                             </div>
                         </a>
                     </div>
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="temp-detail.html" class="card-link">
+                        <a href="tempDetail/kitchen" class="card-link">
                             <h3 class="card-title">주방</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-                                <div class="progress temp-progress" data-temp="24"></div>
+                                <div class="progress" id="room2"></div>
                             </div>
                         </a>
                     </div>
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="temp-detail.html" class="card-link">
+                        <a href="tempDetail/inner" class="card-link">
                             <h3 class="card-title">안방</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
@@ -88,7 +138,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="temp-detail.html" class="card-link">
+                        <a href="tempDetail/exercise" class="card-link">
                             <h3 class="card-title">운동</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
@@ -99,7 +149,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="temp-detail.html" class="card-link">
+                        <a href="tempDetail/warehouse" class="card-link">
                             <h3 class="card-title">창고</h3>
                             <div class="temp">
                                 <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
