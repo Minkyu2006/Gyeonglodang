@@ -6,16 +6,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -274,6 +279,53 @@ public class HomeDataRestController {
         }).start();
 
         return ResponseEntity.ok(res.success());
+    }
+
+    @GetMapping(path="mqttsubcribe",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseBodyEmitter mqttSubcribe() {
+        SseEmitter emitter = new SseEmitter();
+        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+        sseMvcExecutor.execute(() -> {
+            try {
+
+                String clientid ="LoaclDashboartClient" + UUID.randomUUID().toString();
+
+                AtomicInteger atomicInt = new AtomicInteger(0);
+                final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+                    arg.forEach((key, value)->{
+                        //System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
+                        log.info("MQTT 메세지 수신 :" + key + " / " + value );
+                        try {
+                            //최초메세지는 안보내고 두번째 메세지부터 보낸다
+                            if (key == "message" && atomicInt.get() == 1) {
+                                emitter.send(value);
+                            }
+                            if (key == "message" && atomicInt.get() == 0) {
+                                atomicInt.set(1);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                };
+                MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+
+                client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
+
+                client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
+                    arg.forEach((key, value)->{
+                        System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+                    });
+                });
+
+                boolean sub = client.subscribe("notice/alert");
+
+            } catch (Exception ex) {
+                emitter.completeWithError(ex);
+            }
+        });
+        return emitter;
+
     }
 
 //    @PostMapping("warning")

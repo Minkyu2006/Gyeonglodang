@@ -13,12 +13,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -58,107 +57,95 @@ public class WatchRestcontroller {
     }
 
 
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseBodyEmitter watch() {
-        SseEmitter emitter = new SseEmitter();
-        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
-        sseMvcExecutor.execute(() -> {
-            try {
-
-                String clientid ="testuuid";
-
-                final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
-                    arg.forEach((key, value)->{
-                        System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
-                        try {
-                            if (key == "message") {
-                                emitter.send(value);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                };
-                MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
-
-                client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
-
-                client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
-                    arg.forEach((key, value)->{
-                        System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
-                    });
-                });
-
-        //        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
-        //            arg.forEach((key, value)->{
-        //                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
-        //                data.put("value",value);
-        //                res.addResponse("data",data);
-        //            });
-        //        });
-                boolean sub = client.subscribe("notice/alert");
-
-//                for (int i = 0; true; i++) {
-//                    Watch watch = Watch.builder()
-//                            .id(String.valueOf(i))
-//                            .name("홍길동" + String.valueOf(i))
-//                            .modify_dt(LocalDateTime.now())
-//                            .build();
+//    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public ResponseBodyEmitter watch() {
+//        SseEmitter emitter = new SseEmitter();
+//        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+//        sseMvcExecutor.execute(() -> {
+//            try {
 //
-//                    //emitter.send(watch);
-//                    emitter.send(String.valueOf(i));
-//                    Thread.sleep(500);
-//                }
-            } catch (Exception ex) {
-                emitter.completeWithError(ex);
-            }
-        });
-        return emitter;
+//                String clientid ="testuuid";
+//
+//                AtomicInteger atomicInt = new AtomicInteger(0);
+//                final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
+//                    arg.forEach((key, value)->{
+//                        System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
+//                        try {
+//                            //최초메세지는 안보내고 두번째 메세지부터 보낸다
+//
+//                            if (key == "message" && atomicInt.get() == 1) {
+//                                emitter.send(value);
+//                            }
+//                            if (key == "message" && atomicInt.get() == 0) {
+//                                atomicInt.set(1);
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
+//                };
+//                MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+//
+//                client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
+//
+//                client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
+//                    arg.forEach((key, value)->{
+//                        System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
+//                    });
+//                });
+//
+//                boolean sub = client.subscribe("notice/alert");
+//
+//            } catch (Exception ex) {
+//                emitter.completeWithError(ex);
+//            }
+//        });
+//        return emitter;
+//
+//    }
 
-    }
-
-    @RequestMapping("mqtt")
-    public String mqttsubcribe(){
-//        AjaxResponse res = new AjaxResponse();
-//        HashMap<String, Object> data = new HashMap<>();
-        String clientid ="testuuid";
-
-        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
-            arg.forEach((key, value)->{
-                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
-            });
-        };
-
-        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
-
-        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
-
-        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
-            arg.forEach((key, value)->{
-                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
-            });
-        });
-
-//        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
+//    @RequestMapping("mqtt")
+//    public String mqttsubcribe(){
+////        AjaxResponse res = new AjaxResponse();
+////        HashMap<String, Object> data = new HashMap<>();
+//        String clientid ="testuuid";
+//
+//        final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
 //            arg.forEach((key, value)->{
-//                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
-//                data.put("value",value);
-//                res.addResponse("data",data);
+//                System.out.println( String.format("메시지 도착 : 키 -> %s, 값 -> %s", key, value) );
+//            });
+//        };
+//
+//        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+//
+//        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
+//
+//        client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
+//            arg.forEach((key, value)->{
+//                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
 //            });
 //        });
-        boolean sub = client.subscribe("notice/alert");
-
-//        new Thread( ()->{
-//            try {
-//                Thread.sleep(100);
-//                boolean sub = client.subscribe("notice/alert");
-//                log.info("경고창 구독여부 : "+sub);
-////                client.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-
-        return "MQTTTEST";
-    }
+//
+////        client.initDeliveryComplete((arg)-> {  //콜백행위2, 메시지를 전송한 이후 동작
+////            arg.forEach((key, value)->{
+////                System.out.println( String.format("메시지 전달 완료 키 -> %s, 값 -> %s", key, value) );
+////                data.put("value",value);
+////                res.addResponse("data",data);
+////            });
+////        });
+//        boolean sub = client.subscribe("notice/alert");
+//
+////        new Thread( ()->{
+////            try {
+////                Thread.sleep(100);
+////                boolean sub = client.subscribe("notice/alert");
+////                log.info("경고창 구독여부 : "+sub);
+//////                client.close();
+////            } catch (Exception e) {
+////                e.printStackTrace();
+////            }
+////        }).start();
+//
+//        return "MQTTTEST";
+//    }
 }

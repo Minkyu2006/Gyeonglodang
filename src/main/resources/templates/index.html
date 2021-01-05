@@ -10,7 +10,7 @@
 
     <script type="text/javascript">
         $(function() {
-            sseSubcribe();
+
             dataInfo();
             realTime();
             AutoStart();
@@ -79,19 +79,32 @@
             });
 
         });
+        // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
         function sseSubcribe() {
             //alert("test");
-            // source = new EventSource("/api/v1/watch");
-            // console.log("create EventSource");
-            // source.onmessage = function(ev) {
-            //     console.log("on message: ", ev.data);
-            //     $("#stockValue").text(ev.data);
-            // };
-            // source.onerror = function(err) {
-            //     console.log("on err: ", err);
-            //     stop();
-            // };
+            source = new EventSource("/homedata/mqttsubcribe");
+            console.log("create EventSource");
+            source.onmessage = function(ev) {
+                console.log("================on message: ", ev.data);
+                //$("#stockValue").text(ev.data);
+                // 토픽 메세지 내용에 따라 화면 처리 로직
+
+
+                // 경고메세지 표기
+                $('#alertarea').addClass("active");
+
+                //warning();
+
+            };
+            source.onerror = function(err) {
+                console.log("sse on err: ", err);
+                stop();
+            };
         }
+
+        $().ready(function(){
+            sseSubcribe();
+        });
 
         var week = ['일', '월', '화', '수', '목', '금', '토'];
         function clock() {
@@ -127,7 +140,7 @@
         function AutoStart() {
             // reload.location(); 현재페이지 새로고침
             setInterval(clock, 60000);
-            setInterval(dataInfo, 60000);
+            setInterval(dataInfo, 6000);
         }
 
         // 데이터 받아오는 함수
@@ -305,11 +318,6 @@
 
         //경고메세지
         function warning() {
-            $.ajax({
-                url: '/homedata/warning',
-                type: 'post',
-                cache: false
-            });
 
             // audioPlay();
 
@@ -442,7 +450,7 @@
         </div>
 <!--        <audio id="recordtest" type="audio/mp3" src="/static/assets/record/doorrecordtest.mp3"></audio>-->
         <a href="#" onclick="warning();" class="ex-button" style="position: absolute;right: 20px;bottom: 20px;border: 1px solid #222;padding: 20px;font-size: 24px;color: #222;">경고메시지 예제</a>
-        <div class="alert">
+        <div id="alertarea" class="alert">
             <div class="alert-pop">
                 <div class="alert-pop__icon"><i class="fas fa-exclamation-triangle"></i><span>경고</span></div>
                 <div class="alert-pop__text"><span>창문이 열려 있습니다.</span></div>
