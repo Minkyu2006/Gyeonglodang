@@ -41,6 +41,9 @@ public class HomeDataRestController {
     @Value("${broadwave.ha.iot.url}")
     private String BROADWAVE_URL;
 
+    @Value("${broadwave.ha.iot.clientname}")
+    private String BROADWAVE_CLIENTID;
+
     private final HomeDataService homeDataService;
 
     @Autowired
@@ -288,7 +291,7 @@ public class HomeDataRestController {
         sseMvcExecutor.execute(() -> {
             try {
 
-                String clientid ="LoaclDashboartClient";
+                //String clientid ="LoaclDashboartClient";
 
                 AtomicInteger atomicInt = new AtomicInteger(0);
                 final Consumer<HashMap<Object, Object>> pdk = (arg)->{  //메시지를 받는 콜백 행위
@@ -310,7 +313,7 @@ public class HomeDataRestController {
                 };
                 MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
 
-                client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,clientid);
+                client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,BROADWAVE_CLIENTID);
 
                 client.initConnectionLost( (arg)->{  //콜백행위1, 서버와의 연결이 끊기면 동작
                     arg.forEach((key, value)->{
