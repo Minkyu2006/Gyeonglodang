@@ -87,33 +87,43 @@ button {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    padding: 40px;
     background-color: #fff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
-/* header */
-/* .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 15%;
-    height: 100vh;
-} */
-/* contents */
-/* .contents {
-    position: relative;
-    width: 70%;
-    height: 100vh;
-    margin: 0 auto;
-} */
+
+.dashboard {
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .4);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .4);
+	-webkit-box-sizing: border-box;;
+	-moz-box-sizing: border-box;;
+	box-sizing: border-box;;
+}
+
+
 .contents {
-    /* float: left; */
     overflow: auto;
     position: relative;
     width: 75%;
     height: 100vh;
     padding: 10px;
+    margin-left: 25%;
+    background-color: #f5f5f5;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 /* button-list */
 .button-list {}
 .button-list:before {
@@ -134,6 +144,7 @@ button {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 /* context */
 .context {
     display: none;
@@ -180,6 +191,7 @@ button {
     color: #c4001d;
     text-align: center;;
 }
+
 /* card-list */
 .card-list {
 }
@@ -192,6 +204,7 @@ button {
     display: table;
     clear: both;
 }
+
 /* card */
 .card {
     float: left;
@@ -205,9 +218,10 @@ button {
     position: relative;
     width: 100%;
     height: 360px;
-    border: 1px solid #ddd;
-    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
 }
 .card-link {
     position: relative;
@@ -271,11 +285,11 @@ a.console-button {
     border-bottom-left-radius: 0;
 }
 .console-button.front.aircon + .console-button.rear {
-    background-color: #006db3;
+    background-color: #5fa2f0;
     color: #fff;
 }
 .console-button.home {
-    background-color: #00701a;
+    background-color: #0fc727;
     color: #fff;
 }
 .console-button i {
@@ -293,15 +307,15 @@ a.console-button {
     display: block;
 }
 .console-button.light.active {
-    background-color: #ffeb3b;
-    color: #222;
+    background-color: #ffaa00;
+    color: #fff;
 }
 .console-button.aircon.active {
-    background-color: #006db3;
+    background-color: #5fa2f0;
     color: #fff;
 }
 .console-button.airfresher.active {
-    background-color: #00701a;
+    background-color: #0fc727;
     color: #fff;
 }
 .console-button.door {
@@ -309,6 +323,7 @@ a.console-button {
     background-color: #ffaaff;
     color: #790e8b;
 }
+
 /* 온습도 */
 .temp,
 .humidity {
@@ -348,6 +363,7 @@ a.console-button {
 .blue .progress .circle-progress-text {
     fill: #039be5;
 }
+
 /* 공기질 */
 .air-icon {
     width: 250px;
@@ -377,6 +393,7 @@ a.console-button {
     font-size: 36px;
     font-weight: 700;
 }
+
 /* on/off */
 .power {
     width: 250px;
@@ -395,6 +412,7 @@ a.console-button {
 .power.active .power-icon i {
     color: #039be5;
 }
+
 /* door */
 .door {
     width: 250px;
@@ -416,6 +434,7 @@ a.console-button {
 .door.active .door-icon i {
     color: #039be5;
 }
+
 /* gas */
 .gas {
     width: 250px;
@@ -434,6 +453,7 @@ a.console-button {
 .gas.active .gas-icon i {
     color: #f4511e;
 }
+
 /* fire */
 .fire {
     width: 250px;
@@ -452,22 +472,22 @@ a.console-button {
 .fire.active .fire-icon i {
     color: #d50000;
 }
+
 /* console */
 .console {
     display: flex;
     flex-direction: column;
-    float: right;
-    position: fixed;
+    position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     width: 25%;
-    height: 100vh;
+    height: 100%;
     padding: 0 20px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 .infobox {
-    flex: 3;
+    flex: 4;
     position: relative;
     width: 100%;
     padding: 20px 0;
@@ -476,14 +496,11 @@ a.console-button {
     position: relative;
     width: 100%;
     height: 100%;
-    border: 1px solid #ddd;
-    padding: 20px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 .info {
-    font-size: 34px;
-    line-height: 1.4;
+    line-height: 1.2;
 }
 .info:before {
     content: " ";
@@ -495,17 +512,14 @@ a.console-button {
     clear: both;
 }
 .location {
-    float: left;
     width: 100%;
     text-align: center;
 }
-.date,
-.time {
-    float: left;
-    width: 50%;
+.date {
+	font-size: 40px;
 }
 .time {
-    text-align: right;
+    font-size: 78px;
 }
 .weather {
     position: absolute;
@@ -591,6 +605,8 @@ a.console-button {
 }
 .weekly ul li {
     flex: 1;
+    display: flex;
+    align-items: center;
 }
 .weekly ul li + li {
     margin-top: 5px;
@@ -598,9 +614,9 @@ a.console-button {
     border-top: 1px dotted #555;
 }
 .weekly-weather {
+	flex: 1;
     display: flex;
-    font-size: 36px;
-    line-height: 36px;
+    font-size: 32px;
 }
 .weekly-day {
     flex: 1;
@@ -642,20 +658,34 @@ a.console-button {
     position: relative;
     width: 100%;
     height: 100%;
-    border: 1px solid #ddd;
+    border: 0 none;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     color: #fff;
     font-size: 54px;
     font-weight: 700;
     outline: none;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    -o-transition: all .2s;
+    transition: all .2s;;
 }
 .point-button i {
     margin-right: 10px;
 }
 .point-button.exit {
-    background-color: #ff4081;
+    background-color: #fe374a;
+}
+.point-button.exit:active {
+	background-color: #c30022;
 }
 .point-button.open {
-    background-color: #448aff;
+    background-color: #5fa2f0;
+}
+.point-button.open:active {
+	background-color: #1a74bd;
 }
 /* subpage */
 .sub-title {
