@@ -292,7 +292,7 @@
                     }else{
                         $("#nowWeather").text("흐림");
                     }
-                    $("#nowTem").text(Number(weather.temperature).toFixed(1)+"º");
+                    $("#nowTem").text(Number(weather.temperature).toFixed(0)+"º");
                     $("#nowHum").text(Number(weather.humidity).toFixed(0)+"%");
                     $("#nowWindSpeed").text(Number(weather.wind_speed).toFixed(1)+"km/h");
 
