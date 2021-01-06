@@ -7,9 +7,56 @@
 <head>
     <script type="text/javascript">
 
+        function getQueryString(key) {
 
-        $().ready(function() {
+            // 전체 Url을 가져온다.
+            var str = location.href;
 
+            // QueryString의 값을 가져오기 위해서, ? 이후 첫번째 index값을 가져온다.
+            var index = str.indexOf("?") + 1;
+
+            // Url에 #이 포함되어 있을 수 있으므로 경우의 수를 나눴다.
+            var lastIndex = str.indexOf("#") > -1 ? str.indexOf("#") + 1 : str.length;
+
+            // index 값이 0이라는 것은 QueryString이 없다는 것을 의미하기에 종료
+            if (index == 0) {
+                return "";
+            }
+
+            // str의 값은 a=1&b=first&c=true
+            str = str.substring(index, lastIndex);
+
+            // key/value로 이뤄진 쌍을 배열로 나눠서 넣는다.
+            str = str.split("&");
+
+            // 결과값
+            var rst = "";
+
+            for (var i = 0; i < str.length; i++) {
+
+                // key/value로 나눈다.
+                // arr[0] = key
+                // arr[1] = value
+                var arr = str[i].split("=");
+
+                // arr의 length가 2가 아니면 종료
+                if (arr.length != 2) {
+                    break;
+                }
+
+                // 매개변수 key과 일치하면 결과값에 셋팅
+                if (arr[0] == key) {
+                    rst = arr[1];
+                    break;
+                }
+            }
+            return rst;
+        }
+
+
+
+        //var audioElement = document.createElement('audio');
+        $(document).ready(function() {
 
             dataInfo();
             realTime();
@@ -78,10 +125,18 @@
             $('#outBtn').on('click', function() {
                 outGo();
             });
-
             sseSubcribe();
 
+            if( getQueryString("main") != 1){
+                $('#alertmsg').text("환영합니다. 음성 안내를 활성화중입니다. 닫기 버튼을 눌러주세요")
+                $('#alertarea').addClass('active');
+            }
+
+
+
+
         });
+
         // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
         function sseSubcribe() {
             //alert("test");
@@ -94,11 +149,23 @@
                 //$("#stockValue").text(ev.data);
                 // 토픽 메세지 내용에 따라 화면 처리 로직
                 //$(".my_audio").trigger('load');
+                //soundPlayer.play('http://localhost:8999/assets/record/doorrecordtest.mp3');
+                //./assets/record/doorrecordtest.mp3
+
+                var myAudio = document.getElementById("audio01");
+                if (myAudio.paused) {
+                    myAudio.play();
+                } else {
+                    myAudio.pause();
+                }
+
+                //new Audio('./assets/record/doorrecordtest.mp3').play()
 
                 if (receiveData.type=="secure" || receiveData.type=="gas" || receiveData.type=="smoke") {
                     // 경고메세지 표기
                     warningMessage(receiveData.type);
-
+                    //
+                    warningAudioPlay(receiveData.type);
                 }
 
             };
@@ -140,12 +207,73 @@
             }
         }
 
+
+        $(document).ready(function() {
+
+
+            // audioElement.setAttribute('src', '/assets/record/secure01.mp3');
+            // audioElement.addEventListener('ended', function() {
+            // //    this.play();
+            // }, false);
+            //
+            // audioElement.addEventListener("canplay",function(){
+            //     $("#length").text("Duration:" + audioElement.duration + " seconds");
+            //     $("#source").text("Source:" + audioElement.src);
+            //     $("#status").text("Status: Ready to play").css("color","green");
+            // });
+            //
+            // audioElement.addEventListener("timeupdate",function(){
+            //     $("#currentTime").text("Current second:" + audioElement.currentTime);
+            // });
+
+            $('#play').click(function() {
+                //audioElement.play();
+                //$("#audio01").play();
+
+                //$("#status").text("Status: Playing");
+
+                var myAudio = document.getElementById("audio01");
+
+                $("#audio01").prop("muted",false);
+                if (myAudio.paused) {
+                    myAudio.play();
+                } else {
+                    myAudio.pause();
+                }
+
+            });
+            //
+            // $('#pause').click(function() {
+            //     audioElement.pause();
+            //     $("#status").text("Status: Paused");
+            // });
+            //
+            // $('#restart').click(function() {
+            //     audioElement.currentTime = 0;
+            // });
+
+
+
+
+
+            // setTimeout(function() {
+            //     $('#play').trigger("click");
+            //
+            //     alert("ddd");
+            // }, 5000)
+
+        });
+        $(window).load(function() {
+        });
+
+        //
         function warningAudioPlay(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
             // promice 오류
             if (stype=="secure") {
+                //audioElement.play();
                 // var audioElement = document.createElement('audio');
-                // audioElement.setAttribute('src', './assets/record/doorrecordtest.mp3');
+                // audioElement.setAttribute('src', './assets/record/secure01.mp3');
                 // audioElement.play();
 
 
@@ -153,7 +281,13 @@
 
         }
 
+        $().ready(function(){
+            // var audioElement = document.createElement('audio');
+            // audioElement.setAttribute('src', './assets/record/doorrecordtest.mp3');
+            // audioElement.play();
 
+
+        });
 
         var week = ['일', '월', '화', '수', '목', '금', '토'];
         function clock() {
@@ -380,6 +514,20 @@
     </script>
 </head>
 <body>
+<h2>Sound Information</h2>
+<div id="length">Duration:</div>
+<div id="source">Source:</div>
+<div id="status" style="color:red;">Status: Loading</div>
+<hr>
+<h2>Control Buttons</h2>
+<button id="play">Play</button>
+<button id="pause">Pause</button>
+<button id="restart">Restart</button>
+<hr>
+<h2>Playing Information</h2>
+<div id="currentTime">0</div>
+<audio id="audio01" src='/assets/record/secure01.mp3' controls style="display: none" ></audio>
+
 <div class="wrap">
     <div class="contents">
         <div class="button-list">
@@ -490,11 +638,6 @@
                 </li>
             </ul>
         </div>
-<!--        <audio id="recordtest" type="audio/mp3" src="/static/assets/record/doorrecordtest.mp3"></audio>-->
-
-        <audio class="my_audio" controls preload="none">
-            <source src="./assets/record/doorrecordtest.mp3" type="audio/mpeg">
-        </audio>
         <a href="#" onclick="warning();" class="ex-button" style="position: absolute;right: 20px;bottom: 20px;border: 1px solid #222;padding: 20px;font-size: 24px;color: #222;">경고메시지 예제</a>
         <div id="alertarea" class="alert">
             <div class="alert-pop">
@@ -579,5 +722,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
