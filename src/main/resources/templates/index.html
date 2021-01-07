@@ -76,13 +76,23 @@
             $('#outBtn').on('click', function() {
                 outGo();
             });
+			//음성활성화
+			$('#audioCheck').on('click', function() {
+
+				var secureAudio = document.getElementById("secure01");
+				secureAudio.play();
+				var gasAudio = document.getElementById("gas01");
+				gasAudio.play();
+				var smokeAudio = document.getElementById("smoke01");
+				smokeAudio.play();
+
+			});
 
             sseSubcribe()
 
-			if( getQueryString("main") != 1){
-				$('#alertmsg').text("환영합니다. 음성 안내를 활성화중입니다. 닫기 버튼을 눌러주세요")
-				$('#alertarea').addClass('active');
-			}
+			//warningMessageReady("secure");
+
+
 
         });
         // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
@@ -160,6 +170,16 @@
 			}
 			return rst;
 		}
+		//경고메세지 음성테스트
+		function warningMessageReady(stype) {
+			//stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
+			if (stype==="secure") {
+				$('#alertmsg').html("보안 경고메세지 음성이 준비되었습니다. 닫기버튼을 눌러주세요 ")
+				$('#alertarea').addClass('active');
+
+			}
+
+		}
         //경고메세지
         function warningMessage(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
@@ -191,28 +211,32 @@
         function warningAudioPlay(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
             if (stype=="secure") {
-				var myAudio = document.getElementById("secure01");
-				if (myAudio.paused) {
-					myAudio.play();
-				} else {
-					myAudio.pause();
-				}
+
+				var secureAudio = document.getElementById("secure01");
+				$("#secure01").prop("muted",false);
+				//if (secureAudio.paused) {
+					secureAudio.play();
+				// } else {
+				// 	secureAudio.pause();
+				// }
             }
 			if (stype=="gas") {
-				var myAudio = document.getElementById("gas01");
-				if (myAudio.paused) {
-					myAudio.play();
-				} else {
-					myAudio.pause();
-				}
+				var gasAudio = document.getElementById("gas01");
+				$("#gas01").prop("muted",false);
+				//if (gasAudio.paused) {
+					gasAudio.play();
+				// } else {
+				// 	gasAudio.pause();
+				// }
 			}
 			if (stype=="smoke") {
-				var myAudio = document.getElementById("smoke01");
-				if (myAudio.paused) {
-					myAudio.play();
-				} else {
-					myAudio.pause();
-				}
+				var smokeAudio = document.getElementById("smoke01");
+				$("#smoke01").prop("muted",false);
+				//if (smokeAudio.paused) {
+					smokeAudio.play();
+				// } else {
+				// 	smokeAudio.pause();
+				// }
 			}
 
         }
@@ -482,9 +506,9 @@
     </script>
 </head>
 <body>
-<audio id="secure01" src='/assets/record/secure01.mp3' controls style="display: none" ></audio>
-<audio id="gas01" src='/assets/record/gas01.mp3' controls style="display: none"  ></audio>
-<audio id="smoke01" src='/assets/record/smoke01.mp3' controls style="display: none"  ></audio>
+<audio id="secure01" src='/assets/record/secure01.mp3' controls  muted style="display: none" ></audio>
+<audio id="gas01" src='/assets/record/gas01.mp3' controls  muted style="display: none"></audio>
+<audio id="smoke01" src='/assets/record/smoke01.mp3' controls muted style="display: none"></audio>
 <div class="wrap">
 	<div class="dashboard">
 		<div class="console">
@@ -669,6 +693,19 @@
 	                        </a>
 	                    </div>
 	                </li>
+					<li class="card" >
+						<div class="card-inner">
+							<a href="#" class="card-link">
+								<h3 class="card-title">음성활성화</h3>
+								<div id="audioCheck" class="fire">
+									<span class="card-icon"><i class="fas fa-fire-extinguisher"></i></span>
+									<div class="fire-icon">
+										<i class="fas fa-fire-extinguisher"></i>
+									</div>
+								</div>
+							</a>
+						</div>
+					</li>
 	            </ul>
 	        </div>
 
