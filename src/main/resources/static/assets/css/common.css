@@ -123,6 +123,15 @@ button {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+.contents-title {
+	width: 100%;
+	padding: 20px 10px;
+	font-size: 36px;
+	line-height: 36px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 
 /* button-list */
 .button-list {}
@@ -258,12 +267,12 @@ button {
 a.console-button {
     display: block;
     text-align: center;
-    line-height: 160px;
+    line-height: 120px;
 }
 .console-button {
     position: relative;
     width: 100%;
-    height: 160px;
+    height: 120px;
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #fff;
@@ -765,4 +774,56 @@ a.console-button {
     font-size: 54px;
     color: #c4001d;
     text-align: center;;
+}
+
+.audio-pop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 100;
+}
+.audio-pop_box {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	height: 400px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 0 10px 30px rgba(0, 0, 0, .6);
+	-moz-box-shadow: 0 10px 30px rgba(0, 0, 0, .6);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, .6);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+#audioCheck {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	text-align: center;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+} 
+#audioCheck i {
+	color: #fe374a;
+	font-size: 124px;
+}
+#audioCheck p {
+	margin-top: 20px;
+	font-size: 32px;
+	font-weight: 700;
+	line-height: 1.4;
 }
