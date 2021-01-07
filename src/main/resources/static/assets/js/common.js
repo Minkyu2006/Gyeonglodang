@@ -49,8 +49,6 @@ $(function() {
         e.preventDefault();
     })
     
-    $(document).click(function() {
-    	$('.audio-pop').fadeOut(100);
-    })
+    
 
 })
