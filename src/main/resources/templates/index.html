@@ -98,10 +98,6 @@
 
             sseSubcribe()
 
-			//warningMessageReady("secure");
-
-
-
         });
         // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
         function sseSubcribe() {
@@ -112,19 +108,12 @@
                 console.log("Notice Alert Topic 수신: ", ev.data);
                 var receiveData = JSON.parse(ev.data);
 
-                //$("#stockValue").text(ev.data);
-                // 토픽 메세지 내용에 따라 화면 처리 로직
-
                 if (receiveData.type=="secure" || receiveData.type=="gas" || receiveData.type=="smoke") {
                     // 경고메세지 표기
                     warningMessage(receiveData.type);
                     // 경고음성 재생
 					warningAudioPlay(receiveData.type);
-
                 }
-
-
-
 
             };
             source.onerror = function(err) {
@@ -132,62 +121,7 @@
                 stop();
             };
         }
-		// 쿼리스트리 파싱
-		function getQueryString(key) {
 
-			// 전체 Url을 가져온다.
-			var str = location.href;
-
-			// QueryString의 값을 가져오기 위해서, ? 이후 첫번째 index값을 가져온다.
-			var index = str.indexOf("?") + 1;
-
-			// Url에 #이 포함되어 있을 수 있으므로 경우의 수를 나눴다.
-			var lastIndex = str.indexOf("#") > -1 ? str.indexOf("#") + 1 : str.length;
-
-			// index 값이 0이라는 것은 QueryString이 없다는 것을 의미하기에 종료
-			if (index == 0) {
-				return "";
-			}
-
-			// str의 값은 a=1&b=first&c=true
-			str = str.substring(index, lastIndex);
-
-			// key/value로 이뤄진 쌍을 배열로 나눠서 넣는다.
-			str = str.split("&");
-
-			// 결과값
-			var rst = "";
-
-			for (var i = 0; i < str.length; i++) {
-
-				// key/value로 나눈다.
-				// arr[0] = key
-				// arr[1] = value
-				var arr = str[i].split("=");
-
-				// arr의 length가 2가 아니면 종료
-				if (arr.length != 2) {
-					break;
-				}
-
-				// 매개변수 key과 일치하면 결과값에 셋팅
-				if (arr[0] == key) {
-					rst = arr[1];
-					break;
-				}
-			}
-			return rst;
-		}
-		//경고메세지 음성테스트
-		function warningMessageReady(stype) {
-			//stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
-			if (stype==="secure") {
-				$('#alertmsg').html("보안 경고메세지 음성이 준비되었습니다. 닫기버튼을 눌러주세요 ")
-				$('#alertarea').addClass('active');
-
-			}
-
-		}
         //경고메세지
         function warningMessage(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
@@ -222,34 +156,22 @@
 
 				var secureAudio = document.getElementById("secure01");
 				$("#secure01").prop("muted",false);
-				//if (secureAudio.paused) {
-					secureAudio.play();
-				// } else {
-				// 	secureAudio.pause();
-				// }
+				secureAudio.play();
             }
 			if (stype=="gas") {
 				var gasAudio = document.getElementById("gas01");
 				$("#gas01").prop("muted",false);
-				//if (gasAudio.paused) {
-					gasAudio.play();
-				// } else {
-				// 	gasAudio.pause();
-				// }
+				gasAudio.play();
+
 			}
 			if (stype=="smoke") {
 				var smokeAudio = document.getElementById("smoke01");
 				$("#smoke01").prop("muted",false);
-				//if (smokeAudio.paused) {
-					smokeAudio.play();
-				// } else {
-				// 	smokeAudio.pause();
-				// }
+				smokeAudio.play();
+
 			}
 
         }
-
-
 
         var week = ['일', '월', '화', '수', '목', '금', '토'];
         function clock() {
@@ -355,8 +277,6 @@
 					humRefresh('humChartRm4',humDataRm4);// 운동 습도
 					humRefresh('humChartRm5',humDataRm5);// 창고 습도
 
-
-
                     // 공기청정기 셋팅
                     console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
                     var airpurification = JSON.parse(res.data.airpurification.r_data);
@@ -457,6 +377,7 @@
             });
         }
 
+        // 온도표기해주는 함수
         function tempRefresh(elimentId,value) {
             // console.log('받은 온도 : '+value);
 
@@ -478,7 +399,6 @@
 				$tempColor.removeClass('blue').removeClass('red');
             }
         }
-
 
         //습도 표기해주는 함수
 		function humRefresh(elimentId,value) {
