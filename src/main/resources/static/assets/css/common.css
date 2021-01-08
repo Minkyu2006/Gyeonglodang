@@ -773,7 +773,7 @@ a.console-button {
     height: 58px;
     font-size: 54px;
     color: #c4001d;
-    text-align: center;;
+    text-align: center;
 }
 
 .audio-pop {
@@ -884,6 +884,56 @@ a.console-button {
 }
 
 
+.sensor-pop {
+	opacity: 0;
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: #fff;
+}
+.sensor-pop.active {
+	opacity: 1;
+	display: block;
+}
+.sensor-pop__box {
+	overflow: auto;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 90vw;
+	height: 90vh;
+	padding: 80px;
+	background-color: #f3f3f3;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-shadow: 0 5px 40px rgba(0, 0, 0, .6);
+	-moz-box-shadow: 0 5px 40px rgba(0, 0, 0, .6);
+	box-shadow: 0 5px 40px rgba(0, 0, 0, .6);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+.sensor-pop__close {
+	display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 54px;
+    height: 58px;
+    font-size: 54px;
+    color: #c4001d;
+    text-align: center;
+}
 
 
 @keyframes click {

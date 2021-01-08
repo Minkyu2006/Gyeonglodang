@@ -628,7 +628,7 @@
 	            <ul>
 	                <li class="card">
 	                    <div class="card-inner">
-	                        <a href="usertemp" class="card-link">
+	                        <a href="#" class="card-link sensor-card">
 	                            <h3 class="card-title">온도</h3>
 	                            <div id="tempMaster" class="temp">
 	                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
@@ -704,19 +704,6 @@
 	                        </a>
 	                    </div>
 	                </li>
-					<!-- <li class="card" >
-						<div class="card-inner">
-							<a href="#" class="card-link">
-								<h3 class="card-title">음성활성화</h3>
-								<div id="audioCheck" class="fire">
-									<span class="card-icon"><i class="fas fa-volume-up"></i></span>
-									<div class="fire-icon">
-										<i class="fas fa-volume-up"></i>
-									</div>
-								</div>
-							</a>
-						</div>
-					</li> -->
 	            </ul>
 	        </div>
 	        
@@ -738,6 +725,73 @@
 	                <div class="alert-pop__text"><span id="alertmsg">창문이 열려 있습니다.</span></div>
 	                <a href="#" class="alert-pop__close"><i class="far fa-window-close"></i></a>
 	            </div>
+	        </div>
+	        
+	        <div class="sensor-pop">
+	        	<div class="sensor-pop__box">
+	        		<div class="card-list">
+			            <ul>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">거실</h3>
+			                            <div class="temp red">
+			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+			                                <div class="progress" id="room1" role="progressbar" aria-valuemin="0" aria-valuemax="48" aria-valuenow="31.1"><svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="47" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 3 A 47 47 0 1 1 12.341070803520154 78.12125622682098" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">31.1°C</text></svg></div>
+			                            </div>
+			                        </a>
+			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">주방</h3>
+			                            <div class="temp red">
+			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+			                                <div class="progress" id="room2" role="progressbar" aria-valuemin="0" aria-valuemax="48" aria-valuenow="26.1"><svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="47" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 3 A 47 47 0 1 1 37.24229885634149 95.23539611332141" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">26.1°C</text></svg></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">없음</h3>
+			                            <div class="temp red">
+			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+			                                <div class="progress temp-progress" data-temp="25"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">없음</h3>
+			                            <div class="temp red">
+			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+			                                <div class="progress temp-progress" data-temp="28"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">없음</h3>
+			                            <div class="temp red">
+			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
+			                                <div class="progress temp-progress" data-temp="18"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			            </ul>
+			        </div>
+	        		
+	        		<a href="#" class="sensor-pop__close"><i class="far fa-window-close"></i></a>
+	        	</div>
 	        </div>
 	    </div>
 	    
