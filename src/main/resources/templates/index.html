@@ -265,9 +265,10 @@
 
             var ampm;
             if(hours<=12){
-                ampm="오전"
+                ampm="오전";
             }else{
-                ampm="오후"
+            	hours = hours - 12;
+                ampm="오후";
             }
 
             // 초까지 받아온 후
@@ -320,12 +321,18 @@
                     // 온도셋팅
                     console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
                     var temperature = JSON.parse(res.data.temperatureData.r_data);
-                    console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
-                    console.log('회의실 온도 temperature rm2 상태 : '+temperature.rm2tm01);
-                    var temDataRm1 = temperature.rm1tm01; // 사무실 온도
-                    var temDataRm2 = temperature.rm2tm01; // 회의실 온도
+                    var temDataRm1 = temperature.rm1tm01; // 거실 온도
+                    var temDataRm2 = temperature.rm2tm01; // 주방 온도
+					var temDataRm3 = "18"; // 안방 온도
+					var temDataRm4 = "19"; // 운동 온도
+					var temDataRm5 = "0"; // 창고 온도
 
-                    tempRefresh(temDataRm1);
+                    tempRefresh('temChart',temDataRm1);
+					tempRefresh('temChartRm1',temDataRm1);
+					tempRefresh('temChartRm2',temDataRm2);
+					tempRefresh('temChartRm3',temDataRm3);
+					tempRefresh('temChartRm4',temDataRm4);
+					tempRefresh('temChartRm5',temDataRm5);
                     console.log('');
 
                     // 습도셋팅
@@ -334,24 +341,21 @@
                     console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
                     console.log('회의실 습도 humidity rm2 상태 : '+humidity.rm2hu01);
                     console.log('');
-                    var humDataRm1 = humidity.rm1hu01; // 사무실 습도
-                    var humDataRm2 = humidity.rm1hu01; // 회의실 습도
+                    var humDataRm1 = humidity.rm1hu01; // 거실 습도
+                    var humDataRm2 = humidity.rm1hu01; // 주방 습도
+					var humDataRm3 = "47"; // 안방 습도
+					var humDataRm4 = "80"; // 운동 습도
+					var humDataRm5 = "0"; // 창고 습도
 
-                    const hum = new CircleProgress('#humChart', {
-                        max: 100,
-                        value: humDataRm1,
-                        animationDuration: 400,
-                        textFormat: (val) => val + '%'
-                    });
-                    hum.value = humDataRm1;
-                    var $humidity = $('.humidity');
-                    if (hum.value > 70) {
-                        $humidity.addClass('blue').removeClass('red');
-                    } else if (hum.value < 40) {
-                        $humidity.addClass('red').removeClass('blue');
-                    } else {
-                        $humidity.removeClass('blue').removeClass('red');
-                    }
+
+					humRefresh('humChart',humDataRm1);// 거실 습도
+					humRefresh('humChartRm1',humDataRm1);// 거실 습도
+					humRefresh('humChartRm2',humDataRm2);// 주방 습도
+					humRefresh('humChartRm3',humDataRm3);// 안방 습도
+					humRefresh('humChartRm4',humDataRm4);// 운동 습도
+					humRefresh('humChartRm5',humDataRm5);// 창고 습도
+
+
 
                     // 공기청정기 셋팅
                     console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
@@ -453,11 +457,11 @@
             });
         }
 
-        function tempRefresh(value) {
+        function tempRefresh(elimentId,value) {
             // console.log('받은 온도 : '+value);
 
             // 값은 받아오나, 텍스트를 리프레쉬할수없음.
-            const cp = new CircleProgress('#temChart', {
+            const cp = new CircleProgress('#'+elimentId, {
                 max: 48,
                 value: value,
                 animationDuration: 400,
@@ -465,15 +469,38 @@
             });
             cp.value = value;
 
-            var $temp = $('#tempMaster');
+            var $tempColor = $('#'+elimentId+'Color');
             if (value > 26) {
-                $temp.addClass('red').removeClass('blue');
+				$tempColor.addClass('red').removeClass('blue');
             } else if (value < 23) {
-                $temp.addClass('blue').removeClass('red');
+				$tempColor.addClass('blue').removeClass('red');
             } else {
-                $temp.removeClass('blue').removeClass('red');
+				$tempColor.removeClass('blue').removeClass('red');
             }
         }
+
+
+        //습도 표기해주는 함수
+		function humRefresh(elimentId,value) {
+
+			// 값은 받아오나, 텍스트를 리프레쉬할수없음.
+			const cp = new CircleProgress('#'+elimentId, {
+				max: 100,
+				value: value,
+				animationDuration: 400,
+				textFormat: (value) => value + '%'
+			});
+			cp.value = value;
+
+			var $tempColor = $('#'+elimentId+'Color');
+			if (value > 70) {
+				$tempColor.addClass('red').removeClass('blue');
+			} else if (value < 40) {
+				$tempColor.addClass('blue').removeClass('red');
+			} else {
+				$tempColor.removeClass('blue').removeClass('red');
+			}
+		}
 
         // 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
         function integratedFun(name,value) {
@@ -630,7 +657,7 @@
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link sensor-card sensor-card--temp">
 	                            <h3 class="card-title">온도</h3>
-	                            <div id="tempMaster" class="temp">
+	                            <div id="temChartColor" class="temp">
 	                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 	                                <div id="temChart" class="progress temp-progress"></div>
 	                            </div>
@@ -641,7 +668,7 @@
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link sensor-card sensor-card--humidity">
 	                            <h3 class="card-title">습도</h3>
-	                            <div class="humidity">
+	                            <div id="humChartColor" class="humidity">
 	                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 	                                <div id="humChart" class="progress humidity-progress"></div>
 	                            </div>
@@ -736,9 +763,9 @@
 			                    <div class="card-inner">
 			                        <a class="card-link">
 			                            <h3 class="card-title">거실</h3>
-			                            <div class="temp red">
+			                            <div id="temChartRm1Color" class="temp">
 			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-			                                <div class="progress" id="room1" role="progressbar" aria-valuemin="0" aria-valuemax="48" aria-valuenow="31.1"><svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="47" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 3 A 47 47 0 1 1 12.341070803520154 78.12125622682098" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">31.1°C</text></svg></div>
+											<div id="temChartRm1" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
@@ -748,9 +775,9 @@
 			                    <div class="card-inner">
 			                        <a class="card-link">
 			                            <h3 class="card-title">주방</h3>
-			                            <div class="temp red">
+			                            <div id="temChartRm2Color" class="temp">
 			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-			                                <div class="progress" id="room2" role="progressbar" aria-valuemin="0" aria-valuemax="48" aria-valuenow="26.1"><svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="47" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 3 A 47 47 0 1 1 37.24229885634149 95.23539611332141" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">26.1°C</text></svg></div>
+											<div id="temChartRm2" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -758,10 +785,10 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">없음</h3>
-			                            <div class="temp red">
+			                            <h3 class="card-title">안방</h3>
+			                            <div id="temChartRm3Color" class="temp">
 			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-			                                <div class="progress temp-progress" data-temp="25"></div>
+											<div id="temChartRm3" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -769,10 +796,10 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">없음</h3>
-			                            <div class="temp red">
+			                            <h3 class="card-title">운동</h3>
+										<div id="temChartRm4Color" class="temp">
 			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-			                                <div class="progress temp-progress" data-temp="28"></div>
+											<div id="temChartRm4" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -780,10 +807,10 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">없음</h3>
-			                            <div class="temp red">
+			                            <h3 class="card-title">창고</h3>
+										<div id="temChartRm5Color" class="temp">
 			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-			                                <div class="progress temp-progress" data-temp="18"></div>
+											<div id="temChartRm5" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -804,9 +831,9 @@
 			                    <div class="card-inner">
 			                        <a class="card-link">
 			                            <h3 class="card-title">거실</h3>
-			                            <div class="humidity">
+			                            <div id ="humChartRm1Color" class="humidity">
 			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
-			                                <div class="progress" id="room1"></div>
+											<div id="humChartRm1" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
@@ -816,9 +843,9 @@
 			                    <div class="card-inner">
 			                        <a class="card-link">
 			                            <h3 class="card-title">주방</h3>
-			                            <div class="humidity">
+										<div id ="humChartRm2Color" class="humidity">
 			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
-			                                <div class="progress" id="room2"></div>
+											<div id="humChartRm2" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -826,10 +853,10 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">없음</h3>
-			                            <div class="humidity">
+			                            <h3 class="card-title">안방</h3>
+										<div id ="humChartRm3Color" class="humidity">
 			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
-			                                <div class="progress" data-percent="60"></div>
+											<div id="humChartRm3" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -837,10 +864,10 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">없음</h3>
-			                            <div class="humidity">
+			                            <h3 class="card-title">운동</h3>
+										<div id ="humChartRm4Color" class="humidity">
 			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
-			                                <div class="progress" data-percent="40"></div>
+											<div id="humChartRm4" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
@@ -848,10 +875,10 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">없음</h3>
-			                            <div class="humidity">
+			                            <h3 class="card-title">창고</h3>
+										<div id ="humChartRm5Color" class="humidity">
 			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
-			                                <div class="progress" data-percent="30"></div>
+											<div id="humChartRm5" class="progress temp-progress"></div>
 			                            </div>
 			                        </a>
 			                    </div>
