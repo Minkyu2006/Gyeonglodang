@@ -50,8 +50,15 @@ $(function() {
     });
     
     $('.sensor-card').on('click', function(e) {
-    	//$('.sensor-pop').addClass('active');
-    	$('.sensor-pop').addClass('active');
+    	if ($(this).hasClass('sensor-card--temp')) {
+    		$('.sensor-pop.sensor-pop--temp').addClass('active');
+    	} else if ($(this).hasClass('sensor-card--humidity')) {
+    		$('.sensor-pop.sensor-pop--humidity').addClass('active');
+    	} else if ($(this).hasClass('sensor-card--air')) {
+    		$('.sensor-pop.sensor-pop--air').addClass('active');
+    	}
+    	
+    	
 
         e.preventDefault();
     });

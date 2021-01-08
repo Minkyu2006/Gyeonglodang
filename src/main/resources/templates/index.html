@@ -628,7 +628,7 @@
 	            <ul>
 	                <li class="card">
 	                    <div class="card-inner">
-	                        <a href="#" class="card-link sensor-card">
+	                        <a href="#" class="card-link sensor-card sensor-card--temp">
 	                            <h3 class="card-title">온도</h3>
 	                            <div id="tempMaster" class="temp">
 	                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
@@ -639,7 +639,7 @@
 	                </li>
 	                <li class="card">
 	                    <div class="card-inner">
-	                        <a href="userhumidity" class="card-link">
+	                        <a href="#" class="card-link sensor-card sensor-card--humidity">
 	                            <h3 class="card-title">습도</h3>
 	                            <div class="humidity">
 	                                <span class="card-icon"><i class="fas fa-tint"></i></span>
@@ -650,7 +650,7 @@
 	                </li>
 	                <li class="card">
 	                    <div class="card-inner">
-	                        <a href="userair" class="card-link">
+	                        <a href="#" class="card-link sensor-card sensor-card--air">
 	                            <h3 class="card-title">공기질</h3>
 	                            <div class="air">
 	                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
@@ -727,7 +727,8 @@
 	            </div>
 	        </div>
 	        
-	        <div class="sensor-pop">
+	        <!-- 온도 -->
+	        <div class="sensor-pop sensor-pop--temp">
 	        	<div class="sensor-pop__box">
 	        		<div class="card-list">
 			            <ul>
@@ -783,6 +784,159 @@
 			                            <div class="temp red">
 			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 			                                <div class="progress temp-progress" data-temp="18"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			            </ul>
+			        </div>
+	        		
+	        		<a href="#" class="sensor-pop__close"><i class="far fa-window-close"></i></a>
+	        	</div>
+	        </div>
+	        
+	        <!-- 습도 -->
+	        <div class="sensor-pop sensor-pop--humidity">
+	        	<div class="sensor-pop__box">
+	        		<div class="card-list">
+			            <ul>
+			            	<li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">거실</h3>
+			                            <div class="humidity">
+			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
+			                                <div class="progress" id="room1"></div>
+			                            </div>
+			                        </a>
+			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">주방</h3>
+			                            <div class="humidity">
+			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
+			                                <div class="progress" id="room2"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">없음</h3>
+			                            <div class="humidity">
+			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
+			                                <div class="progress" data-percent="60"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">없음</h3>
+			                            <div class="humidity">
+			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
+			                                <div class="progress" data-percent="40"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">없음</h3>
+			                            <div class="humidity">
+			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
+			                                <div class="progress" data-percent="30"></div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			            </ul>
+			        </div>
+	        		
+	        		<a href="#" class="sensor-pop__close"><i class="far fa-window-close"></i></a>
+	        	</div>
+	        </div>
+	        
+	        <!-- 공기질 -->
+	        <div class="sensor-pop sensor-pop--air">
+	        	<div class="sensor-pop__box">
+	        		<div class="card-list">
+			            <ul>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">거실</h3>
+			                            <div class="air good">
+			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+			                                <div class="air-icon">
+			                                    <i class="far fa-smile-wink"></i>
+			                                    <!-- 변경시 fa-smile 삭제 .air에 클래스 추가 -->
+			                                    <!-- 좋음일 때 air에 good추가 fa-smile-wink 변경 -->
+			                                    <!-- 나쁨일 때 air에 bad 추가 fa-frown 변경 -->
+			                                </div>
+			                                <div class="air-state">좋음</div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">주방</h3>
+			                            <div class="air bad">
+			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+			                                <div class="air-icon">
+			                                    <i class="far fa-frown"></i>
+			                                </div>
+			                                <div class="air-state">나쁨</div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">안방</h3>
+			                            <div class="air">
+			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+			                                <div class="air-icon">
+			                                    <i class="far fa-smile"></i>
+			                                </div>
+			                                <div class="air-state">보통</div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">운동</h3>
+			                            <div class="air">
+			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+			                                <div class="air-icon">
+			                                    <i class="far fa-smile"></i>
+			                                </div>
+			                                <div class="air-state">보통</div>
+			                            </div>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a class="card-link">
+			                            <h3 class="card-title">창고</h3>
+			                            <div class="air">
+			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
+			                                <div class="air-icon">
+			                                    <i class="far fa-smile"></i>
+			                                </div>
+			                                <div class="air-state">보통</div>
 			                            </div>
 			                        </a>
 			                    </div>
