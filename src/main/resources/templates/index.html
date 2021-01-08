@@ -90,7 +90,9 @@
 				smokeAudio.play();
 				var leaveAudio = document.getElementById("leave01");
 				leaveAudio.play();
-				
+				var welcomeAudio = document.getElementById("welcome01");
+				welcomeAudio.play();
+
 				$('.audio-pop').fadeOut(100);
 			});
 
@@ -263,9 +265,9 @@
 
             var ampm;
             if(hours<=12){
-                ampm="오후"
-            }else{
                 ampm="오전"
+            }else{
+                ampm="오후"
             }
 
             // 초까지 받아온 후
@@ -516,6 +518,7 @@
 <audio id="gas01" src='/assets/record/gas01.mp3' controls  muted style="display: none"></audio>
 <audio id="smoke01" src='/assets/record/smoke01.mp3' controls muted style="display: none"></audio>
 <audio id="leave01" src='/assets/record/leave01.mp3' controls muted style="display: none"></audio>
+<audio id="welcome01" src='/assets/record/welcome.mp3' controls style="display: none"></audio>
 <div class="wrap">
 	<div class="dashboard">
 		<div class="console">
