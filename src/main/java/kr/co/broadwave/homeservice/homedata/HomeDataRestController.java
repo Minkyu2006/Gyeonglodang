@@ -59,6 +59,7 @@ public class HomeDataRestController {
         Optional<HomeData> light = homeDataService.findByIdData("light");
         if(!light.isPresent()) {
             log.info("light 받아오기 실패");
+            data.put("lightData","");
         }else{
             sensorData = light.get();
             log.info("조명 데이터 : "+sensorData);
@@ -68,6 +69,7 @@ public class HomeDataRestController {
         Optional<HomeData> temperature = homeDataService.findByIdData("temperature");
         if(!temperature.isPresent()) {
             log.info("temperature 받아오기 실패");
+            data.put("temperatureData","");
         }else{
             sensorData = temperature.get();
             log.info("온도 데이터 : "+sensorData);
@@ -77,6 +79,7 @@ public class HomeDataRestController {
         Optional<HomeData> humidity = homeDataService.findByIdData("humidity");
         if(!humidity.isPresent()) {
             log.info("humidity 받아오기 실패");
+            data.put("humidity","");
         }else{
             sensorData = humidity.get();
             log.info("습도 데이터 : "+sensorData);
@@ -86,6 +89,7 @@ public class HomeDataRestController {
         Optional<HomeData> airpurification = homeDataService.findByIdData("airpurification");
         if(!airpurification.isPresent()) {
             log.info("airpurification 받아오기 실패");
+            data.put("airpurification","");
         }else{
             sensorData = airpurification.get();
             log.info("공기청정기 데이터 : "+sensorData);
@@ -95,6 +99,7 @@ public class HomeDataRestController {
         Optional<HomeData> weather = homeDataService.findByIdData("weather");
         if(!weather.isPresent()) {
             log.info("weather 받아오기 실패");
+            data.put("weather","");
         }else{
             sensorData = weather.get();
             log.info("날씨 데이터 : "+sensorData);
@@ -104,6 +109,7 @@ public class HomeDataRestController {
         Optional<HomeData> aircondition = homeDataService.findByIdData("aircondition");
         if(!aircondition.isPresent()) {
             log.info("aircondition 받아오기 실패");
+            data.put("aircondition","");
         }else{
             sensorData = aircondition.get();
             log.info("날씨 데이터 : "+sensorData);
@@ -113,6 +119,7 @@ public class HomeDataRestController {
         Optional<HomeData> doorsensor = homeDataService.findByIdData("doorsensor");
         if(!doorsensor.isPresent()) {
             log.info("doorsensor 받아오기 실패");
+            data.put("doorsensor","");
         }else{
             sensorData = doorsensor.get();
             log.info("문센서 데이터 : "+sensorData);
@@ -122,6 +129,7 @@ public class HomeDataRestController {
         Optional<HomeData> gas = homeDataService.findByIdData("gas");
         if(!gas.isPresent()) {
             log.info("gas 받아오기 실패");
+            data.put("gas","");
         }else{
             sensorData = gas.get();
             log.info("가스 데이터 : "+gas);
@@ -131,6 +139,7 @@ public class HomeDataRestController {
         Optional<HomeData> smoke = homeDataService.findByIdData("smoke");
         if(!smoke.isPresent()) {
             log.info("smoke 받아오기 실패");
+            data.put("smoke","");
         }else{
             sensorData = smoke.get();
             log.info("화재 데이터 : "+smoke);

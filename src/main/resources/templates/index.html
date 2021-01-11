@@ -222,155 +222,186 @@
                 },
                 success: function (res) {
 
+
                     // 조명셋팅
-                    console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
-                    var light = JSON.parse(res.data.lightData.r_data);
-                    console.log('내자신');
-                    console.log('light 상태 : '+light.rm2lt01);
-                    console.log('');
-                    var listhData = light.rm2lt01;
-                    var $lightBtn = $('#lightBtn');
-                    if(listhData==="on") {
-                        $lightBtn.addClass("active")
-                        $lightBtn.children('.fa-lightbulb').removeClass('fas');
-                        $lightBtn.children('.fa-lightbulb').addClass('far');
-                    }else{
-                        $lightBtn.removeClass("active")
-                        $lightBtn.children('.fa-lightbulb').addClass('fas');
-                        $lightBtn.children('.fa-lightbulb').removeClass('far');
-                    }
+					if(res.data.lightData != ''){
+						//todo 조명이 하나라도 켜있으면 On 할것
+						console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
+						var light = JSON.parse(res.data.lightData.r_data);
+						// console.log('내자신');
+						// console.log('light 상태 : '+light.rm2lt01);
+						// console.log('');
+						var listhData = light.rm2lt01;
+						var $lightBtn = $('#lightBtn');
+						if(listhData==="on") {
+							$lightBtn.addClass("active")
+							$lightBtn.children('.fa-lightbulb').removeClass('fas');
+							$lightBtn.children('.fa-lightbulb').addClass('far');
+						}else{
+							$lightBtn.removeClass("active")
+							$lightBtn.children('.fa-lightbulb').addClass('fas');
+							$lightBtn.children('.fa-lightbulb').removeClass('far');
+						}
+					}
 
                     // 온도셋팅
-                    console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
-                    var temperature = JSON.parse(res.data.temperatureData.r_data);
-                    var temDataRm1 = temperature.rm1tm01; // 거실 온도
-                    var temDataRm2 = temperature.rm2tm01; // 주방 온도
-					var temDataRm3 = "18"; // 안방 온도
-					var temDataRm4 = "19"; // 운동 온도
-					var temDataRm5 = "0"; // 창고 온도
+					if(res.data.temperatureData != '') {
+						console.log('temperatureData Json 데이터 : ' + res.data.temperatureData.r_data);
+						var temperature = JSON.parse(res.data.temperatureData.r_data);
+						var temDataRm1 = temperature.rm1mu01; // 거실 온도
+						var temDataRm2 = temperature.rm2mu01; // 주방 온도
+						var temDataRm3 = temperature.rm3mu01; // 안방 온도
+						var temDataRm4 = temperature.rm4mu01; // 운동 온도
+						var temDataRm5 = "0"; // 창고 온도
 
-                    tempRefresh('temChart',temDataRm1);
-					tempRefresh('temChartRm1',temDataRm1);
-					tempRefresh('temChartRm2',temDataRm2);
-					tempRefresh('temChartRm3',temDataRm3);
-					tempRefresh('temChartRm4',temDataRm4);
-					tempRefresh('temChartRm5',temDataRm5);
-                    console.log('');
+						tempRefresh('temChart', temDataRm1);
+						tempRefresh('temChartRm1', temDataRm1);
+						tempRefresh('temChartRm2', temDataRm2);
+						tempRefresh('temChartRm3', temDataRm3);
+						tempRefresh('temChartRm4', temDataRm4);
+						tempRefresh('temChartRm5', temDataRm5);
+						console.log('');
+					}
 
-                    // 습도셋팅
-                    console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
-                    var humidity = JSON.parse(res.data.humidity.r_data);
-                    console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
-                    console.log('회의실 습도 humidity rm2 상태 : '+humidity.rm2hu01);
-                    console.log('');
-                    var humDataRm1 = humidity.rm1hu01; // 거실 습도
-                    var humDataRm2 = humidity.rm1hu01; // 주방 습도
-					var humDataRm3 = "47"; // 안방 습도
-					var humDataRm4 = "80"; // 운동 습도
-					var humDataRm5 = "0"; // 창고 습도
+					if(res.data.humidity != '') {
+						// 습도셋팅
+						console.log('humidityData Json 데이터 : ' + res.data.humidity.r_data);
+						var humidity = JSON.parse(res.data.humidity.r_data);
+						console.log('사무실 습도 humidity rm1 상태 : ' + humidity.rm1hu01);
+						console.log('회의실 습도 humidity rm2 상태 : ' + humidity.rm2hu01);
+						console.log('');
+						var humDataRm1 = humidity.rm1mu01; // 거실 습도
+						var humDataRm2 = humidity.rm2mu01; // 주방 습도
+						var humDataRm3 = humidity.rm3mu01;
+						; // 안방 습도
+						var humDataRm4 = humidity.rm4mu01;
+						; // 운동 습도
+						var humDataRm5 = "0"; // 창고 습도
+
+						humRefresh('humChart', humDataRm1);// 거실 습도
+						humRefresh('humChartRm1', humDataRm1);// 거실 습도
+						humRefresh('humChartRm2', humDataRm2);// 주방 습도
+						humRefresh('humChartRm3', humDataRm3);// 안방 습도
+						humRefresh('humChartRm4', humDataRm4);// 운동 습도
+						humRefresh('humChartRm5', humDataRm5);// 창고 습도
+					}
+
+					if(res.data.airpurification != '') {
+						// 공기청정기 셋팅
+						console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
+						var airpurification = JSON.parse(res.data.airpurification.r_data);
+						console.log('airpurification 상태 : ' + airpurification.rm1aq01);
+						console.log('');
+						var airpurificationPower = airpurification.rm1aq01;
+						var $aqBtn = $('#aqBtn');
+						if (airpurificationPower === "on") {
+							$aqBtn.addClass("active")
+						} else {
+							$aqBtn.removeClass("active")
+						}
+					}
+
+					if(res.data.aircondition != '') {
+						// 에어컨 셋팅
+						console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
+						var aircondition = JSON.parse(res.data.aircondition.r_data);
+						console.log('aircondition 상태 : ' + aircondition.rm1ac01);
+						console.log('');
+						var airconditionPower = aircondition.rm1ac01;
+						var $airBtn = $('#airBtn');
+						if (airconditionPower === "cool") {
+							$airBtn.addClass("active")
+						} else {
+							$airBtn.removeClass("active")
+						}
+					}
+
+					if(res.data.weather != '') {
+						// 날씨셋팅
+						console.log('weather Json 데이터 : ' + res.data.weather.r_data);
+						var weather = JSON.parse(res.data.weather.r_data);
+						console.log('오늘 날씨 상태 : ' + weather.condition);
+						console.log('오늘 날씨 온도 : ' + weather.temperature);
+						console.log('오늘 날씨 습도 : ' + weather.humidity);
+						console.log('오늘 날씨 풍속 : ' + weather.wind_speed);
+						console.log('다음날 날씨 리스트 : ' + weather.forecast)
+						console.log('');
+						if (weather.condition === "sunny") {
+							$("#nowWeather").text("맑음");
+						} else {
+							$("#nowWeather").text("흐림");
+						}
+						$("#nowTem").text(Number(weather.temperature).toFixed(0) + "º");
+						$("#nowHum").text(Number(weather.humidity).toFixed(0) + "%");
+						$("#nowWindSpeed").text(Number(weather.wind_speed).toFixed(1) + "km/h");
 
 
-					humRefresh('humChart',humDataRm1);// 거실 습도
-					humRefresh('humChartRm1',humDataRm1);// 거실 습도
-					humRefresh('humChartRm2',humDataRm2);// 주방 습도
-					humRefresh('humChartRm3',humDataRm3);// 안방 습도
-					humRefresh('humChartRm4',humDataRm4);// 운동 습도
-					humRefresh('humChartRm5',humDataRm5);// 창고 습도
+						var today = new Date();
+						var d = 1;
+						for (i = 0; i < 4; i++) {
+							today.setDate(today.getDate() + d);
+							var day = today.getDay();
 
-                    // 공기청정기 셋팅
-                    console.log('airpurificationData Json 데이터 : '+ res.data.airpurification.r_data);
-                    var airpurification = JSON.parse(res.data.airpurification.r_data);
-                    console.log('airpurification 상태 : '+airpurification.rm1aq01);
-                    console.log('');
-                    var airpurificationPower = airpurification.rm1aq01;
-                    var $aqBtn = $('#aqBtn');
-                    if(airpurificationPower==="on"){
-                        $aqBtn.addClass("active")
-                    }else{
-                        $aqBtn.removeClass("active")
-                    }
+							$("#nextDay" + i).text(`${week[day]}` + "요일");
+							// $("#nextWeatherIcon"+i).text(""); // 아이콘처리
+							$("#nextTem" + i).text(weather.forecast[i].temperature.toFixed(0) + "º");
+							$("#nextTemLow" + i).text(weather.forecast[i].templow.toFixed(0) + "º");
+						}
+					}
 
-                    // 에어컨 셋팅
-                    console.log('airconditionData Json 데이터 : '+ res.data.aircondition.r_data);
-                    var aircondition = JSON.parse(res.data.aircondition.r_data);
-                    console.log('aircondition 상태 : '+aircondition.rm1ac01);
-                    console.log('');
-                    var airconditionPower = aircondition.rm1ac01;
-                    var $airBtn = $('#airBtn');
-                    if(airconditionPower==="cool"){
-                        $airBtn.addClass("active")
-                    }else{
-                        $airBtn.removeClass("active")
-                    }
+					if(res.data.doorsensor != '') {
+						// 창문 셋팅
+						console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
+						var doorsensor = JSON.parse(res.data.doorsensor.r_data);
+						console.log('doorsensor 상태 : ' + doorsensor.rm1dr01);
+						console.log('');
+						var doorsensorStatus = doorsensor.rm1dr01;
+						var $doorStatus = $('#doorStatus');
+						if (doorsensorStatus === "off") {
+							$doorStatus.addClass("active")
+						} else {
+							$doorStatus.removeClass("active")
+						}
+					}
 
-                    // 날씨셋팅
-                    console.log('weather Json 데이터 : '+ res.data.weather.r_data);
-                    var weather = JSON.parse(res.data.weather.r_data);
-                    console.log('오늘 날씨 상태 : '+weather.condition);
-                    console.log('오늘 날씨 온도 : '+weather.temperature);
-                    console.log('오늘 날씨 습도 : '+weather.humidity);
-                    console.log('오늘 날씨 풍속 : '+weather.wind_speed);
-                    console.log('다음날 날씨 리스트 : '+weather.forecast)
-                    console.log('');
-                    if(weather.condition==="sunny"){
-                        $("#nowWeather").text("맑음");
-                    }else{
-                        $("#nowWeather").text("흐림");
-                    }
-                    $("#nowTem").text(Number(weather.temperature).toFixed(0)+"º");
-                    $("#nowHum").text(Number(weather.humidity).toFixed(0)+"%");
-                    $("#nowWindSpeed").text(Number(weather.wind_speed).toFixed(1)+"km/h");
+					if(res.data.gas != '') {
+						// 가스 셋팅
+						console.log('gas Json 데이터 : ' + res.data.gas.r_data);
+						var gas = JSON.parse(res.data.gas.r_data);
+						console.log('gas 상태 : ' + gas.rm2ga01);
+						console.log('');
 
-                    var today = new Date();
-                    var d=1;
-                    for(i=0; i<4; i++){
-                        today.setDate(today.getDate()+d);
-                        var day = today.getDay();
+						let checkGas = false;
+						if (gas.rm2ga01 === "detected") checkGas = true;
+						var $gas = $('#gas');
+						if (checkGas) {
+							$gas.addClass("active")
+						} else {
+							$gas.removeClass("active")
+						}
+					}
 
-                        $("#nextDay"+i).text(`${week[day]}`+"요일");
-                        // $("#nextWeatherIcon"+i).text(""); // 아이콘처리
-                        $("#nextTem"+i).text(weather.forecast[i].temperature.toFixed(0)+"º");
-                        $("#nextTemLow"+i).text(weather.forecast[i].templow.toFixed(0)+"º");
-                    }
+					if(res.data.smoke != '') {
+						// 화재 셋팅
+						console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
+						var smoke = JSON.parse(res.data.smoke.r_data);
+						console.log('smoke 상태 : ' + smoke.rm1sm01);
+						console.log('');
 
-                    // 창문 셋팅
-                    console.log('doorsensor Json 데이터 : '+ res.data.doorsensor.r_data);
-                    var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-                    console.log('doorsensor 상태 : '+doorsensor.rm1dr01);
-                    console.log('');
-                    var doorsensorStatus = doorsensor.rm1dr01;
-                    var $doorStatus = $('#doorStatus');
-                    if(doorsensorStatus==="off"){
-                        $doorStatus.addClass("active")
-                    }else{
-                        $doorStatus.removeClass("active")
-                    }
+						let checkSmoke = false;
+						if (smoke.rm1sm01 === "detected") checkSmoke = true;
+						if (smoke.rm2sm01 === "detected") checkSmoke = true;
+						if (smoke.rm3sm01 === "detected") checkSmoke = true;
+						if (smoke.rm4sm01 === "detected") checkSmoke = true;
+						if (smoke.rm5sm01 === "detected") checkSmoke = true;
 
-                    // 가스 셋팅
-                    console.log('gas Json 데이터 : '+ res.data.gas.r_data);
-                    var gas = JSON.parse(res.data.gas.r_data);
-                    console.log('gas 상태 : '+gas.rm1ga01);
-                    console.log('');
-                    var gasStatus = gas.rm1ga01;
-                    var $gas = $('#gas');
-                    if(gasStatus==="clear"){
-                        $gas.removeClass("active")
-                    }else{
-                        $gas.addClass("active")
-                    }
-
-                    // 화제 셋팅
-                    console.log('smoke Json 데이터 : '+ res.data.smoke.r_data);
-                    var smoke = JSON.parse(res.data.smoke.r_data);
-                    console.log('smoke 상태 : '+smoke.rm1sm01);
-                    console.log('');
-                    var smokeStatus = smoke.rm1sm01;
-                    var $smoke = $('#smoke');
-                    if(smokeStatus==="clear"){
-                        $smoke.removeClass("active")
-                    }else{
-                        $smoke.addClass("active")
-                    }
+						var $smoke = $('#smoke');
+						if (checkSmoke){
+							$smoke.addClass("active");
+						}else{
+							$smoke.removeClass("active");
+						}
+					}
 
 
                 }
@@ -379,7 +410,7 @@
 
         // 온도표기해주는 함수
         function tempRefresh(elimentId,value) {
-            // console.log('받은 온도 : '+value);
+            console.log('받은 온도 : '+value);
 
             // 값은 받아오나, 텍스트를 리프레쉬할수없음.
             const cp = new CircleProgress('#'+elimentId, {
