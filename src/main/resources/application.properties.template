@@ -7,7 +7,8 @@ spring.output.ansi.enabled = ALWAYS
 logging.level.root=INFO
 logging.level.org.hibernate=INFO
 logging.level.kr.co.broadwave=DEBUG
-logging.file.max-history=5
+logging.file.max-history=30
+logging.file=./logs/homeservice.log
 
 broadwave.ha.iot.username=***
 broadwave.ha.iot.password=***
