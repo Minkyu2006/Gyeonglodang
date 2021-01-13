@@ -65,8 +65,9 @@
 							if(doorCheckRm3) doorType = "안방";
 							if(doorCheckRm4) doorType = "운동방";
 							if(doorCheckRm5) doorType = "창고방";
-							$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.<br>(현재 " + doorType+ " 문이 열려있습니다.)")
+							$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.<br>(현재 " + doorType +  " 창문(문)이 열려있습니다.)")
 							$('#alertarea').addClass('active');
+							$('#doorMessage').text(doorType + "창문(문)이 열렸습니다.");
 							setTimeout(function() {
 								$('#alertarea').removeClass('active');
 							}, 5000)
@@ -74,6 +75,7 @@
 							$doorStatus.removeClass("active")
 							$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.")
 							$('#alertarea').addClass('active');
+							$('#doorMessage').text(doorType + "창문 보안 안전");
 							setTimeout(function() {
 								$('#alertarea').removeClass('active');
 							}, 5000)
