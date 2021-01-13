@@ -362,14 +362,60 @@
 						// 창문 셋팅
 						console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
 						var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-						console.log('doorsensor 상태 : ' + doorsensor.rm1dr01);
-						console.log('');
-						var doorsensorStatus = doorsensor.rm1dr01;
+						let doorCheckRm1 =false; //거실
+						let doorCheckRm2 =false; //주방
+						let doorCheckRm3 =false; //안방
+						let doorCheckRm4 =false; //운동
+						let doorCheckRm5 =false; //창고
+
+						if (doorsensor.rm1dr01 =="on")  doorCheckRm1 = true
+						if (doorsensor.rm1dr02 =="on")  doorCheckRm1 = true
+						if (doorsensor.rm1dr03 =="on")  doorCheckRm1 = true
+
+						if (doorsensor.rm2dr03 =="on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr04 =="on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr05 =="on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr06 =="on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr07 =="on")  doorCheckRm2 = true
+
+						if (doorsensor.rm3dr01 =="on")  doorCheckRm3 = true
+						if (doorsensor.rm3dr02 =="on")  doorCheckRm3 = true
+						if (doorsensor.rm3dr03 =="on")  doorCheckRm3 = true
+
+						if (doorsensor.rm4dr01 =="on")  doorCheckRm4 = true
+						if (doorsensor.rm4dr02 =="on")  doorCheckRm4 = true
+						if (doorsensor.rm4dr03 =="on")  doorCheckRm4 = true
+
+						if (doorsensor.rm5dr01 =="on")  doorCheckRm5 = true
+						if (doorsensor.rm5dr02 =="on")  doorCheckRm5 = true
+
+
 						var $doorStatus = $('#doorStatus');
-						if (doorsensorStatus === "off") {
-							$doorStatus.addClass("active")
-						} else {
+						var $doorMessage = $('#doorMessage');
+
+
+						if (doorCheckRm1) {
 							$doorStatus.removeClass("active")
+							$doorMessage.text("거실 창문이 열렸습니다.");
+						}else if(doorCheckRm2){
+							$doorStatus.removeClass("active")
+							$doorMessage.text("주방 창문(뒷문)이 열렸습니다.");
+
+						}else if(doorCheckRm3){
+							$doorStatus.removeClass("active")
+							$doorMessage.text("안방 창문이 열렸습니다.");
+
+						}else if(doorCheckRm4){
+							$doorStatus.removeClass("active")
+							$doorMessage.text("운동방 창문이 열렸습니다.");
+
+						}else if(doorCheckRm5){
+							$doorStatus.removeClass("active")
+							$doorMessage.text("창고방 창문이 열렸습니다.");
+
+						} else {
+							$doorStatus.addClass("active")
+							$doorMessage.text("창문 보안 안전");
 						}
 					}
 
@@ -660,7 +706,7 @@
 	                                <div class="door-icon">
 	                                    <i class="fas fa-lock"></i>
 	                                </div>
-	                                <span>아이콘 이미지 교체 필요</span>
+	                                <span id="doorMessage">아이콘 이미지 교체 필요</span>
 	                            </div>
 	                        </a>
 	                    </div>
