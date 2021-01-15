@@ -89,7 +89,7 @@
 				gasAudio.play();
 				var smokeAudio = document.getElementById("smoke01");
 				smokeAudio.play();
-				var leaveAudio = document.getElementById("leave01");
+				var leaveAudio = document.getElementById("leave02");
 				leaveAudio.play();
 				var welcomeAudio = document.getElementById("welcome01");
 				welcomeAudio.play();
@@ -112,6 +112,9 @@
 					alert('퇴실실패');
 				},
 				success: function (res) {
+					var leaveAudio = document.getElementById("leave02");
+					$("#leave02").prop("muted",false);
+					leaveAudio.play();
 
 				}
 			});
@@ -129,9 +132,7 @@
 				success: function (res) {
 
 
-					//var leaveAudio = document.getElementById("leave01");
-					//$("#leave01").prop("muted",false);
-					//leaveAudio.play();
+
 					var doorsensor = JSON.parse(res.data.doorsensor.r_data);
 					let doorCheckRm1 =false; //거실
 					let doorCheckRm2 =false; //주방
@@ -658,7 +659,7 @@
 <audio id="secure01" src='/assets/record/secure01.mp3' controls  muted style="display: none" ></audio>
 <audio id="gas01" src='/assets/record/gas01.mp3' controls  muted style="display: none"></audio>
 <audio id="smoke01" src='/assets/record/smoke01.mp3' controls muted style="display: none"></audio>
-<audio id="leave01" src='/assets/record/leave01.mp3' controls muted style="display: none"></audio>
+<audio id="leave02" src='/assets/record/leave02.mp3' controls muted style="display: none"></audio>
 <audio id="welcome01" src='/assets/record/welcome.mp3' controls style="display: none"></audio>
 <div class="wrap">
 	<div class="dashboard">
