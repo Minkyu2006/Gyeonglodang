@@ -91,6 +91,10 @@ $(function() {
         e.preventDefault();
     })
     
+    $('.exit-btn--cancel').on('click', function(e) {
+    	$(this).parents('.alert').removeClass('active');
+    })
+    
     
 
 })
