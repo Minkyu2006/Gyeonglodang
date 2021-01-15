@@ -429,9 +429,18 @@
 						console.log('aircondition 상태 : ' + aircondition.rm2ac01);
 
 						let airconditionCheck = false
-						if (aircondition.rm1ac01 == "cool" || aircondition.rm2ac01 == "dry" ) airconditionCheck = true;
-						if (aircondition.rm2ac01 == "cool" || aircondition.rm2ac01 == "dry" ) airconditionCheck = true;
-						if (aircondition.rm3ac01 == "cool" || aircondition.rm3ac01 == "dry" ) airconditionCheck = true;
+						if (aircondition.rm1ac01 == "cool" || aircondition.rm2ac01 == "dry" ){
+							$('#air1').addClass("active");
+							airconditionCheck = true;
+						} else { $('#air1').removeClass("active");}
+						if (aircondition.rm2ac01 == "cool" || aircondition.rm2ac01 == "dry" ){
+							$('#air2').addClass("active");
+							airconditionCheck = true;
+						} else { $('#air2').removeClass("active");}
+						if (aircondition.rm3ac01 == "cool" || aircondition.rm3ac01 == "dry" ){
+							$('#air3').addClass("active");
+							airconditionCheck = true;
+						} else { $('#air3').removeClass("active");}
 
 						var $airBtn = $('#airBtn');
 						if (airconditionCheck) {
