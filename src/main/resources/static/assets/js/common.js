@@ -36,6 +36,28 @@ $(function() {
     //     $('.humidity').removeClass('blue');
     //     $('.humidity').removeClass('red');
     // }
+	
+	// 공기질
+    const airqual = new CircleProgress('.air .progress', {
+        max: 600,
+        value: 90,
+        animationDuration: 400,
+        textFormat: (val) => val + '㎍/㎥'
+    });
+    
+    if (airqual.value > 80) {
+        $('.air').addClass('red');
+        $('.air').removeClass('blue');
+        $('.air__state').text('나쁨');
+    }  else if (airqual.value > 30) {
+    	$('.air').removeClass('blue');
+        $('.air').removeClass('red');
+        $('.air__state').text('보통');
+    } else {
+        $('.air').addClass('blue');
+        $('.air').removeClass('red');
+        $('.air__state').text('좋음');        
+    }
 
     // 경고메시지 예제 추후 삭제
     //$('.ex-button').on('click', function(e) {

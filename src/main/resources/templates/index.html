@@ -49,12 +49,8 @@
             $('#lightBtn').on('click', function() {
                 $(this).toggleClass('active');
                 if ($(this).hasClass('light active')) {
-                    $(this).children('.fa-lightbulb').removeClass('fas');
-                    $(this).children('.fa-lightbulb').addClass('far');
                     integratedFun("light","ON");
                 }else{
-                    $(this).children('.fa-lightbulb').removeClass('far');
-                    $(this).children('.fa-lightbulb').addClass('fas');
                     integratedFun("light","OFF");
                 }
             })
@@ -74,10 +70,12 @@
             });
             // 퇴실버튼
             $('#outBtn').on('click', function() {
+            	$("#exitPop").addClass("active");
+            	
 				var leaveAudio = document.getElementById("leave01");
 				$("#leave01").prop("muted",false);
 				leaveAudio.play();
-                outGo();
+                // outGo();
             });
 			//음성활성화
 			$('#audioCheck').on('click', function() {
@@ -126,14 +124,14 @@
         function warningMessage(stype) {
             //stype : secure : 비운영시간에 움직임감지,  gas : 가스감지 , smoke : 연기감지
             if (stype==="secure") {
-                $('#alertmsg').html("운영시간 외 움직임이 감지되어 <br>관리자에게 알림이 송신되었습니다. <br> (5초후 메세지창이닫힙니다)")
+                $('#alertmsg').html("운영시간 외 움직임이 감지되어 <br>관리자에게 알림이 송신되었습니다. <br> (<span class='color--red'>5초</span> 후 메세지창이닫힙니다)")
                 $('#alertarea').addClass('active');
                 setTimeout(function() {
                     $('#alertarea').removeClass('active');
                 }, 5000)
             }
             if (stype==="smoke") {
-                $('#alertmsg').html("경로당내 연기가 감지되었습니다. <br> 화재발생에 주의 해주세요. <br> (5초후 메세지창이닫힙니다)")
+                $('#alertmsg').html("경로당내 연기가 감지되었습니다. <br> 화재발생에 주의 해주세요. <br> (<span class='color--red'>5초</span> 후 메세지창이닫힙니다)")
                 $('#alertarea').addClass('active');
                 setTimeout(function() {
                     $('#alertarea').removeClass('active');
@@ -141,7 +139,7 @@
                 $("#smoke").addClass("active")
             }
             if (stype==="gas") {
-                $('#alertmsg').html("경로당내 가스가 감지되었습니다. <br> 가스밸브를 확인 해주세요. <br> (5초후 메세지창이닫힙니다)")
+                $('#alertmsg').html("경로당내 가스가 감지되었습니다. <br> 가스밸브를 확인 해주세요. <br> (<span class='color--red'>5초</span> 후 메세지창이닫힙니다)")
                 $('#alertarea').addClass('active');
                 setTimeout(function() {
                     $('#alertarea').removeClass('active');
@@ -173,7 +171,7 @@
 
         }
 
-        var week = ['일', '월', '화', '수', '목', '금', '토'];
+        var week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
         function clock() {
 
             var date = new Date();
@@ -187,15 +185,17 @@
 
             var ampm;
             if(hours<=12){
-                ampm="오전";
+                ampm="am";
             }else{
             	hours = hours - 12;
-                ampm="오후";
+                ampm="pm";
             }
 
             // 초까지 받아온 후
-            $("#clockDate").text(`${year}.${month+1}.${clockDate}(${week[day]})`);
-            $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }`);
+            $("#clockDate").text(`${year}.${month+1}.${clockDate}`);
+            $("#week").text(`${week[day]}`)
+            $("#clockTime").text(`${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }`);
+            $("#ampm").text(`${ampm}`)
             // $("#clockTime").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }.${seconds < 10 ? `0${seconds }`  : seconds }`);
         }
 
@@ -351,7 +351,7 @@
 							today.setDate(today.getDate() + d);
 							var day = today.getDay();
 
-							$("#nextDay" + i).text(`${week[day]}` + "요일");
+							$("#nextDay" + i).text(`${week[day]}`);
 							// $("#nextWeatherIcon"+i).text(""); // 아이콘처리
 							$("#nextTem" + i).text(weather.forecast[i].temperature.toFixed(0) + "º");
 							$("#nextTemLow" + i).text(weather.forecast[i].templow.toFixed(0) + "º");
@@ -559,61 +559,71 @@
 	        <div class="infobox">
 	            <div class="infobox__inner">
 	                <div class="info">
-	                    <div class="date"><span id="clockDate"></span></div>
-	                    <div class="time"><span id="clockTime"></span></div>
+	                    <div class="date"><span id="clockDate"></span><span id="week"></span></div>
+	                    <div class="time"><span id="clockTime"></span><span id="ampm"></span></div>
 	                </div>
 	                <div class="weather">
 	                	<div class="location">대전시 유성구</div>
 	                    <div class="temperature">
-	                        <div id="nowTem" class="temperature__current">38º</div>
+	                        <div class="temperature__current">
+		                        <span id="nowTem">38º</span>
+		                        <span id="nowWeather">맑음</span>
+	                        </div>
 	                        <div class="weather__etc">
-	                            <div class="weather__humidity"><i class="fas fa-tint"></i><span id="nowHum">40%</span></div>
-	                            <div class="weather__wind"><i class="fas fa-wind"></i><span id="nowWindSpeed">20.20km/h</span></div>
+	                            <div class="weather__humidity">습도<span id="nowHum">40%</span></div>
+	                            <div class="weather__wind">풍속<span id="nowWindSpeed">20.20km/h</span></div>
 	                        </div>
 	                    </div>
 	                    <div class="weather__icon">
-	                        <i id="newWeatherIcon" class="fas fa-sun"></i>
-	                        <span id="nowWeather">맑음</span>
+	                    	<img src="/assets/images/weather/sunny.png" alt="" id="newWeatherIcon" />
 	                    </div>
 	                    <div class="weekly">
 	                        <ul>
 	                            <li>
 	                                <div class="weekly-weather">
 	                                    <div id="nextDay0" class="weekly-day">금요일</div>
-	                                    <div class="weekly-icon"><i id="nextWeatherIcon0" class="fas fa-sun"></i></div>
 	                                    <div class="weelky-temp">
-	                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem0"></span></span>
-	                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow0"></span></span>
+	                                        <span class="low" id="nextTemLow0"></span> / 
+	                                        <span class="high" id="nextTem0"></span>
+	                                    </div>
+	                                    <div class="weekly-icon">
+	                                    	<img src="/assets/images/weather/sunny.png" alt="" id="nextWeatherIcon0" />
 	                                    </div>
 	                                </div>
 	                            </li>
 	                            <li>
 	                                <div class="weekly-weather">
 	                                    <div id="nextDay1" class="weekly-day">토요일</div>
-	                                    <div class="weekly-icon"><i id="nextWeatherIcon1" class="fas fa-sun"></i></div>
 	                                    <div class="weelky-temp">
-	                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem1"></span></span>
-	                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow1"></span></span>
+	                                        <span class="low" id="nextTemLow1"></span> / 
+	                                    	<span class="high" id="nextTem1"></span>
+	                                    </div>
+	                                    <div class="weekly-icon">
+	                                    	<img src="/assets/images/weather/sunny.png" alt="" id="nextWeatherIcon1" />
 	                                    </div>
 	                                </div>
 	                            </li>
 	                            <li>
 	                                <div class="weekly-weather">
 	                                    <div id="nextDay2" class="weekly-day">일요일</div>
-	                                    <div class="weekly-icon"><i id="nextWeatherIcon2" class="fas fa-sun"></i></div>
 	                                    <div class="weelky-temp">
-	                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem2"></span></span>
-	                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow2"></span></span>
+	                                    	<span class="low" id="nextTemLow2"></span> / 
+	                                   		<span class="high" id="nextTem2"></span>
+	                                    </div>
+	                                    <div class="weekly-icon">
+	                                    	<img src="/assets/images/weather/sunny.png" alt="" id="nextWeatherIcon2" />
 	                                    </div>
 	                                </div>
 	                            </li>
 	                            <li>
 	                                <div class="weekly-weather">
 	                                    <div id="nextDay3" class="weekly-day">월요일</div>
-	                                    <div class="weekly-icon"><i id="nextWeatherIcon3" class="fas fa-sun"></i></div>
 	                                    <div class="weelky-temp">
-	                                        <span class="high"><i class="fas fa-long-arrow-alt-up"></i><span id="nextTem3"></span></span>
-	                                        <span class="low"><i class="fas fa-long-arrow-alt-down"></i><span id="nextTemLow3"></span></span>
+	                                    	<span class="low" id="nextTemLow3"></span> / 
+	                                    	<span class="high" id="nextTem3"></span>
+	                                    </div>
+	                                    <div class="weekly-icon">
+	                                    	<img src="/assets/images/weather/sunny.png" alt="" id="nextWeatherIcon3" />
 	                                    </div>
 	                                </div>
 	                            </li>
@@ -624,8 +634,8 @@
 	        </div>
 	        <div class="buttons">
 	            <ul>
-	                <li><button id="outBtn" class="point-button exit">퇴실</button></li>
-	                <li><button id="openDoorBtn" class="point-button open">문열림</button></li>
+	                <li><button id="outBtn" class="point-button exit"><img src="/assets/images/icon_out.png" alt="" />퇴실</button></li>
+	                <li><button id="openDoorBtn" class="point-button open"><img src="/assets/images/icon_open.png" alt="" />문열림</button></li>
 	            </ul>
 	        </div>
 	    </div>
@@ -636,25 +646,25 @@
 	            <ul>
 	                <li>
 	                    <!-- 개별에어컨 제어 추가로 수정 -->
-	                    <button id="airBtn" class="console-button front aircon"><i class="fas fa-wind"></i>에어컨<span>ON</span></button>
-	                    <button id="airBtnSub" class="console-button rear"><i class="fas fa-sort-down"></i></button>
+	                    <button id="airBtn" class="console-button front aircon">에어컨<span>ON</span></button>
+	                    <button id="airBtnSub" class="console-button rear"><img src="/assets/images/btn_setting.png" alt="에어컨 선택" /></button>
 	                    <div class="context">
 	                        <div class="context-pop">
 	                            <h4 class="context-title">개별 에어컨 제어</h4>
 	                            <ul>
-	                                <li><button id="air1" class="console-button aircon"><i class="fas fa-wind"></i>거실<span>ON</span></button></li>
-	                                <li><button id="air2" class="console-button aircon"><i class="fas fa-wind"></i>주방<span>ON</span></button></li>
-	                                <li><button id="air3" class="console-button aircon"><i class="fas fa-wind"></i>안방<span>ON</span></button></li>
+	                                <li><button id="air1" class="console-button aircon">거실<span>ON</span></button></li>
+	                                <li><button id="air2" class="console-button aircon">주방<span>ON</span></button></li>
+	                                <li><button id="air3" class="console-button aircon">안방<span>ON</span></button></li>
 	                            </ul>
-	                            <a href="#" class="context-pop__close"><i class="far fa-window-close"></i></a>
+	                            <a href="#" class="context-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>
 	                        </div>
 	                    </div>
 	                </li>
 	                <li>
-	                    <button id="lightBtn" class="console-button light"><i class="fas fa-lightbulb"></i>조명<span>ON</span></button>
+	                    <button id="lightBtn" class="console-button light">조명<span>ON</span></button>
 	                </li>
 	                <li>
-	                    <button id="aqBtn" class="console-button airfresher"><i class="fas fa-air-freshener"></i>공기청정기<span>ON</span></button>
+	                    <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
 	                </li>
 	            </ul>
 	        </div>
@@ -663,37 +673,47 @@
 	                <li class="card">
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link sensor-card sensor-card--temp">
-	                            <h3 class="card-title">온도</h3>
+	                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도" />온도</h3>
 	                            <div id="temChartColor" class="temp">
-	                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 	                                <div id="temChart" class="progress temp-progress"></div>
 	                            </div>
+	                            <span class="card-comment">적정 실내 온도입니다.</span>
 	                        </a>
 	                    </div>
 	                </li>
 	                <li class="card">
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link sensor-card sensor-card--humidity">
-	                            <h3 class="card-title">습도</h3>
+	                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도" />습도</h3>
 	                            <div id="humChartColor" class="humidity">
-	                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 	                                <div id="humChart" class="progress humidity-progress"></div>
 	                            </div>
+	                            <span class="card-comment">적정 실내 습도입니다.</span>
 	                        </a>
 	                    </div>
 	                </li>
 	                <li class="card">
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link sensor-card sensor-card--air">
-	                            <h3 class="card-title">공기질</h3>
+	                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질" />공기질</h3>
 	                            <div class="air">
-	                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-	                                <div class="air-icon">
+	                            	<div class="progress air-progress" data-micro="5"></div>
+	                            	<div class="air__state"></div>
+	                                <!-- <div class="air-icon">
 	                                    <i class="far fa-smile"></i>
-	                                    <!-- 변경시 fa-smile 삭제 .air에 클래스 추가 -->
-	                                    <!-- 좋음일 때 air에 good추가 fa-smile-wink 변경 -->
-	                                    <!-- 나쁨일 때 air에 bad 추가 fa-frown 변경 -->
-	                                </div>
+	                                </div> -->
+	                            </div>
+	                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link">
+	                            <div id="doorStatus" class="homestate door">
+	                            	<h3 class="card-title">창문</h3>
+	                                <div class="card-icon card-icon--door"></div>
+	                                <span class="card-comment" id="doorMessage">아이콘 이미지 교체 필요</span>
 	                            </div>
 	                        </a>
 	                    </div>
@@ -701,13 +721,10 @@
 	                <li class="card">
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link">
-	                            <h3 class="card-title">창문</h3>
-	                            <div id="doorStatus" class="door">
-	                                <span class="card-icon"><i class="fas fa-lock"></i></span>
-	                                <div class="door-icon">
-	                                    <i class="fas fa-lock"></i>
-	                                </div>
-	                                <span id="doorMessage">아이콘 이미지 교체 필요</span>
+	                            <div id="gas" class="homestate gas">
+	                            	<h3 class="card-title">가스</h3>
+	                                <div class="card-icon card-icon--gas"></div>
+	                                <span class="card-comment" id="gasrMessage">가스 상태 안전</span>
 	                            </div>
 	                        </a>
 	                    </div>
@@ -715,25 +732,10 @@
 	                <li class="card">
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link">
-	                            <h3 class="card-title">가스</h3>
-	                            <div id="gas" class="gas">
-	                                <span class="card-icon"><i class="fas fa-burn"></i></span>
-	                                <div class="gas-icon">
-	                                    <i class="fas fa-burn"></i>
-	                                </div>
-	                            </div>
-	                        </a>
-	                    </div>
-	                </li>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link">
-	                            <h3 class="card-title">화재</h3>
-	                            <div id="smoke" class="fire">
-	                                <span class="card-icon"><i class="fas fa-fire-extinguisher"></i></span>
-	                                <div class="fire-icon">
-	                                    <i class="fas fa-fire-extinguisher"></i>
-	                                </div>
+	                            <div id="smoke" class="homestate fire">
+	                            	<h3 class="card-title">화재</h3>
+	                                <div class="card-icon card-icon--fire"></div>
+	                                <span class="card-comment" id="fireMessage">화재 위험 안전</span>
 	                            </div>
 	                        </a>
 	                    </div>
@@ -755,9 +757,9 @@
 	<!--        <a href="#" onclick="warning();" class="ex-button" style="position: absolute;right: 20px;bottom: 20px;border: 1px solid #222;padding: 20px;font-size: 24px;color: #222;">경고메시지 예제</a>-->
 	        <div id="alertarea" class="alert">
 	            <div class="alert-pop">
-	                <div class="alert-pop__icon"><i class="fas fa-exclamation-triangle"></i><span>경고</span></div>
+	                <div class="alert-pop__icon"><img src="/assets/images/img_icon_error.png" alt="" /></div>
 	                <div class="alert-pop__text"><span id="alertmsg">창문이 열려 있습니다.</span></div>
-	                <a href="#" class="alert-pop__close"><i class="far fa-window-close"></i></a>
+	                <a href="#" class="alert-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>
 	            </div>
 	        </div>
 	        
@@ -769,11 +771,11 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">거실</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">거실</h3>
 			                            <div id="temChartRm1Color" class="temp">
-			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 											<div id="temChartRm1" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 온도입니다.</span>
 			                        </a>
 			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
 			                    </div>
@@ -781,51 +783,51 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">주방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">주방</h3>
 			                            <div id="temChartRm2Color" class="temp">
-			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 											<div id="temChartRm2" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">안방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">안방</h3>
 			                            <div id="temChartRm3Color" class="temp">
-			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 											<div id="temChartRm3" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">운동방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">운동방</h3>
 										<div id="temChartRm4Color" class="temp">
-			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 											<div id="temChartRm4" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">창고방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">창고방</h3>
 										<div id="temChartRm5Color" class="temp">
-			                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
 											<div id="temChartRm5" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			            </ul>
 			        </div>
 	        		
-	        		<a href="#" class="sensor-pop__close"><i class="far fa-window-close"></i></a>
+	        		<a href="#" class="sensor-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>
 	        	</div>
 	        </div>
 	        
@@ -837,11 +839,11 @@
 			            	<li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">거실</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">거실</h3>
 			                            <div id ="humChartRm1Color" class="humidity">
-			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 											<div id="humChartRm1" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 습도입니다.</span>
 			                        </a>
 			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
 			                    </div>
@@ -849,51 +851,51 @@
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">주방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">주방</h3>
 										<div id ="humChartRm2Color" class="humidity">
-			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 											<div id="humChartRm2" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">안방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">안방</h3>
 										<div id ="humChartRm3Color" class="humidity">
-			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 											<div id="humChartRm3" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">운동방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">운동방</h3>
 										<div id ="humChartRm4Color" class="humidity">
-			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 											<div id="humChartRm4" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
-			                            <h3 class="card-title">창고방</h3>
+			                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">창고방</h3>
 										<div id ="humChartRm5Color" class="humidity">
-			                                <span class="card-icon"><i class="fas fa-tint"></i></span>
 											<div id="humChartRm5" class="progress temp-progress"></div>
 			                            </div>
+			                            <span class="card-comment">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			            </ul>
 			        </div>
 	        		
-	        		<a href="#" class="sensor-pop__close"><i class="far fa-window-close"></i></a>
+	        		<a href="#" class="sensor-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>
 	        	</div>
 	        </div>
 	        
@@ -902,85 +904,100 @@
 	        	<div class="sensor-pop__box">
 	        		<div class="card-list">
 			            <ul>
-			                <li class="card">
+			            	<li class="card">
 			                    <div class="card-inner">
-			                        <a class="card-link">
-			                            <h3 class="card-title">거실</h3>
-			                            <div class="air good">
-			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-			                                <div class="air-icon">
-			                                    <i class="far fa-smile-wink"></i>
-			                                    <!-- 변경시 fa-smile 삭제 .air에 클래스 추가 -->
-			                                    <!-- 좋음일 때 air에 good추가 fa-smile-wink 변경 -->
-			                                    <!-- 나쁨일 때 air에 bad 추가 fa-frown 변경 -->
-			                                </div>
-			                                <div class="air-state">좋음</div>
-			                            </div>
-			                        </a>
-			                    </div>
-			                </li>
-			                <li class="card">
-			                    <div class="card-inner">
-			                        <a class="card-link">
-			                            <h3 class="card-title">주방</h3>
-			                            <div class="air bad">
-			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-			                                <div class="air-icon">
-			                                    <i class="far fa-frown"></i>
-			                                </div>
-			                                <div class="air-state">나쁨</div>
-			                            </div>
-			                        </a>
-			                    </div>
-			                </li>
-			                <li class="card">
-			                    <div class="card-inner">
-			                        <a class="card-link">
-			                            <h3 class="card-title">안방</h3>
+			                        <a href="#" class="card-link sensor-card sensor-card--air">
+			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">거실</h3>
 			                            <div class="air">
-			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-			                                <div class="air-icon">
+			                            	<div class="progress air-progress" data-micro="15"></div>
+			                            	<div class="air__state"></div>
+			                                <!-- <div class="air-icon">
 			                                    <i class="far fa-smile"></i>
-			                                </div>
-			                                <div class="air-state">보통</div>
+			                                </div> -->
 			                            </div>
+			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
-			                        <a class="card-link">
-			                            <h3 class="card-title">운동</h3>
+			                        <a href="#" class="card-link sensor-card sensor-card--air">
+			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">주방</h3>
 			                            <div class="air">
-			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-			                                <div class="air-icon">
+			                            	<div class="progress air-progress" data-micro="25"></div>
+			                            	<div class="air__state"></div>
+			                                <!-- <div class="air-icon">
 			                                    <i class="far fa-smile"></i>
-			                                </div>
-			                                <div class="air-state">보통</div>
+			                                </div> -->
 			                            </div>
+			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			                <li class="card">
 			                    <div class="card-inner">
-			                        <a class="card-link">
-			                            <h3 class="card-title">창고</h3>
+			                        <a href="#" class="card-link sensor-card sensor-card--air">
+			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">안방</h3>
 			                            <div class="air">
-			                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-			                                <div class="air-icon">
+			                            	<div class="progress air-progress" data-micro="35"></div>
+			                            	<div class="air__state"></div>
+			                                <!-- <div class="air-icon">
 			                                    <i class="far fa-smile"></i>
-			                                </div>
-			                                <div class="air-state">보통</div>
+			                                </div> -->
 			                            </div>
+			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a href="#" class="card-link sensor-card sensor-card--air">
+			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">운동</h3>
+			                            <div class="air">
+			                            	<div class="progress air-progress" data-micro="45"></div>
+			                            	<div class="air__state"></div>
+			                                <!-- <div class="air-icon">
+			                                    <i class="far fa-smile"></i>
+			                                </div> -->
+			                            </div>
+			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+			                        </a>
+			                    </div>
+			                </li>
+			                <li class="card">
+			                    <div class="card-inner">
+			                        <a href="#" class="card-link sensor-card sensor-card--air">
+			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">창고</h3>
+			                            <div class="air">
+			                            	<div class="progress air-progress" data-micro="55"></div>
+			                            	<div class="air__state"></div>
+			                                <!-- <div class="air-icon">
+			                                    <i class="far fa-smile"></i>
+			                                </div> -->
+			                            </div>
+			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
 			                        </a>
 			                    </div>
 			                </li>
 			            </ul>
 			        </div>
 	        		
-	        		<a href="#" class="sensor-pop__close"><i class="far fa-window-close"></i></a>
+	        		<a href="#" class="sensor-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>
 	        	</div>
 	        </div>
+	    
+	    	<!-- 퇴실 팝업 -->
+	    	<div class="alert" id="exitPop">
+	    		<div class="pop-exit">
+	    			<p class="pop-exit__text">약 30분 후 가전, 조명, 전기가 차단됩니다.</p>
+	    			<div class="pop-exit__text"><span class="place">안방</span> 창문이 열려있습니다.<br />퇴실하시겠습니까?</div>
+	    			<ul>
+	    				<li><button class="exit-btn">퇴실하기</button></li>
+	    				<li><button class="exit-btn exit-btn--cancel">취소하기</button></li>
+	    			</ul>
+	    			<a href="#" class="alert-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>
+	    		</div>
+	    	</div>
 	    </div>
 	    
 	</div>
