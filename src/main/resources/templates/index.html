@@ -68,15 +68,18 @@
             $('#openDoorBtn').on('click', function() {
                 doorOpen("OPEN");
             });
-            // 퇴실버튼
+            // 퇴실할지여부 물어보는 화면
             $('#outBtn').on('click', function() {
-            	$("#exitPop").addClass("active");
-            	
-				var leaveAudio = document.getElementById("leave01");
-				$("#leave01").prop("muted",false);
-				leaveAudio.play();
-                // outGo();
+                outGoReady();
             });
+
+			$('#outGoExec').on('click', function() {
+
+				outGo();
+			});
+
+
+
 			//음성활성화
 			$('#audioCheck').on('click', function() {
 
@@ -93,10 +96,91 @@
 
 				$('.audio-pop').fadeOut(100);
 			});
-
-            sseSubcribe()
+			//경고방송용 토픽 구독
+            sseSubcribe();
 
         });
+
+		function outGo() {
+			$("#exitPop").removeClass("active");
+
+			$.ajax({
+				url: '/exitGo/outGo',
+				type: 'post',
+				cache: false,
+				error: function () {
+					alert('퇴실실패');
+				},
+				success: function (res) {
+
+				}
+			});
+		}
+
+		function outGoReady() {
+			$("#exitPop").addClass("active");
+			$.ajax({
+				url: '/exitGo/ready',
+				type: 'post',
+				cache: false,
+				error: function () {
+					alert('퇴실실패');
+				},
+				success: function (res) {
+
+
+					//var leaveAudio = document.getElementById("leave01");
+					//$("#leave01").prop("muted",false);
+					//leaveAudio.play();
+					var doorsensor = JSON.parse(res.data.doorsensor.r_data);
+					let doorCheckRm1 =false; //거실
+					let doorCheckRm2 =false; //주방
+					let doorCheckRm3 =false; //안방
+					let doorCheckRm4 =false; //운동
+					let doorCheckRm5 =false; //창고
+
+					if (doorsensor.rm1dr01 =="on")  doorCheckRm1 = true
+					if (doorsensor.rm1dr02 =="on")  doorCheckRm1 = true
+					if (doorsensor.rm1dr03 =="on")  doorCheckRm1 = true
+
+					if (doorsensor.rm2dr03 =="on")  doorCheckRm2 = true
+					if (doorsensor.rm2dr04 =="on")  doorCheckRm2 = true
+					if (doorsensor.rm2dr05 =="on")  doorCheckRm2 = true
+					if (doorsensor.rm2dr06 =="on")  doorCheckRm2 = true
+					if (doorsensor.rm2dr07 =="on")  doorCheckRm2 = true
+
+					if (doorsensor.rm3dr01 =="on")  doorCheckRm3 = true
+					if (doorsensor.rm3dr02 =="on")  doorCheckRm3 = true
+					if (doorsensor.rm3dr03 =="on")  doorCheckRm3 = true
+
+					if (doorsensor.rm4dr01 =="on")  doorCheckRm4 = true
+					if (doorsensor.rm4dr02 =="on")  doorCheckRm4 = true
+					if (doorsensor.rm4dr03 =="on")  doorCheckRm4 = true
+
+					if (doorsensor.rm5dr01 =="on")  doorCheckRm5 = true
+					if (doorsensor.rm5dr02 =="on")  doorCheckRm5 = true
+
+
+					if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5 ){
+						$('#doorStatus').addClass("active")
+						let doorType ='';
+						if(doorCheckRm1) doorType = "거실";
+						if(doorCheckRm2) doorType = "주방";
+						if(doorCheckRm3) doorType = "안방";
+						if(doorCheckRm4) doorType = "운동방";
+						if(doorCheckRm5) doorType = "창고방";
+						$('#place').text(doorType +  " 창문(뒷문)이 열려있습니다.");
+						$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
+
+					}else{
+						$('#doorStatus').removeClass("active")
+						$('#place').text("");
+
+					}
+				}
+			});
+		}
+
         // 서버에서 경고 토픽 받아오는 기능 (SSE기반)
         function sseSubcribe() {
             //alert("test");
@@ -253,11 +337,27 @@
 					if(res.data.temperatureData != '') {
 						console.log('temperatureData Json 데이터 : ' + res.data.temperatureData.r_data);
 						var temperature = JSON.parse(res.data.temperatureData.r_data);
-						var temDataRm1 = temperature.rm1mu01; // 거실 온도
-						var temDataRm2 = temperature.rm2mu01; // 주방 온도
-						var temDataRm3 = temperature.rm3mu01; // 안방 온도
-						var temDataRm4 = temperature.rm4mu01; // 운동 온도
-						var temDataRm5 = "0"; // 창고 온도
+						let temDataRm1 = '0'; // 거실 온도
+						let temDataRm2 = '0'; // 주방 온도
+						let temDataRm3 = '0'; // 안방 온도
+						let temDataRm4 = '0'; // 운동 온도
+						let temDataRm5 = '0'; // 창고 온도
+						try {
+							temDataRm1 = temperature.rm1mu01; // 거실 온도
+							temDataRm2 = temperature.rm2mu01; // 주방 온도
+							temDataRm3 = temperature.rm3mu01; // 안방 온도
+							temDataRm4 = temperature.rm4mu01; // 운동 온도
+							temDataRm5 = temperature.rm5mu01; // 창고 온도
+						}catch (e){
+							// 에러처리 필요없슴
+						}
+						if (typeof temDataRm1=='undefined') temDataRm1 = '0';
+						if (typeof temDataRm2=='undefined') temDataRm2 = '0';
+						if (typeof temDataRm3=='undefined') temDataRm3 = '0';
+						if (typeof temDataRm4=='undefined') temDataRm4 = '0';
+						if (typeof temDataRm5=='undefined') temDataRm5 = '0';
+
+						console.log('========temDataRm5' +temDataRm5 )
 
 						tempRefresh('temChart', temDataRm1);
 						tempRefresh('temChartRm1', temDataRm1);
@@ -265,7 +365,7 @@
 						tempRefresh('temChartRm3', temDataRm3);
 						tempRefresh('temChartRm4', temDataRm4);
 						tempRefresh('temChartRm5', temDataRm5);
-						console.log('');
+
 					}
 
 					if(res.data.humidity != '') {
@@ -274,14 +374,25 @@
 						var humidity = JSON.parse(res.data.humidity.r_data);
 						console.log('사무실 습도 humidity rm1 상태 : ' + humidity.rm1hu01);
 						console.log('회의실 습도 humidity rm2 상태 : ' + humidity.rm2hu01);
-						console.log('');
-						var humDataRm1 = humidity.rm1mu01; // 거실 습도
-						var humDataRm2 = humidity.rm2mu01; // 주방 습도
-						var humDataRm3 = humidity.rm3mu01;
-						; // 안방 습도
-						var humDataRm4 = humidity.rm4mu01;
-						; // 운동 습도
-						var humDataRm5 = "0"; // 창고 습도
+						let humDataRm1 = '0'; // 거실 습도
+						let humDataRm2 = '0'; // 주방 습도
+						let humDataRm3 = '0';// 안방 습도
+						let humDataRm4 = '0';// 운동 습도
+						let humDataRm5 = '0'; // 창고 습도
+						try {
+							humDataRm1 = humidity.rm1mu01; // 거실 습도
+							humDataRm2 = humidity.rm2mu01; // 주방 습도
+							humDataRm3 = humidity.rm3mu01;// 안방 습도
+							humDataRm4 = humidity.rm4mu01;// 운동 습도
+							humDataRm5 = humidity.rm5mu01; // 창고 습도
+						}catch (e){
+							// 에러처리 필요없슴
+						}
+						if (typeof humDataRm1=='undefined') humDataRm1 = '0';
+						if (typeof humDataRm2=='undefined') humDataRm2 = '0';
+						if (typeof humDataRm3=='undefined') humDataRm3 = '0';
+						if (typeof humDataRm4=='undefined') humDataRm4 = '0';
+						if (typeof humDataRm5=='undefined') humDataRm5 = '0';
 
 						humRefresh('humChart', humDataRm1);// 거실 습도
 						humRefresh('humChartRm1', humDataRm1);// 거실 습도
@@ -389,35 +500,21 @@
 						if (doorsensor.rm5dr01 =="on")  doorCheckRm5 = true
 						if (doorsensor.rm5dr02 =="on")  doorCheckRm5 = true
 
-
-						var $doorStatus = $('#doorStatus');
-						var $doorMessage = $('#doorMessage');
-
-
-						if (doorCheckRm1) {
-							$doorStatus.addClass("active")
-							$doorMessage.text("거실 창문이 열렸습니다.");
-						}else if(doorCheckRm2){
-							$doorStatus.addClass("active")
-							$doorMessage.text("주방 창문(뒷문)이 열렸습니다.");
-
-						}else if(doorCheckRm3){
-							$doorStatus.addClass("active")
-							$doorMessage.text("안방 창문이 열렸습니다.");
-
-						}else if(doorCheckRm4){
-							$doorStatus.addClass("active")
-							$doorMessage.text("운동방 창문이 열렸습니다.");
-
-						}else if(doorCheckRm5){
-							$doorStatus.addClass("active")
-							$doorMessage.text("창고방 창문이 열렸습니다.");
-
-						} else {
-
-							$doorStatus.removeClass("active")
-							$doorMessage.text("창문 보안 안전");
+						if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5){
+							let doorType= "";
+							if(doorCheckRm1) doorType = "거실";
+							if(doorCheckRm2) doorType = "주방";
+							if(doorCheckRm3) doorType = "안방";
+							if(doorCheckRm4) doorType = "운동방";
+							if(doorCheckRm5) doorType = "창고방";
+							$('#doorStatus').addClass("active")
+							$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
+						}else{
+							$('#doorStatus').removeClass("active")
+							$('#doorMessage').text("창문 보안 안전");
 						}
+
+
 					}
 
 					if(res.data.gas != '') {
@@ -478,12 +575,16 @@
             cp.value = value;
 
             var $tempColor = $('#'+elimentId+'Color');
-            if (value > 26) {
+			var $tempMessage = $('#'+elimentId+'Message');
+            if (value > 27) {
 				$tempColor.addClass('red').removeClass('blue');
-            } else if (value < 23) {
+				$tempMessage.text('실내 온도가 덥습니다.');
+            } else if (value < 18) {
 				$tempColor.addClass('blue').removeClass('red');
+				$tempMessage.text('실내 온도가 춥습니다.');
             } else {
 				$tempColor.removeClass('blue').removeClass('red');
+				$tempMessage.text('적정 실내 온도입니다.');
             }
         }
 
@@ -500,12 +601,18 @@
 			cp.value = value;
 
 			var $tempColor = $('#'+elimentId+'Color');
-			if (value > 70) {
+			var $tempMessage = $('#'+elimentId+'Message');
+			if (value > 60) {
 				$tempColor.addClass('red').removeClass('blue');
+				$tempMessage.text('실내가 습합니다.');
+				if (value>=80) $tempMessage.text('실내가 매우 습합니다.');
 			} else if (value < 40) {
 				$tempColor.addClass('blue').removeClass('red');
+				$tempMessage.text('실내가 건조합니다.');
+				if (value<30) $tempMessage.text('실내가 매우 건조합니다.');
 			} else {
 				$tempColor.removeClass('blue').removeClass('red');
+				$tempMessage.text('적정 실내습도입니다.');
 			}
 		}
 
@@ -677,7 +784,7 @@
 	                            <div id="temChartColor" class="temp">
 	                                <div id="temChart" class="progress temp-progress"></div>
 	                            </div>
-	                            <span class="card-comment">적정 실내 온도입니다.</span>
+	                            <span class="card-comment" id="temChartMessage">적정 실내 온도입니다.</span>
 	                        </a>
 	                    </div>
 	                </li>
@@ -688,7 +795,7 @@
 	                            <div id="humChartColor" class="humidity">
 	                                <div id="humChart" class="progress humidity-progress"></div>
 	                            </div>
-	                            <span class="card-comment">적정 실내 습도입니다.</span>
+	                            <span class="card-comment" id="humChartMessage">적정 실내 습도입니다.</span>
 	                        </a>
 	                    </div>
 	                </li>
@@ -775,7 +882,7 @@
 			                            <div id="temChartRm1Color" class="temp">
 											<div id="temChartRm1" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 온도입니다.</span>
+			                            <span class="card-comment" id="temChartRm1Message">적정 실내 온도입니다.</span>
 			                        </a>
 			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
 			                    </div>
@@ -787,7 +894,7 @@
 			                            <div id="temChartRm2Color" class="temp">
 											<div id="temChartRm2" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 온도입니다.</span>
+			                            <span class="card-comment" id="temChartRm2Message">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -798,7 +905,7 @@
 			                            <div id="temChartRm3Color" class="temp">
 											<div id="temChartRm3" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 온도입니다.</span>
+			                            <span class="card-comment" id="temChartRm3Message">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -809,7 +916,7 @@
 										<div id="temChartRm4Color" class="temp">
 											<div id="temChartRm4" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 온도입니다.</span>
+			                            <span class="card-comment" id="temChartRm4Message">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -820,7 +927,7 @@
 										<div id="temChartRm5Color" class="temp">
 											<div id="temChartRm5" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 온도입니다.</span>
+			                            <span class="card-comment" id="temChartRm5Message">적정 실내 온도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -843,7 +950,7 @@
 			                            <div id ="humChartRm1Color" class="humidity">
 											<div id="humChartRm1" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 습도입니다.</span>
+			                            <span class="card-comment" id="humChartRm1Message">적정 실내 습도입니다.</span>
 			                        </a>
 			                        <!-- 서브페이지에서는 온도 하나하나를 클릭해도 이동 없음. 그러니 .card-link a태그에서 href 지워주세요 -->
 			                    </div>
@@ -855,7 +962,7 @@
 										<div id ="humChartRm2Color" class="humidity">
 											<div id="humChartRm2" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 습도입니다.</span>
+			                            <span class="card-comment" id="humChartRm2Message">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -866,7 +973,7 @@
 										<div id ="humChartRm3Color" class="humidity">
 											<div id="humChartRm3" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 습도입니다.</span>
+			                            <span class="card-comment" id="humChartRm3Message">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -877,7 +984,7 @@
 										<div id ="humChartRm4Color" class="humidity">
 											<div id="humChartRm4" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 습도입니다.</span>
+			                            <span class="card-comment" id="humChartRm4Message">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -888,7 +995,7 @@
 										<div id ="humChartRm5Color" class="humidity">
 											<div id="humChartRm5" class="progress temp-progress"></div>
 			                            </div>
-			                            <span class="card-comment">적정 실내 습도입니다.</span>
+			                            <span class="card-comment" id="humChartRm5Message">적정 실내 습도입니다.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -989,10 +1096,11 @@
 	    	<!-- 퇴실 팝업 -->
 	    	<div class="alert" id="exitPop">
 	    		<div class="pop-exit">
-	    			<p class="pop-exit__text">약 30분 후 가전, 조명, 전기가 차단됩니다.</p>
-	    			<div class="pop-exit__text"><span class="place">안방</span> 창문이 열려있습니다.<br />퇴실하시겠습니까?</div>
+
+	    			<div class="pop-exit__text" ><span class="place" id="place">안방 창문(뒷문)이 열려있습니다.</span> <br />퇴실하시겠습니까?</div>
+					<p class="pop-exit__text">약 30분 후 가전, 조명,전기가 차단됩니다.</p>
 	    			<ul>
-	    				<li><button class="exit-btn">퇴실하기</button></li>
+	    				<li><button class="exit-btn" id="outGoExec">퇴실하기</button></li>
 	    				<li><button class="exit-btn exit-btn--cancel">취소하기</button></li>
 	    			</ul>
 	    			<a href="#" class="alert-pop__close"><img src="/assets/images/btn_x@2x.png" alt="" /></a>

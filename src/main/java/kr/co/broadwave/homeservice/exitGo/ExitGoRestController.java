@@ -46,7 +46,14 @@ public class ExitGoRestController {
         ExitGo exitGoupdate = new ExitGo();
         Optional<ExitGo> exitGo = exitGoService.findByIdLeave("pkvalue");
         if(!exitGo.isPresent()) {
-            log.info("exitGo 받아오기 실패");
+
+            exitGoupdate.setId("pkvalue");
+            exitGoupdate.setLeaveRequest("Y");
+            exitGoupdate.setPreLeaveRequest("N");
+            exitGoupdate.setModify_dt(LocalDateTime.now());
+            exitGoupdate.setPre_modify_dt(LocalDateTime.now());
+            exitGoService.save(exitGoupdate);
+
         }else{
             String leaveRequset = exitGo.get().getLeaveRequest();
             LocalDateTime modify_dt = exitGo.get().getModify_dt();
@@ -62,10 +69,22 @@ public class ExitGoRestController {
             exitGoService.save(exitGoupdate);
         }
 
+        //res.addResponse("data",data);
+        return ResponseEntity.ok(res.success());
+    }
+
+    @PostMapping("ready")
+    public ResponseEntity<Map<String,Object>> ready() {
+        AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
+
+        log.info("퇴실 전 현재 도어센서정보 가져오기 ");
+
         HomeData sensorData;
         Optional<HomeData> doorsensor = homeDataService.findByIdData("doorsensor");
         if(!doorsensor.isPresent()) {
             log.info("doorsensor 받아오기 실패");
+            data.put("doorsensor","");
         }else{
             sensorData = doorsensor.get();
             log.info("날씨 데이터 : "+sensorData);
