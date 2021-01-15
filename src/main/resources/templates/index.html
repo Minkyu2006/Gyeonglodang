@@ -197,6 +197,10 @@
                     // 경고음성 재생
 					warningAudioPlay(receiveData.type);
                 }
+                //refresh 이면 오면 화면 재갱신 함수 호출
+                if(receiveData.type=="refresh"){
+					dataInfo();
+				}
 
             };
             source.onerror = function(err) {
