@@ -451,11 +451,26 @@
 						console.log('오늘 날씨 풍속 : ' + weather.wind_speed);
 						console.log('다음날 날씨 리스트 : ' + weather.forecast)
 						console.log('');
-						if (weather.condition === "sunny") {
-							$("#nowWeather").text("맑음");
-						} else {
-							$("#nowWeather").text("흐림");
-						}
+						//<img src="/assets/images/weather/sunny.png" alt="" id="nowWeatherIcon" />
+
+						setWeatherIcon('nowWeatherIcon',weather.condition);
+
+						if (weather.condition === "clear-night") $("#nowWeather").text("맑은 ");
+						if (weather.condition === "cloudy") $("#nowWeather").text("흐림");
+						if (weather.condition === "fog") $("#nowWeather").text("안개");
+						if (weather.condition === "hail") $("#nowWeather").text("우박");
+						if (weather.condition === "lightning") $("#nowWeather").text("벼락");
+						if (weather.condition === "lightning-rainy") $("#nowWeather").text("비,벼락");
+						if (weather.condition === "partlycloudy") $("#nowWeather").text("조금흐림");
+						if (weather.condition === "pouring") $("#nowWeather").text("폭우");
+						if (weather.condition === "rainy") $("#nowWeather").text("비");
+						if (weather.condition === "snowy") $("#nowWeather").text("눈");
+						if (weather.condition === "snowy-rainy") $("#nowWeather").text("눈,비");
+						if (weather.condition === "sunny") $("#nowWeather").text("맑음");
+						if (weather.condition === "windy") $("#nowWeather").text("바람");
+						if (weather.condition === "windy-variant") $("#nowWeather").text("바람");
+						if (weather.condition === "exceptional") $("#nowWeather").text("미확인");
+
 						$("#nowTem").text(Number(weather.temperature).toFixed(0) + "º");
 						$("#nowHum").text(Number(weather.humidity).toFixed(0) + "%");
 						$("#nowWindSpeed").text(Number(weather.wind_speed).toFixed(1) + "km/h");
@@ -471,6 +486,7 @@
 							// $("#nextWeatherIcon"+i).text(""); // 아이콘처리
 							$("#nextTem" + i).text(weather.forecast[i].temperature.toFixed(0) + "º");
 							$("#nextTemLow" + i).text(weather.forecast[i].templow.toFixed(0) + "º");
+							setWeatherIcon('nextWeatherIcon'+i,weather.forecast[i].condition);
 						}
 					}
 
@@ -563,8 +579,13 @@
 
 
                 }
-            });
+            });setWeatherIcon
         }
+        //날씨아이콘 바꾸는 함수
+		function setWeatherIcon(elimentId,weatherType){
+
+			$("#"+ elimentId).attr("src", "/assets/images/weather/"+ weatherType +".png");
+		}
 
         // 온도표기해주는 함수
         function tempRefresh(elimentId,value) {
@@ -687,7 +708,7 @@
 	                        </div>
 	                    </div>
 	                    <div class="weather__icon">
-	                    	<img src="/assets/images/weather/sunny.png" alt="" id="newWeatherIcon" />
+	                    	<img src="/assets/images/weather/sunny.png" alt="" id="nowWeatherIcon" />
 	                    </div>
 	                    <div class="weekly">
 	                        <ul>
