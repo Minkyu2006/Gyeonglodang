@@ -120,30 +120,45 @@
 
 <body>
 <div class="wrap">
-    <div class="header">
-        <div class="nav">
-            <ul>
+    <div class="console">
+    	<div class="infobox">
+    		<h2 class="info-title">Manager Mode</h2>
+    		<div class="datetime">
+	    		<span class="date">2021.01.18 월요일</span>
+	    		<span class="time">am 10:16</span>
+    		</div>
+    	</div>
+    	<div class="iot-buttons">
+    		<h3>IoT 가전제어</h3>
+    		<ul>
                 <li>
-                    <a href="/admin" class="nav-link"><span>HOME</span></a>
+                    <button id="airBtn" class="console-button aircon">에어컨<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="/living" class="nav-link"><span>거실</span></a>
+                    <button id="lightBtn" class="console-button light">조명<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="/kitchen" class="nav-link"><span>주방</span></a>
+                    <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="/inner" class="nav-link"><span>안방</span></a>
-                </li>
-                <li>
-                    <a href="/exercise" class="nav-link"><span>운동</span></a>
-                </li>
-                <li>
-                    <a href="/warehouse" class="nav-link"><span>창고</span></a>
+                    <button class="console-button electronic">가전 전원<span>ON</span></button>
                 </li>
             </ul>
-        </div>
+    	</div>
+    	<div class="battery">
+    		<div class="battery__head">
+    			<h3 class="battery_title">배터리</h3>
+    			<span class="battery-percent"></span>
+    			<a href="battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
+    		</div>
+    		<div class="battery__contents">
+    			<div class="battery__progress" data-percent="80">
+    				<div class="battery__bar"></div>
+    			</div>
+    		</div>
+    	</div>
     </div>
+    
     <input type="hidden" id="room" th:value="${room}" />
     <div class="contents">
         <div class="button-list">

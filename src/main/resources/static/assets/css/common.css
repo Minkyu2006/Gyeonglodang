@@ -219,11 +219,13 @@ button {
 /* card-list */
 .card-list {
 }
-.card-list:before {
+.card-list:before,
+.card-list ul:before {
     content: " ";
     display: table;
 }
-.card-list:after {
+.card-list:after,
+.card-list ul:after {
     content: " ";
     display: table;
     clear: both;
@@ -351,9 +353,6 @@ a.console-button {
 .console-button.home {
     background-color: #0fc727;
     color: #fff;
-}
-.console-button i {
-    margin-right: 10px;
 }
 .console-button span {
     display: none;

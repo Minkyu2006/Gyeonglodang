@@ -61,35 +61,55 @@
 
 <body>
 <div class="wrap">
-    <div class="header">
-        <div class="nav">
-            <ul>
+    <div class="console">
+    	<div class="infobox">
+    		<h2 class="info-title">Manager Mode</h2>
+    		<div class="datetime">
+	    		<span class="date">2021.01.18 월요일</span>
+	    		<span class="time">am 10:16</span>
+    		</div>
+    	</div>
+    	<div class="iot-buttons">
+    		<h3>IoT 가전제어</h3>
+    		<ul>
                 <li>
-                    <a href="admin" class="nav-link active"><span>HOME</span></a>
+                    <button id="airBtn" class="console-button aircon">에어컨<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="living" class="nav-link"><span>거실</span></a>
+                    <button id="lightBtn" class="console-button light">조명<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="kitchen" class="nav-link"><span>주방</span></a>
+                    <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="inner" class="nav-link"><span>안방</span></a>
-                </li>
-                <li>
-                    <a href="exercise" class="nav-link"><span>운동</span></a>
-                </li>
-                <li>
-                    <a href="warehouse" class="nav-link"><span>창고</span></a>
+                    <button class="console-button electronic">가전 전원<span>ON</span></button>
                 </li>
             </ul>
-        </div>
+    	</div>
+    	<div class="battery">
+    		<div class="battery__head">
+    			<h3 class="battery_title">배터리</h3>
+    			<span class="battery-percent"></span>
+    			<a href="battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
+    		</div>
+    		<div class="battery__contents">
+    			<div class="battery__progress" data-percent="80">
+    				<div class="battery__bar"></div>
+    			</div>
+    		</div>
+    	</div>
     </div>
 
     <div class="contents">
+    	<div class="button-list">
+            <!-- 장소별 페이지 버튼 리스트 수정 -->
+            <ul>
+    			<li><a href="admin" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
+            </ul>
+        </div>
         <div class="battery-wrap">
             <div class="battery-head">
-                <h3><i class="fas fa-battery-full"></i>배터리</h3>
+                <h3><img src="/assets/images/icon_battery.png" alt="" />배터리</h3>
                 <div class="battery-check">
                     <input type="checkbox" id="battery-check">
                     <label for="battery-check">30% 이하만 표시</label>
@@ -98,7 +118,7 @@
             <div class="battery-contents">
                 <div class="battery-section">
                     <div class="battery-inner">
-                        <h4 class="battery-title">거실</h4>
+                        <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />거실</h4>
                         <ul id="rm1">
 
                         </ul>
@@ -107,7 +127,7 @@
 
                 <div class="battery-section">
                     <div class="battery-inner">
-                        <h4 class="battery-title">주방</h4>
+                        <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />주방</h4>
                         <ul id="rm2">
 
                         </ul>
@@ -116,50 +136,34 @@
 
                 <div class="battery-section">
                     <div class="battery-inner">
-                        <h4 class="battery-title">안방</h4>
+                        <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />안방</h4>
                         <ul id="rm3">
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-full"></i>-->
-<!--                                    <span class="battery-name">복합센서01</span>-->
-<!--                                    <span class="battery-percent">100%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-three-quarters"></i>-->
-<!--                                    <span class="battery-name">복합센서02</span>-->
-<!--                                    <span class="battery-percent">75%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-half"></i>-->
-<!--                                    <span class="battery-name">도어센서01</span>-->
-<!--                                    <span class="battery-percent">50%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-quarter"></i>-->
-<!--                                    <span class="battery-name">도어센서02</span>-->
-<!--                                    <span class="battery-percent">25%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-empty"></i>-->
-<!--                                    <span class="battery-name">연기센서01</span>-->
-<!--                                    <span class="battery-percent">0%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
+                           <li>
+                               <div class="battery-item">
+                                   <span class="battery-name">복합센서01</span>
+                                   <span class="battery__percent">100%</span>
+                               </div>
+                           </li>
+                           <li>
+                               <div class="battery-item">
+                                   <span class="battery-name">복합센서02</span>
+                                   <span class="battery__percent">100%</span>
+                               </div>
+                           </li>
+                           <li>
+                               <div class="battery-item">
+                                   <span class="battery-name">복합센서03</span>
+                                   <span class="battery__percent">100%</span>
+                               </div>
+                           </li>
+
                         </ul>
                     </div>
                 </div>
 
                 <div class="battery-section">
                     <div class="battery-inner">
-                        <h4 class="battery-title">운동</h4>
+                        <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />운동</h4>
                         <ul id="rm4">
 <!--                            <li>-->
 <!--                                <div class="battery-item">-->
@@ -202,7 +206,7 @@
 
                 <div class="battery-section">
                     <div class="battery-inner">
-                        <h4 class="battery-title">창고</h4>
+                        <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />창고</h4>
                         <ul id="rm5">
                         </ul>
                     </div>

@@ -100,122 +100,127 @@
 
 <body>
 <div class="wrap">
-    <div class="header">
-        <div class="nav">
-            <ul>
+    <div class="console">
+    	<div class="infobox">
+    		<h2 class="info-title">Manager Mode</h2>
+    		<div class="datetime">
+	    		<span class="date">2021.01.18 월요일</span>
+	    		<span class="time">am 10:16</span>
+    		</div>
+    	</div>
+    	<div class="iot-buttons">
+    		<h3>IoT 가전제어</h3>
+    		<ul>
                 <li>
-                    <a href="/admin" class="nav-link"><span>HOME</span></a>
+                    <button id="airBtn" class="console-button aircon">에어컨<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="/living" class="nav-link"><span>거실</span></a>
+                    <button id="lightBtn" class="console-button light">조명<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="/kitchen" class="nav-link active"><span>주방</span></a>
+                    <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
                 </li>
                 <li>
-                    <a href="/inner" class="nav-link"><span>안방</span></a>
-                </li>
-                <li>
-                    <a href="/exercise" class="nav-link"><span>운동</span></a>
-                </li>
-                <li>
-                    <a href="/warehouse" class="nav-link"><span>창고</span></a>
+                    <button class="console-button electronic">가전 전원<span>ON</span></button>
                 </li>
             </ul>
-        </div>
+    	</div>
+    	<div class="battery">
+    		<div class="battery__head">
+    			<h3 class="battery_title">배터리</h3>
+    			<span class="battery-percent"></span>
+    			<a href="battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
+    		</div>
+    		<div class="battery__contents">
+    			<div class="battery__progress" data-percent="80">
+    				<div class="battery__bar"></div>
+    			</div>
+    		</div>
+    	</div>
     </div>
 
     <div class="contents">
         <div class="button-list">
             <ul>
-                <li>
-                    <a href="javascript:history.back()" class="console-button back"><i class="fas fa-undo-alt"></i>뒤로가기</a>
-                </li>
-            </ul>
+    			<li><a href="admin" class="home">HOME</a></li>
+    			<li><a href="living">거실</a></li>
+    			<li><a href="kitchen" class="active">주방</a></li>
+    			<li><a href="inner">안방</a></li>
+    			<li><a href="exercise">운동</a></li>
+    			<li><a href="warehouse">창고</a></li>
+    		</ul>
         </div>
 
         <div class="card-list">
             <ul>
-                <li class="card">
-                    <div class="card-inner">
-                        <a style="cursor:pointer" onclick="temLink('rm2tm01');" class="card-link">
-                        <h3 class="card-title">온도</h3>
-                            <div class="temp">
-                                <span class="card-icon"><i class="fas fa-thermometer-half"></i></span>
-                                <div id="tem" class="progress temp-progress"></div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a style="cursor:pointer" onclick="humLink('rm2hu01');" class="card-link">
-                            <h3 class="card-title">습도</h3>
-                            <div class="humidity">
-                                <span class="card-icon"><i class="fas fa-tint"></i></span>
-                                <div id="hum" class="progress humidity-progress"></div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a href="../adminstate/air.html" class="card-link">
-                            <h3 class="card-title">공기질</h3>
-                            <div class="air">
-                                <span class="card-icon"><i class="fas fa-air-freshener"></i></span>
-                                <div class="air-icon">
-                                    <i class="far fa-smile"></i>
-                                    <!-- 변경시 fa-smile 삭제 .air에 클래스 추가 -->
-                                    <!-- 좋음일 때 air에 good추가 fa-smile-wink 변경 -->
-                                    <!-- 나쁨일 때 air에 bad 추가 fa-frown 변경 -->
-                                </div>
-                                <div class="air-state">보통</div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a class="card-link">
-                            <h3 class="card-title">창문</h3>
-                            <div id="doorStatus" class="door">
-                                <span class="card-icon"><i class="fas fa-lock"></i></span>
-                                <div class="door-icon">
-                                    <i class="fas fa-lock"></i>
-                                </div>
-                                <span>아이콘 이미지 교체 필요</span>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a class="card-link">
-                            <h3 class="card-title">가스</h3>
-                            <div class="gas active">
-                                <span class="card-icon"><i class="fas fa-burn"></i></span>
-                                <div class="gas-icon">
-                                    <i class="fas fa-burn"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a class="card-link">
-                            <h3 class="card-title">화재</h3>
-                            <div class="fire active">
-                                <span class="card-icon"><i class="fas fa-fire-extinguisher"></i></span>
-                                <div class="fire-icon">
-                                    <i class="fas fa-fire-extinguisher"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-            </ul>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link sensor-card sensor-card--temp">
+	                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도" />온도</h3>
+	                            <div id="temChartColor" class="temp">
+	                                <div id="temChart" class="progress temp-progress"></div>
+	                            </div>
+	                            <span class="card-comment" id="temChartMessage">적정 실내 온도입니다.</span>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link sensor-card sensor-card--humidity">
+	                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도" />습도</h3>
+	                            <div id="humChartColor" class="humidity">
+	                                <div id="humChart" class="progress humidity-progress"></div>
+	                            </div>
+	                            <span class="card-comment" id="humChartMessage">적정 실내 습도입니다.</span>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link sensor-card sensor-card--air">
+	                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질" />공기질</h3>
+	                            <div class="air">
+	                            	<div class="progress air-progress" data-micro="5"></div>
+	                            	<div class="air__state"></div>
+	                            </div>
+	                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link">
+	                            <div id="doorStatus" class="homestate door">
+	                            	<h3 class="card-title">창문</h3>
+	                                <div class="card-icon card-icon--door"></div>
+	                                <span class="card-comment" id="doorMessage">창문 보안 안전</span>
+	                            </div>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link">
+	                            <div id="gas" class="homestate gas">
+	                            	<h3 class="card-title">가스</h3>
+	                                <div class="card-icon card-icon--gas"></div>
+	                                <span class="card-comment" id="gasrMessage">가스 상태 안전</span>
+	                            </div>
+	                        </a>
+	                    </div>
+	                </li>
+	                <li class="card">
+	                    <div class="card-inner">
+	                        <a href="#" class="card-link">
+	                            <div id="smoke" class="homestate fire">
+	                            	<h3 class="card-title">화재</h3>
+	                                <div class="card-icon card-icon--fire"></div>
+	                                <span class="card-comment" id="fireMessage">화재 위험 안전</span>
+	                            </div>
+	                        </a>
+	                    </div>
+	                </li>
+	            </ul>
         </div>
     </div>
 </div>
