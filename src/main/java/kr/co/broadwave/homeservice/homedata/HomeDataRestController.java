@@ -317,6 +317,84 @@ public class HomeDataRestController {
 
         return ResponseEntity.ok(res.success());
     }
+    @PostMapping("air1OnOff")
+    public ResponseEntity<Map<String,Object>> air1OnOff(@RequestParam(value="value", defaultValue="") String value){
+        AjaxResponse res = new AjaxResponse();
+        log.info("에어컨1(거실) 명령하기 : "+value);
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/aircon/rm1on","{\"Dashboard\":\"airONCommand\"}");
+                }else{
+                    client.sender("command/smart/aircon/rm1off","{\"Dashboard\":\"airOFFCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        return ResponseEntity.ok(res.success());
+    }
+    @PostMapping("air2OnOff")
+    public ResponseEntity<Map<String,Object>> air2OnOff(@RequestParam(value="value", defaultValue="") String value){
+        AjaxResponse res = new AjaxResponse();
+        log.info("에어컨2(주방) 명령하기 : "+value);
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/aircon/rm2on","{\"Dashboard\":\"airONCommand\"}");
+                }else{
+                    client.sender("command/smart/aircon/rm2off","{\"Dashboard\":\"airOFFCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        return ResponseEntity.ok(res.success());
+    }
+    @PostMapping("air3OnOff")
+    public ResponseEntity<Map<String,Object>> air3OnOff(@RequestParam(value="value", defaultValue="") String value){
+        AjaxResponse res = new AjaxResponse();
+        log.info("에어컨3(안방) 명령하기 : "+value);
+
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/aircon/rm3on","{\"Dashboard\":\"airONCommand\"}");
+                }else{
+                    client.sender("command/smart/aircon/rm3off","{\"Dashboard\":\"airOFFCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        return ResponseEntity.ok(res.success());
+    }
 
     @GetMapping(path="mqttsubcribe",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseBodyEmitter mqttSubcribe() {

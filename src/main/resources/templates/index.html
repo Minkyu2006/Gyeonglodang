@@ -37,12 +37,33 @@
 
             $('#air1').on('click', function() {
                 $(this).toggleClass('active');
+				if ($(this).hasClass('aircon active')) {
+					console.log("거실 에어컨온")
+					integratedFun("air1","ON");
+				}else{
+					console.log("에어컨오프")
+					integratedFun("air1","OFF");
+				}
             })
             $('#air2').on('click', function() {
                 $(this).toggleClass('active');
+				if ($(this).hasClass('aircon active')) {
+					console.log("주방 에어컨온")
+					integratedFun("air2","ON");
+				}else{
+					console.log("에어컨오프")
+					integratedFun("air2","OFF");
+				}
             })
             $('#air3').on('click', function() {
                 $(this).toggleClass('active');
+				if ($(this).hasClass('aircon active')) {
+					console.log("안방 에어컨온")
+					integratedFun("air3","ON");
+				}else{
+					console.log("안방 에어컨오프")
+					integratedFun("air3","OFF");
+				}
             })
 
             // 조명버튼
@@ -679,7 +700,28 @@
                     data: params,
                     cache: false
                 });
-            }else{
+            }else if(name==="air1"){
+				$.ajax({
+					url: '/homedata/air1OnOff',
+					type: 'post',
+					data: params,
+					cache: false
+				});
+			}else if(name==="air2"){
+				$.ajax({
+					url: '/homedata/air2OnOff',
+					type: 'post',
+					data: params,
+					cache: false
+				});
+			}else if(name==="air3"){
+				$.ajax({
+					url: '/homedata/air3OnOff',
+					type: 'post',
+					data: params,
+					cache: false
+				});
+			}else{
                 alert("알 수 없는 명령");
                 console.log("알 수 없는 명령")
             }
