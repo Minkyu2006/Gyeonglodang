@@ -109,7 +109,6 @@ button {
 .infobox {
 	position: relative;
 	width: 100%;
-	margin-top: 40px;
 }
 .info-title {
 	color: #fff;
@@ -135,7 +134,7 @@ button {
 	box-sizing: border-box;
 }
 .iot-buttons {
-	margin-top: 60px;
+	margin-top: 20px;
 }
 .iot-buttons h3 {
 	color:#fff;
@@ -152,7 +151,7 @@ button {
 }
 
 .battery {
-	margin-top: 40px;
+	margin-top: 20px;
 }
 .battery__head {
 	overflow: hidden;
@@ -785,6 +784,7 @@ a.console-button {
 .battery-section {
     float: left;
     width: 33.3333%;
+    min-width: 340px;
     height: 498px;
     padding: 10px;
     -webkit-box-sizing: border-box;
