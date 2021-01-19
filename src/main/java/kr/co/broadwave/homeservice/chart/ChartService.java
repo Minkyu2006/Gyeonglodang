@@ -52,9 +52,9 @@ public class ChartService {
 
         String url;
         if(sensor.equals("temp")){
-            url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/bw/v1/sensordata/temperature?intervalhour=12";
+            url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/jb/v1/sensordata/temperature?intervalhour=12";
         }else{
-            url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/bw/v1/sensordata/humidity?intervalhour=12" ;
+            url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/jb/v1/sensordata/humidity?intervalhour=12" ;
         }
 
         RestTemplate restTemplate = new RestTemplate();

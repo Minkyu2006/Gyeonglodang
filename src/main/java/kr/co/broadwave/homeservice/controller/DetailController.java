@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DetailController {
 
     // 관리자전용 - 온도 상세보기(그래프)
-    @RequestMapping("/tempdetail/{room}")
+    @RequestMapping("/temp/tempdetail/{room}")
     public String tempdetail(Model model, @PathVariable String room){
         model.addAttribute("room", room);
         return "detail/tempdetail";
     }
 
     // 관리자전용 - 습도 상세보기(그래프)
-    @RequestMapping("/humdetail/{room}")
+    @RequestMapping("/humidity/humdetail/{room}")
     public String humdetail(Model model, @PathVariable String room){
         model.addAttribute("room", room);
         return "detail/humdetail";

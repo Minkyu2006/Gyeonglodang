@@ -23,7 +23,90 @@
 		<script>
 
 			function AutoStart() {
-				setInterval(dataInfo, 5000); // 5초마다 데이터불러와 실행
+				setInterval(clock, 60000);
+				setInterval(dataInfo, 60000); // 5초마다 데이터불러와 실행
+			}
+
+			var week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+			function clock() {
+
+				var date = new Date();
+				var year = date.getFullYear();
+				var month = date.getMonth();
+				var clockDate = date.getDate();
+				var day = date.getDay();
+				var hours = date.getHours();
+				var minutes = date.getMinutes();
+				// var seconds = date.getSeconds();
+
+				var ampm;
+				if(hours<=12){
+					ampm="am";
+				}else{
+					hours = hours - 12;
+					ampm="pm";
+				}
+
+				$(".date").text(`${year}.${month+1}.${clockDate} ${week[day]}`)
+				$(".time").text(`${ampm} ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }`)
+
+			}
+
+			// 시계호출
+			function realTime() {
+				clock();
+			}
+
+			// 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
+			function integratedFun(name,value) {
+				// console.log("name : "+name);
+				// console.log("value : "+value);
+				var params = {
+					value: value
+				};
+				if(name==="light"){
+					$.ajax({
+						url: '/homedata/lightOnOff',
+						type: 'post',
+						data: params,
+						cache: false
+					});
+				}else if(name==="aq"){
+					$.ajax({
+						url: '/homedata/aqOnOff',
+						type: 'post',
+						data: params,
+						cache: false
+					});
+				}else if(name==="air"){
+					$.ajax({
+						url: '/homedata/airOnOff',
+						type: 'post',
+						data: params,
+						cache: false
+					});
+				}else{
+					alert("알 수 없는 명령");
+					console.log("알 수 없는 명령")
+				}
+			}
+
+			// 배터리표기 함수
+			function batteryRefresh(value) {
+				// battery progress
+				$('.battery__progress').each(function() {
+					var $this = $(this)
+					var _percent = value
+
+					if (31 > _percent) {
+						$this.parents('.battery').addClass('empty');
+					} else {
+						$this.parents('.battery').removeClass('empty');
+					}
+
+					$('.battery__bar').width(_percent + "%");
+					$('.battery-percent').text(_percent + "%")
+				})
 			}
 
 			function temLink(room){

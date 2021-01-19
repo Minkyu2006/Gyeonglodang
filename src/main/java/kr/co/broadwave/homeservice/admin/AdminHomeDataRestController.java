@@ -78,21 +78,51 @@ public class AdminHomeDataRestController {
         }else{
             sensorData = humidity.get();
             log.info("온도 데이터 : "+sensorData);
-            data.put("humidityData",sensorData);
+            data.put("humidity",sensorData);
         }
 
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
     }
 
-    // 관리자페이지 전용(모든 배터리가져오기)
-    @PostMapping("adminBatteryDataInfo")
-    public ResponseEntity<Map<String,Object>> adminBatteryDataInfo(){
+    // 관리자페이지 전용(메뉴데이터)
+    @PostMapping("adminMenuDataInfo")
+    public ResponseEntity<Map<String,Object>> adminMenuDataInfo(){
 
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();
 
         HomeData sensorData;
+
+        Optional<HomeData> light = homeDataService.findByIdData("light");
+        if(!light.isPresent()) {
+            log.info("light 받아오기 실패");
+            data.put("lightData","");
+        }else{
+            sensorData = light.get();
+            log.info("조명 데이터 : "+sensorData);
+            data.put("lightData",sensorData);
+        }
+
+        Optional<HomeData> airpurification = homeDataService.findByIdData("airpurification");
+        if(!airpurification.isPresent()) {
+            log.info("airpurification 받아오기 실패");
+            data.put("airpurification","");
+        }else{
+            sensorData = airpurification.get();
+            log.info("공기청정기 데이터 : "+sensorData);
+            data.put("airpurification",sensorData);
+        }
+
+        Optional<HomeData> aircondition = homeDataService.findByIdData("aircondition");
+        if(!aircondition.isPresent()) {
+            log.info("aircondition 받아오기 실패");
+            data.put("aircondition","");
+        }else{
+            sensorData = aircondition.get();
+            log.info("날씨 데이터 : "+sensorData);
+            data.put("aircondition",sensorData);
+        }
 
         Optional<HomeData> battery = homeDataService.findByIdData("battery");
         if(!battery.isPresent()) {

@@ -146,6 +146,16 @@ public class HomeDataRestController {
             data.put("smoke",sensorData);
         }
 
+        Optional<HomeData> battery = homeDataService.findByIdData("battery");
+        if(!battery.isPresent()) {
+            log.info("battery 받아오기 실패");
+            data.put("battery","");
+        }else{
+            sensorData = battery.get();
+            log.info("배터리 데이터 : "+sensorData);
+            data.put("batteryData",sensorData);
+        }
+
 //        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
 //            arg.forEach((key, value)->{
 //                System.out.println("값 : "+value);

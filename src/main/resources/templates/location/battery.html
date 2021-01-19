@@ -9,13 +9,14 @@
 
         $(function() {
             dataInfo();
-            // AutoStart();
+            realTime();
+            AutoStart();
         })
 
         // 데이터 받아오는 함수
         function dataInfo() {
             $.ajax({
-                url: '/adminhomedata/adminBatteryDataInfo',
+                url: '/adminhomedata/adminMenuDataInfo',
                 type: 'post',
                 cache: false,
                 error: function () {
@@ -23,39 +24,303 @@
                 },
                 success: function (res) {
 
-                    console.log("batteryData : "+res.data.batteryData.r_data)
-                    var battery = JSON.parse(res.data.batteryData.r_data);
-                    var batteryDataRm1 = battery.rm1mo01; // 거실 모션센서 01
-                    var batteryDataRm2 = battery.rm2mo01; // 주방 모션센서 01
+                    if (res.data.lightData !== '') {
+                        //todo 조명이 하나라도 켜있으면 On 할것
+                        console.log('lightData Json 데이터 : ' + res.data.lightData);
+                        let light = JSON.parse(res.data.lightData.r_data);
+                        let lightCheck =false;
+                        if (light.rm1ls101 ==="on")  lightCheck = true
+                        if (light.rm2ls201 ==="on")  lightCheck = true
+                        if (light.rm2ls202 ==="on")  lightCheck = true
+                        if (light.rm3ls101 ==="on")  lightCheck = true
+                        if (light.rm4ls101 ==="on")  listhCheck = true
 
-                    var html = '';
-                    var html2 = '';
-                    var $rm = $('#rm1');
+                        var $lightBtn = $('#lightBtn');
+                        if(lightCheck) {
+                            $lightBtn.addClass("active")
+                            $lightBtn.children('.fa-lightbulb').removeClass('fas');
+                            $lightBtn.children('.fa-lightbulb').addClass('far');
+                        }else{
+                            $lightBtn.removeClass("active")
+                            $lightBtn.children('.fa-lightbulb').addClass('fas');
+                            $lightBtn.children('.fa-lightbulb').removeClass('far');
+                        }
+                    }
+
+                    if(res.data.airpurification !== '') {
+                        // 공기청정기 셋팅
+                        console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
+                        var airpurification = JSON.parse(res.data.airpurification.r_data);
+                        console.log('airpurification 상태 : ' + airpurification.rm1aq01);
+                        console.log('');
+                        var airpurificationPower = airpurification.rm1aq01;
+                        var $aqBtn = $('#aqBtn');
+                        if (airpurificationPower === "on") {
+                            $aqBtn.addClass("active")
+                        } else {
+                            $aqBtn.removeClass("active")
+                        }
+                    }
+
+                    if(res.data.aircondition !== '') {
+                        // 에어컨 셋팅
+                        console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
+                        var aircondition = JSON.parse(res.data.aircondition.r_data);
+                        console.log('aircondition 상태 : ' + aircondition.rm2ac01);
+
+                        let airconditionCheck = false
+                        if (aircondition.rm1ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
+                            $('#air1').addClass("active");
+                            airconditionCheck = true;
+                        } else { $('#air1').removeClass("active");}
+                        if (aircondition.rm2ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
+                            $('#air2').addClass("active");
+                            airconditionCheck = true;
+                        } else { $('#air2').removeClass("active");}
+                        if (aircondition.rm3ac01 === "cool" || aircondition.rm3ac01 === "dry" ){
+                            $('#air3').addClass("active");
+                            airconditionCheck = true;
+                        } else { $('#air3').removeClass("active");}
+
+                        var $airBtn = $('#airBtn');
+                        if (airconditionCheck) {
+                            $airBtn.addClass("active")
+                        } else {
+                            $airBtn.removeClass("active")
+                        }
+                    }
+
+                    var $rm1 = $('#rm1');
                     var $rm2 = $('#rm2');
+                    var $rm3 = $('#rm3');
+                    var $rm4 = $('#rm4')
+                    var $rm5 = $('#rm5');
 
-                    html += '<li>'
-                    html += '<div class="battery-item">'
-                    html += '<i class="fas fa-battery-three-quarters"></i>'
-                    html += '<span class="battery-name">' + '모션센서01' + '</span>'
-                    html += '<span class="battery-percent">' + batteryDataRm1+'%' + '</span>'
-                    html += '</div>'
-                    html += '</li>'
+                    var html1 = '';
+                    var html2 = '';
+                    var html3 = '';
+                    var html4 = '';
+                    var html5 = '';
+                    if(res.data.batteryData !== '') {
+                        // 배터리 셋팅
+                        var battery = JSON.parse(res.data.batteryData.r_data);
+                        console.log('');
 
-                    html2 += '<li>'
-                    html2 += '<div class="battery-item">'
-                    html2 += '<i class="fas fas fa-battery-full"></i>'
-                    html2 += '<span class="battery-name">' + '모션센서02' + '</span>'
-                    html2 += '<span class="battery-percent">' + batteryDataRm2+'%' + '</span>'
-                    html2 += '</div>'
-                    html2 += '</li>'
+                        var batteryLowValue = 100;
+                        var sernserNmae;
+                        $.each(battery,function(key, value){
+                            // console.log('키 : '+key + ', 값 :' + value);
+                            if(key.startsWith('rm1')===true){
+                                // console.log('key : '+key);
+                                if(key.indexOf("mu") !== -1){
+                                    sernserNmae = "복합센서"+key.substr(key.length-2,key.length);
+                                    console.log('mu : '+key);
+                                    html1 += '<li>'
+                                    html1 += '<div class="battery-item">'
+                                    html1 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html1 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html1 += '</div>'
+                                    html1 += '</li>'
+                                }else if(key.indexOf("dl") !== -1){
+                                    console.log('dl : '+key);
+                                    sernserNmae = "도어락"+key.substr(key.length-2,key.length);
+                                    html1 += '<li>'
+                                    html1 += '<div class="battery-item">'
+                                    html1 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html1 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html1 += '</div>'
+                                    html1 += '</li>'
+                                }else if(key.indexOf("dr") !== -1){
+                                    console.log('dr : '+key);
+                                    sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
+                                    html1 += '<li>'
+                                    html1 += '<div class="battery-item">'
+                                    html1 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html1 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html1 += '</div>'
+                                    html1 += '</li>'
+                                }else if(key.indexOf("sm") !== -1){
+                                    console.log('sm : '+key);
+                                    sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
+                                    html1 += '<li>'
+                                    html1 += '<div class="battery-item">'
+                                    html1 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html1 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html1 += '</div>'
+                                    html1 += '</li>'
+                                }
+                            }else if(key.startsWith('rm2')===true){
+                                if(key.indexOf("mu") !== -1){
+                                    sernserNmae = "복합센서"+key.substr(key.length-2,key.length);
+                                    console.log('mu : '+key);
+                                    html2 += '<li>'
+                                    html2 += '<div class="battery-item">'
+                                    html2 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html2 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html2 += '</div>'
+                                    html2 += '</li>'
+                                }else if(key.indexOf("dl") !== -1){
+                                    console.log('dl : '+key);
+                                    sernserNmae = "도어락"+key.substr(key.length-2,key.length);
+                                    html2 += '<li>'
+                                    html2 += '<div class="battery-item">'
+                                    html2 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html2 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html2 += '</div>'
+                                    html2 += '</li>'
+                                }else if(key.indexOf("dr") !== -1){
+                                    console.log('dr : '+key);
+                                    sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
+                                    html2 += '<li>'
+                                    html2 += '<div class="battery-item">'
+                                    html2 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html2 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html2 += '</div>'
+                                    html2 += '</li>'
+                                }else if(key.indexOf("sm") !== -1){
+                                    console.log('sm : '+key);
+                                    sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
+                                    html2 += '<li>'
+                                    html2 += '<div class="battery-item">'
+                                    html2 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html2 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html2 += '</div>'
+                                    html2 += '</li>'
+                                }
+                            }else if(key.startsWith('rm3')===true){
+                                if(key.indexOf("mu") !== -1){
+                                    sernserNmae = "복합센서"+key.substr(key.length-2,key.length);
+                                    console.log('mu : '+key);
+                                    html3 += '<li>'
+                                    html3 += '<div class="battery-item">'
+                                    html3 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html3 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html3 += '</div>'
+                                    html3 += '</li>'
+                                }else if(key.indexOf("dl") !== -1){
+                                    console.log('dl : '+key);
+                                    sernserNmae = "도어락"+key.substr(key.length-2,key.length);
+                                    html3 += '<li>'
+                                    html3 += '<div class="battery-item">'
+                                    html3 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html3 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html3 += '</div>'
+                                    html3 += '</li>'
+                                }else if(key.indexOf("dr") !== -1){
+                                    console.log('dr : '+key);
+                                    sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
+                                    html3 += '<li>'
+                                    html3 += '<div class="battery-item">'
+                                    html3 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html3 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html3 += '</div>'
+                                    html3 += '</li>'
+                                }else if(key.indexOf("sm") !== -1){
+                                    console.log('sm : '+key);
+                                    sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
+                                    html3 += '<li>'
+                                    html3 += '<div class="battery-item">'
+                                    html3 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html3 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html3 += '</div>'
+                                    html3 += '</li>'
+                                }
+                            }else if(key.startsWith('rm4')===true){
+                                if(key.indexOf("mu") !== -1){
+                                    sernserNmae = "복합센서"+key.substr(key.length-2,key.length);
+                                    console.log('mu : '+key);
+                                    html4 += '<li>'
+                                    html4 += '<div class="battery-item">'
+                                    html4 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html4 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html4 += '</div>'
+                                    html4 += '</li>'
+                                }else if(key.indexOf("dl") !== -1){
+                                    console.log('dl : '+key);
+                                    sernserNmae = "도어락"+key.substr(key.length-2,key.length);
+                                    html4 += '<li>'
+                                    html4 += '<div class="battery-item">'
+                                    html4 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html4 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html4 += '</div>'
+                                    html4 += '</li>'
+                                }else if(key.indexOf("dr") !== -1){
+                                    console.log('dr : '+key);
+                                    sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
+                                    html4 += '<li>'
+                                    html4 += '<div class="battery-item">'
+                                    html4 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html4 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html4 += '</div>'
+                                    html4 += '</li>'
+                                }else if(key.indexOf("sm") !== -1){
+                                    console.log('sm : '+key);
+                                    sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
+                                    html4 += '<li>'
+                                    html4 += '<div class="battery-item">'
+                                    html4 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html4 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html4 += '</div>'
+                                    html4 += '</li>'
+                                }
+                            }else if(key.startsWith('rm5')===true){
+                                if(key.indexOf("mu") !== -1){
+                                    sernserNmae = "복합센서"+key.substr(key.length-2,key.length);
+                                    console.log('mu : '+key);
+                                    html5 += '<li>'
+                                    html5 += '<div class="battery-item">'
+                                    html5 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html5 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html5 += '</div>'
+                                    html5 += '</li>'
+                                }else if(key.indexOf("dl") !== -1){
+                                    console.log('dl : '+key);
+                                    sernserNmae = "도어락"+key.substr(key.length-2,key.length);
+                                    html5 += '<li>'
+                                    html5 += '<div class="battery-item">'
+                                    html5 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html5 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html5 += '</div>'
+                                    html5 += '</li>'
+                                }else if(key.indexOf("dr") !== -1){
+                                    console.log('dr : '+key);
+                                    sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
+                                    html5 += '<li>'
+                                    html5 += '<div class="battery-item">'
+                                    html5 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html5 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html5 += '</div>'
+                                    html5 += '</li>'
+                                }else if(key.indexOf("sm") !== -1){
+                                    console.log('sm : '+key);
+                                    sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
+                                    html5 += '<li>'
+                                    html5 += '<div class="battery-item">'
+                                    html5 += '<span class="battery-name">' + sernserNmae + '</span>'
+                                    html5 += '<span class="battery__percent">' + value+'%' + '</span>'
+                                    html5 += '</div>'
+                                    html5 += '</li>'
+                                }
+                            }
 
-                    $rm.html(html);
-                    $rm2.html(html2);
+                            $rm1.html(html1);
+                            $rm2.html(html2);
+                            $rm3.html(html3);
+                            $rm4.html(html4);
+                            $rm5.html(html5);
 
+                            if(value!=="" && batteryLowValue>Number(value)){
+                                // console.log('batteryLowValue : '+batteryLowValue + ', value :' + value);
+                                batteryLowValue = Number(value);
+                            }
+                        });
+                        console.log('제일 낮은 battery : ' + batteryLowValue);
+                        batteryRefresh(batteryLowValue)
+                    }
                 }
             });
         }
-
+        
     </script>
 </head>
 
@@ -93,7 +358,7 @@
     			<a href="battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
     		</div>
     		<div class="battery__contents">
-    			<div class="battery__progress" data-percent="80">
+    			<div class="battery__progress">
     				<div class="battery__bar"></div>
     			</div>
     		</div>
@@ -104,7 +369,7 @@
     	<div class="button-list">
             <!-- 장소별 페이지 버튼 리스트 수정 -->
             <ul>
-    			<li><a href="admin" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
+    			<li><a href="/admin/index" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
             </ul>
         </div>
         <div class="battery-wrap">
@@ -138,24 +403,6 @@
                     <div class="battery-inner">
                         <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />안방</h4>
                         <ul id="rm3">
-                           <li>
-                               <div class="battery-item">
-                                   <span class="battery-name">복합센서01</span>
-                                   <span class="battery__percent">100%</span>
-                               </div>
-                           </li>
-                           <li>
-                               <div class="battery-item">
-                                   <span class="battery-name">복합센서02</span>
-                                   <span class="battery__percent">100%</span>
-                               </div>
-                           </li>
-                           <li>
-                               <div class="battery-item">
-                                   <span class="battery-name">복합센서03</span>
-                                   <span class="battery__percent">100%</span>
-                               </div>
-                           </li>
 
                         </ul>
                     </div>
@@ -165,41 +412,7 @@
                     <div class="battery-inner">
                         <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />운동</h4>
                         <ul id="rm4">
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-full"></i>-->
-<!--                                    <span class="battery-name">복합센서01</span>-->
-<!--                                    <span class="battery-percent">100%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-three-quarters"></i>-->
-<!--                                    <span class="battery-name">복합센서02</span>-->
-<!--                                    <span class="battery-percent">75%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-half"></i>-->
-<!--                                    <span class="battery-name">도어센서01</span>-->
-<!--                                    <span class="battery-percent">50%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-quarter"></i>-->
-<!--                                    <span class="battery-name">도어센서02</span>-->
-<!--                                    <span class="battery-percent">25%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <div class="battery-item">-->
-<!--                                    <i class="fas fa-battery-empty"></i>-->
-<!--                                    <span class="battery-name">연기센서01</span>-->
-<!--                                    <span class="battery-percent">0%</span>-->
-<!--                                </div>-->
-<!--                            </li>-->
+
                         </ul>
                     </div>
                 </div>
@@ -208,6 +421,7 @@
                     <div class="battery-inner">
                         <h4 class="battery-title"><img src="/assets/images/icon_battery.png" alt="" />창고</h4>
                         <ul id="rm5">
+
                         </ul>
                     </div>
                 </div>

@@ -7,222 +7,444 @@
 <head>
     <script type="text/javascript">
 
-        $(function() {
-            dataInfo();
-            AutoStart();
-        })
+		$(function() {
+			dataInfo();
+			realTime();
+			AutoStart();
 
-        // 1분마다 새로고침
-        function AutoStart() {
-            setInterval(dataInfo, 60000);
-        }
+			// 공기질
+			const airqual = new CircleProgress('.air .progress', {
+				max: 600,
+				value: 90,
+				animationDuration: 400,
+				textFormat: (val) => val + '㎍/㎥'
+			});
+			if (airqual.value > 80) {
+				$('.air').addClass('red');
+				$('.air').removeClass('blue');
+				$('.air__state').text('나쁨');
+			}  else if (airqual.value > 30) {
+				$('.air').removeClass('blue');
+				$('.air').removeClass('red');
+				$('.air__state').text('보통');
+			} else {
+				$('.air').addClass('blue');
+				$('.air').removeClass('red');
+				$('.air__state').text('좋음');
+			}
 
-        // 데이터 받아오는 함수
-        function dataInfo() {
-            $.ajax({
-                url: '/homedata/dataInfo',
-                type: 'post',
-                cache: false,
-                error: function () {
-                    alert('데이터받기 실패');
-                },
-                success: function (res) {
+			// 조명버튼
+			$('#lightBtn').on('click', function() {
+				$(this).toggleClass('active');
+				if ($(this).hasClass('light active')) {
+					$(this).children('.fa-lightbulb').removeClass('fas');
+					$(this).children('.fa-lightbulb').addClass('far');
+					integratedFun("light","ON");
+				}else{
+					$(this).children('.fa-lightbulb').removeClass('far');
+					$(this).children('.fa-lightbulb').addClass('fas');
+					integratedFun("light","OFF");
+				}
+			})
+			// 공기청정기 버튼
+			$('#aqBtn').on('click', function() {
+				$(this).toggleClass('active');
+				if ($(this).hasClass('airfresher active')) {
+					integratedFun("aq","ON");
+				}else{
+					integratedFun("aq","OFF");
+				}
+			})
+			// 에어컨 온오프버튼(전체)
+			$('#airBtn').on('click', function() {
+				$(this).toggleClass('active');
+				if ($(this).hasClass('aircon active')) {
+					integratedFun("air","ON");
+				}else{
+					integratedFun("air","OFF");
+				}
+			})
 
-                    // 온도셋팅
-                    // console.log('temperatureData Json 데이터 : '+ res.data.temperatureData.r_data);
-                    var temperature = JSON.parse(res.data.temperatureData.r_data);
-                    // console.log('사무실 온도 temperature rm1tm01 상태 : '+temperature.rm1tm01);
-                    // console.log('회의실 온도 temperature rm2 상태 : '+temperature.rm2tm01);
-                    // console.log('');
-                    var temDataRm1 = temperature.rm1tm01; // 사무실 온도
-                    var temDataRm2 = temperature.rm2tm01; // 회의실 온도
+		})
 
-                    const temp = new CircleProgress('#tem', {
-                        max: 48,
-                        value: temDataRm2,
-                        animationDuration: 400,
-                        textFormat: (val) => val + '°C'
-                    });
-                    temp.value = temDataRm2;
-                    var $temp = $('.temp');
-                    if (temp.value > 26) {
-                        $temp.addClass('red').removeClass('blue');
-                    } else if (temp.value < 23) {
-                        $temp.addClass('blue').removeClass('red');
-                    } else {
-                        $temp.removeClass('blue').removeClass('red');
-                    }
+		// 데이터 받아오는 함수
+		function dataInfo() {
+			$.ajax({
+				url: '/homedata/dataInfo',
+				type: 'post',
+				cache: false,
+				error: function () {
+					alert('데이터받기 실패');
+				},
+				success: function (res) {
 
-                    // 습도셋팅
-                    // console.log('humidityData Json 데이터 : '+ res.data.humidity.r_data);
-                    var humidity = JSON.parse(res.data.humidity.r_data);
-                    // console.log('사무실 습도 humidity rm1 상태 : '+humidity.rm1hu01);
-                    // console.log('회의실 습도 humidity rm2 상태 : '+humidity.rm2hu01);
-                    // console.log('');
-                    var humDataRm1 = humidity.rm1hu01; // 사무실 습도
-                    var humDataRm2 = humidity.rm1hu01; // 회의실 습도
+					// 조명셋팅
+					if(res.data.lightData !== ''){
+						//todo 조명이 하나라도 켜있으면 On 할것
+						console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
+						let light = JSON.parse(res.data.lightData.r_data);
+						// console.log('내자신');
+						// console.log('light 상태 : '+light.rm2lt01);
+						// console.log('');
+						let lightCheck =false;
+						if (light.rm1ls101 ==="on")  lightCheck = true
+						if (light.rm2ls201 ==="on")  lightCheck = true
+						if (light.rm2ls202 ==="on")  lightCheck = true
+						if (light.rm3ls101 ==="on")  lightCheck = true
+						if (light.rm4ls101 ==="on")  listhCheck = true
 
-                    const hum = new CircleProgress('#hum', {
-                        max: 100,
-                        value: humDataRm2,
-                        animationDuration: 400,
-                        textFormat: (val) => val + '%'
-                    });
-                    hum.value = humDataRm2;
-                    var $humidity = $('.humidity');
-                    if (hum.value > 70) {
-                        $humidity.addClass('blue').removeClass('red');
-                    } else if (hum.value < 40) {
-                        $humidity.addClass('red').removeClass('blue');
-                    } else {
-                        $humidity.removeClass('blue').removeClass('red');
-                    }
+						var $lightBtn = $('#lightBtn');
+						if(lightCheck) {
+							$lightBtn.addClass("active")
+							$lightBtn.children('.fa-lightbulb').removeClass('fas');
+							$lightBtn.children('.fa-lightbulb').addClass('far');
+						}else{
+							$lightBtn.removeClass("active")
+							$lightBtn.children('.fa-lightbulb').addClass('fas');
+							$lightBtn.children('.fa-lightbulb').removeClass('far');
+						}
+					}
 
-                    // 창문 셋팅
-                    console.log('doorsensor Json 데이터 : '+ res.data.doorsensor.r_data);
-                    var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-                    console.log('doorsensor 상태 : '+doorsensor.rm1dr01);
-                    console.log('');
-                    var doorsensorStatus = doorsensor.rm1dr01;
-                    var $doorStatus = $('#doorStatus');
-                    if(doorsensorStatus==="off"){
-                        $doorStatus.addClass("active")
-                    }else{
-                        $doorStatus.removeClass("active")
-                    }
+					// 온도셋팅
+					if(res.data.temperatureData !== '') {
+						console.log('temperatureData Json 데이터 : ' + res.data.temperatureData.r_data);
+						var temperature = JSON.parse(res.data.temperatureData.r_data);
+						let temDataRm2 = '0'; // 거실 온도
+						try {
+							temDataRm2 = temperature.rm2mu01; // 거실 온도
+						}catch (e){
+							// 에러처리 필요없슴
+						}
+						if (typeof temDataRm2=='undefined') temDataRm2 = '0';
+						tempRefresh('temChartRm2', temDataRm2);
+					}
 
-                }
-            });
-        }
+					if(res.data.humidity !== '') {
+						// 습도셋팅
+						console.log('humidityData Json 데이터 : ' + res.data.humidity.r_data);
+						var humidity = JSON.parse(res.data.humidity.r_data);
+						let humDataRm2 = '0'; // 거실 습도
+						try {
+							humDataRm2 = humidity.rm2mu01; // 거실 습도
+						}catch (e){
+							// 에러처리 필요없슴
+						}
+						if (typeof humDataRm2=='undefined') humDataRm2 = '0';
+						humRefresh('humChartRm2', humDataRm2);// 거실 습도
+					}
+
+					if(res.data.airpurification !== '') {
+						// 공기청정기 셋팅
+						console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
+						var airpurification = JSON.parse(res.data.airpurification.r_data);
+						console.log('airpurification 상태 : ' + airpurification.rm1aq01);
+						console.log('');
+						var airpurificationPower = airpurification.rm1aq01;
+						var $aqBtn = $('#aqBtn');
+						if (airpurificationPower === "on") {
+							$aqBtn.addClass("active")
+						} else {
+							$aqBtn.removeClass("active")
+						}
+					}
+
+					if(res.data.aircondition !== '') {
+						// 에어컨 셋팅
+						console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
+						var aircondition = JSON.parse(res.data.aircondition.r_data);
+						console.log('aircondition 상태 : ' + aircondition.rm2ac01);
+
+						let airconditionCheck = false
+						if (aircondition.rm1ac01 == "cool" || aircondition.rm2ac01 == "dry" ){
+							$('#air1').addClass("active");
+							airconditionCheck = true;
+						} else { $('#air1').removeClass("active");}
+						if (aircondition.rm2ac01 == "cool" || aircondition.rm2ac01 == "dry" ){
+							$('#air2').addClass("active");
+							airconditionCheck = true;
+						} else { $('#air2').removeClass("active");}
+						if (aircondition.rm3ac01 == "cool" || aircondition.rm3ac01 == "dry" ){
+							$('#air3').addClass("active");
+							airconditionCheck = true;
+						} else { $('#air3').removeClass("active");}
+
+						var $airBtn = $('#airBtn');
+						if (airconditionCheck) {
+							$airBtn.addClass("active")
+						} else {
+							$airBtn.removeClass("active")
+						}
+					}
+
+					if(res.data.doorsensor !== '') {
+						// 창문 셋팅
+						console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
+						var doorsensor = JSON.parse(res.data.doorsensor.r_data);
+
+						let doorCheckRm2 =false; //주방
+
+						if (doorsensor.rm2dr03 === "on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr04 === "on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr05 === "on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr06 === "on")  doorCheckRm2 = true
+						if (doorsensor.rm2dr07 === "on")  doorCheckRm2 = true
+
+						if(doorCheckRm2){
+							let doorType= "";
+							if(doorCheckRm2) doorType = "주방";
+							$('#doorStatus').addClass("active")
+							$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
+						}else{
+							$('#doorStatus').removeClass("active")
+							$('#doorMessage').text("창문 보안 안전");
+						}
+
+
+					}
+
+					if(res.data.gas !== '') {
+						// 가스 셋팅
+						console.log('gas Json 데이터 : ' + res.data.gas.r_data);
+						var gas = JSON.parse(res.data.gas.r_data);
+						console.log('gas 상태 : ' + gas.rm2ga01);
+						console.log('');
+
+						let checkGas = false;
+						if (gas.rm2ga01 === "detected") checkGas = true;
+						var $gas = $('#gas');
+						if (checkGas) {
+							$gas.addClass("active")
+						} else {
+							$gas.removeClass("active")
+						}
+					}
+
+					if(res.data.smoke !== '') {
+						// 화재 셋팅
+						console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
+						var smoke = JSON.parse(res.data.smoke.r_data);
+						console.log('smoke 상태 : ' + smoke.rm1sm01);
+						console.log('');
+
+						let checkSmoke = false;
+						if (smoke.rm1sm01 === "detected") checkSmoke = true;
+						if (smoke.rm2sm01 === "detected") checkSmoke = true;
+						if (smoke.rm3sm01 === "detected") checkSmoke = true;
+						if (smoke.rm4sm01 === "detected") checkSmoke = true;
+						if (smoke.rm5sm01 === "detected") checkSmoke = true;
+
+						var $smoke = $('#smoke');
+						if (checkSmoke){
+							$smoke.addClass("active");
+						}else{
+							$smoke.removeClass("active");
+						}
+					}
+
+					if(res.data.batteryData !== '') {
+						// 배터리 셋팅
+						console.log('battery Json 데이터 : ' + res.data.batteryData.r_data);
+						var battery = JSON.parse(res.data.batteryData.r_data);
+						console.log('');
+
+						var batteryLowValue = 100;
+						$.each(battery,function(key, value){
+							// console.log('키 : '+key + ', 값 :' + value);
+							if(value!=="" && batteryLowValue>Number(value)){
+								// console.log('batteryLowValue : '+batteryLowValue + ', value :' + value);
+								batteryLowValue = Number(value);
+							}
+						});
+						console.log('제일 낮은 battery : ' + batteryLowValue);
+						batteryRefresh(batteryLowValue)
+					}
+
+				}
+			});
+		}
+
+		// 온도표기해주는 함수
+		function tempRefresh(elimentId,value) {
+			console.log('받은 온도 : '+value);
+
+			// 값은 받아오나, 텍스트를 리프레쉬할수없음.
+			const cp = new CircleProgress('#'+elimentId, {
+				max: 48,
+				value: value,
+				animationDuration: 400,
+				textFormat: (value) => value + '°C'
+			});
+			cp.value = value;
+
+			var $tempColor = $('#'+elimentId+'Color');
+			var $tempMessage = $('#'+elimentId+'Message');
+			if (value > 27) {
+				$tempColor.addClass('red').removeClass('blue');
+				$tempMessage.text('실내 온도가 덥습니다.');
+			} else if (value < 18) {
+				$tempColor.addClass('blue').removeClass('red');
+				$tempMessage.text('실내 온도가 춥습니다.');
+			} else {
+				$tempColor.removeClass('blue').removeClass('red');
+				$tempMessage.text('적정 실내 온도입니다.');
+			}
+		}
+
+		//습도 표기해주는 함수
+		function humRefresh(elimentId,value) {
+
+			// 값은 받아오나, 텍스트를 리프레쉬할수없음.
+			const cp = new CircleProgress('#'+elimentId, {
+				max: 100,
+				value: value,
+				animationDuration: 400,
+				textFormat: (value) => value + '%'
+			});
+			cp.value = value;
+
+			var $tempColor = $('#'+elimentId+'Color');
+			var $tempMessage = $('#'+elimentId+'Message');
+			if (value > 60) {
+				$tempColor.addClass('red').removeClass('blue');
+				$tempMessage.text('실내가 습합니다.');
+				if (value>=80) $tempMessage.text('실내가 매우 습합니다.');
+			} else if (value < 40) {
+				$tempColor.addClass('blue').removeClass('red');
+				$tempMessage.text('실내가 건조합니다.');
+				if (value<30) $tempMessage.text('실내가 매우 건조합니다.');
+			} else {
+				$tempColor.removeClass('blue').removeClass('red');
+				$tempMessage.text('적정 실내습도입니다.');
+			}
+		}
 
     </script>
 </head>
-
 <body>
 <div class="wrap">
-    <div class="console">
-    	<div class="infobox">
-    		<h2 class="info-title">Manager Mode</h2>
-    		<div class="datetime">
-	    		<span class="date">2021.01.18 월요일</span>
-	    		<span class="time">am 10:16</span>
-    		</div>
-    	</div>
-    	<div class="iot-buttons">
-    		<h3>IoT 가전제어</h3>
-    		<ul>
-                <li>
-                    <button id="airBtn" class="console-button aircon">에어컨<span>ON</span></button>
-                </li>
-                <li>
-                    <button id="lightBtn" class="console-button light">조명<span>ON</span></button>
-                </li>
-                <li>
-                    <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
-                </li>
-                <li>
-                    <button class="console-button electronic">가전 전원<span>ON</span></button>
-                </li>
-            </ul>
-    	</div>
-    	<div class="battery">
-    		<div class="battery__head">
-    			<h3 class="battery_title">배터리</h3>
-    			<span class="battery-percent"></span>
-    			<a href="battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
-    		</div>
-    		<div class="battery__contents">
-    			<div class="battery__progress" data-percent="80">
-    				<div class="battery__bar"></div>
-    			</div>
-    		</div>
-    	</div>
-    </div>
+	<div class="console">
+		<div class="infobox">
+			<h2 class="info-title">Manager Mode</h2>
+			<div class="datetime">
+				<span class="date">2021.01.18 월요일</span>
+				<span class="time">am 10:16</span>
+			</div>
+		</div>
+		<div class="iot-buttons">
+			<h3>IoT 가전제어</h3>
+			<ul>
+				<li>
+					<button id="airBtn" class="console-button aircon">에어컨<span>ON</span></button>
+				</li>
+				<li>
+					<button id="lightBtn" class="console-button light">조명<span>ON</span></button>
+				</li>
+				<li>
+					<button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
+				</li>
+				<li>
+					<button class="console-button electronic">가전 전원<span>ON</span></button>
+				</li>
+			</ul>
+		</div>
+		<div class="battery">
+			<div class="battery__head">
+				<h3 class="battery_title">배터리</h3>
+				<span class="battery-percent"></span>
+				<a href="/admin/battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
+			</div>
+			<div class="battery__contents">
+				<div class="battery__progress" data-percent="80">
+					<div class="battery__bar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="contents">
-        <div class="button-list">
-            <ul>
-    			<li><a href="admin" class="home">HOME</a></li>
-    			<li><a href="living">거실</a></li>
-    			<li><a href="kitchen" class="active">주방</a></li>
-    			<li><a href="inner">안방</a></li>
-    			<li><a href="exercise">운동</a></li>
-    			<li><a href="warehouse">창고</a></li>
-    		</ul>
-        </div>
+	<div class="contents">
+		<div class="button-list">
+			<ul>
+				<li><a href="/admin/">HOME</a></li>
+				<li><a href="/admin/living">거실</a></li>
+				<li><a href="/admin/kitchen" class="kitchen active">주방</a></li>
+				<li><a href="/admin/inner">안방</a></li>
+				<li><a href="/admin/exercise">운동</a></li>
+				<li><a href="/admin/warehouse">창고</a></li>
+			</ul>
+		</div>
 
-        <div class="card-list">
-            <ul>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link sensor-card sensor-card--temp">
-	                            <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도" />온도</h3>
-	                            <div id="temChartColor" class="temp">
-	                                <div id="temChart" class="progress temp-progress"></div>
-	                            </div>
-	                            <span class="card-comment" id="temChartMessage">적정 실내 온도입니다.</span>
-	                        </a>
-	                    </div>
-	                </li>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link sensor-card sensor-card--humidity">
-	                            <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도" />습도</h3>
-	                            <div id="humChartColor" class="humidity">
-	                                <div id="humChart" class="progress humidity-progress"></div>
-	                            </div>
-	                            <span class="card-comment" id="humChartMessage">적정 실내 습도입니다.</span>
-	                        </a>
-	                    </div>
-	                </li>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link sensor-card sensor-card--air">
-	                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질" />공기질</h3>
-	                            <div class="air">
-	                            	<div class="progress air-progress" data-micro="5"></div>
-	                            	<div class="air__state"></div>
-	                            </div>
-	                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
-	                        </a>
-	                    </div>
-	                </li>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link">
-	                            <div id="doorStatus" class="homestate door">
-	                            	<h3 class="card-title">창문</h3>
-	                                <div class="card-icon card-icon--door"></div>
-	                                <span class="card-comment" id="doorMessage">창문 보안 안전</span>
-	                            </div>
-	                        </a>
-	                    </div>
-	                </li>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link">
-	                            <div id="gas" class="homestate gas">
-	                            	<h3 class="card-title">가스</h3>
-	                                <div class="card-icon card-icon--gas"></div>
-	                                <span class="card-comment" id="gasrMessage">가스 상태 안전</span>
-	                            </div>
-	                        </a>
-	                    </div>
-	                </li>
-	                <li class="card">
-	                    <div class="card-inner">
-	                        <a href="#" class="card-link">
-	                            <div id="smoke" class="homestate fire">
-	                            	<h3 class="card-title">화재</h3>
-	                                <div class="card-icon card-icon--fire"></div>
-	                                <span class="card-comment" id="fireMessage">화재 위험 안전</span>
-	                            </div>
-	                        </a>
-	                    </div>
-	                </li>
-	            </ul>
-        </div>
-    </div>
+		<div class="card-list">
+			<ul>
+				<li class="card">
+					<div class="card-inner">
+						<a href="/temp/tempdetail/rm2mu01" class="card-link">
+							<h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">거실</h3>
+							<div id="temChartRm2Color" class="temp">
+								<div id="temChartRm2" class="progress temp-progress"></div>
+							</div>
+							<span class="card-comment" id="temChartRm1Message">적정 실내 온도입니다.</span>
+						</a>
+					</div>
+				</li>
+				<li class="card">
+					<div class="card-inner">
+						<a href="/humidity/humdetail/rm2mu01" class="card-link">
+							<h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">거실</h3>
+							<div id ="humChartRm2Color" class="humidity">
+								<div id="humChartRm2" class="progress temp-progress"></div>
+							</div>
+							<span class="card-comment" id="humChartRm1Message">적정 실내 습도입니다.</span>
+						</a>
+					</div>
+				</li>
+				<li class="card">
+					<div class="card-inner">
+						<a href="/admin/air" class="card-link sensor-card sensor-card--air">
+							<h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질" />공기질</h3>
+							<div class="air">
+								<div class="progress air-progress" data-micro="5"></div>
+								<div class="air__state"></div>
+							</div>
+							<span class="card-comment">공기청정기를 ON 해주세요.</span>
+						</a>
+					</div>
+				</li>
+				<li class="card">
+					<div class="card-inner">
+						<a href="#" class="card-link">
+							<div id="doorStatus" class="homestate door">
+								<h3 class="card-title">창문</h3>
+								<div class="card-icon card-icon--door"></div>
+								<span class="card-comment" id="doorMessage">창문 보안 안전</span>
+							</div>
+						</a>
+					</div>
+				</li>
+				<li class="card">
+					<div class="card-inner">
+						<a href="#" class="card-link">
+							<div id="gas" class="homestate gas">
+								<h3 class="card-title">가스</h3>
+								<div class="card-icon card-icon--gas"></div>
+								<span class="card-comment" id="gasrMessage">가스 상태 안전</span>
+							</div>
+						</a>
+					</div>
+				</li>
+				<li class="card">
+					<div class="card-inner">
+						<a href="#" class="card-link">
+							<div id="smoke" class="homestate fire">
+								<h3 class="card-title">화재</h3>
+								<div class="card-icon card-icon--fire"></div>
+								<span class="card-comment" id="fireMessage">화재 위험 안전</span>
+							</div>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 </body>
 </html>
