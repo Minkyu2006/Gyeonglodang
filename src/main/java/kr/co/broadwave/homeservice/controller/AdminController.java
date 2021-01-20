@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Slf4j
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admindashboard")
 public class AdminController {
 
     // 대시보드 메인화면(관리자용)

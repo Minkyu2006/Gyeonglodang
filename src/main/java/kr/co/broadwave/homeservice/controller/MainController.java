@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
 
     // 대시보드 메인화면(사용자용)
-    @RequestMapping("/")
+    @RequestMapping("/localdashborad")
     public String main() {
         return "index";
     }
