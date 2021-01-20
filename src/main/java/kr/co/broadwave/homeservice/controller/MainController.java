@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MainController {
 
+    // 스마트경로당 시작 빈페이지
+    @RequestMapping("/")
+    public String start() {
+        return "start";
+    }
+
     // 대시보드 메인화면(사용자용)
     @RequestMapping("/localdashborad")
     public String main() {

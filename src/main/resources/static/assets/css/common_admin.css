@@ -837,6 +837,26 @@ a.console-button {
     line-height: 1.5;
     lettter-spacing: -0.63px;
 }
+.battery-item2 {
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #2a2c37;
+    font-size: 25px;
+    line-height: 1.5;
+    lettter-spacing: -0.63px;
+}
+.battery-item2:before {
+    content: " ";
+    display: table;
+}
+.battery-item2:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
 .battery-item:before {
     content: " ";
     display: table;
@@ -857,6 +877,11 @@ a.console-button {
     text-align: right;
 }
 
+.battery__percent2 {
+    float: left;
+    width: 80px;
+    text-align: right;
+}
 
 /* alert */
 .alert {
