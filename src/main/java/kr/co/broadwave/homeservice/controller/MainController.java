@@ -21,7 +21,7 @@ public class MainController {
     }
 
     // 대시보드 메인화면(사용자용)
-    @RequestMapping("/localdashborad")
+    @RequestMapping("/localdashboard")
     public String main() {
         return "index";
     }
