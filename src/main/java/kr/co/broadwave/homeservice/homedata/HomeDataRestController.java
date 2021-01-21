@@ -85,6 +85,15 @@ public class HomeDataRestController {
             log.info("습도 데이터 : "+sensorData);
             data.put("humidity",sensorData);
         }
+        Optional<HomeData> airquality = homeDataService.findByIdData("airquality");
+        if(!airquality.isPresent()) {
+            log.info("airquality 받아오기 실패");
+            data.put("airquality","");
+        }else{
+            sensorData = airquality.get();
+            log.info("공기질 데이터 : "+sensorData);
+            data.put("airquality",sensorData);
+        }
 
         Optional<HomeData> airpurification = homeDataService.findByIdData("airpurification");
         if(!airpurification.isPresent()) {

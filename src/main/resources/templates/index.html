@@ -384,7 +384,6 @@
 						if (typeof temDataRm4=='undefined') temDataRm4 = '0';
 						if (typeof temDataRm5=='undefined') temDataRm5 = '0';
 
-						console.log('========temDataRm5' +temDataRm5 )
 
 						tempRefresh('temChart', temDataRm1);
 						tempRefresh('temChartRm1', temDataRm1);
@@ -427,6 +426,34 @@
 						humRefresh('humChartRm3', humDataRm3);// 안방 습도
 						humRefresh('humChartRm4', humDataRm4);// 운동 습도
 						humRefresh('humChartRm5', humDataRm5);// 창고 습도
+					}
+
+					if(res.data.airquality != '') {
+						// 공기질
+						console.log('airqualityData Json 데이터 : ' + res.data.airquality.r_data);
+						var airquality = JSON.parse(res.data.airquality.r_data);
+						let airDataRm1 = '0'; // 거실 공기질(PM10)
+						let airDataRm2 = '0'; // 주방 공기질(PM10)
+						let airDataRm3 = '0';// 안방 공기질(PM10)
+
+						try {
+							airDataRm1 = airquality.rm1pm01pm10; // 거실 공기질(PM10)
+							airDataRm2 = airquality.rm2pm01pm10; // 주방 공기질(PM10)
+							airDataRm3 = airquality.rm3pm01pm10;// 안방 공기질(PM10)
+
+						}catch (e){
+							// 에러처리 필요없슴
+						}
+						if (typeof airDataRm1=='undefined') airDataRm1 = '0';
+						if (typeof airDataRm2=='undefined') airDataRm2 = '0';
+						if (typeof airDataRm3=='undefined') airDataRm3 = '0';
+
+
+						airRefresh('airChart', airDataRm1);// 거실 공기질(PM10)
+						airRefresh('airChartRm1', airDataRm1);// 거실 공기질(PM10)
+						airRefresh('airChartRm2', airDataRm2);// 주방 공기질(PM10)
+						airRefresh('airChartRm3', airDataRm3);// 안방 공기질(PM10)
+
 					}
 
 					if(res.data.airpurification != '') {
@@ -673,6 +700,39 @@
 			}
 		}
 
+		//공기 표기해주는 함수
+		function airRefresh(elimentId,value) {
+
+			// 값은 받아오나, 텍스트를 질리프레쉬할수없음.
+			const cp = new CircleProgress('#'+elimentId, {
+				max: 60,
+				value: value,
+				animationDuration: 400,
+				textFormat: (value) => value + '㎍/㎥'
+			});
+			cp.value = value;
+
+			var $tempColor = $('#'+elimentId+'Color');
+			var $tempMessage = $('#'+elimentId+'Message');
+			var $tempState = $('#'+elimentId+'State');
+			if (value <= 15) {
+				$tempColor.addClass('blue').removeClass('red');
+				$tempMessage.text('');
+				$tempState.text('좋음');
+
+			} else if (value <= 35) {
+				$tempColor.removeClass('blue').removeClass('red');
+				$tempMessage.text('');
+				$tempState.text('보통');
+
+			} else {
+				$tempColor.addClass('red').removeClass('blue');
+				$tempMessage.text('공기청정기를 ON 해주세요.');
+				$tempState.text('나쁨');
+
+			}
+		}
+
         // 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
         function integratedFun(name,value) {
             // console.log("name : "+name);
@@ -881,14 +941,12 @@
 	                    <div class="card-inner">
 	                        <a href="#" class="card-link sensor-card sensor-card--air">
 	                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질" />공기질</h3>
-	                            <div class="air">
-	                            	<div class="progress air-progress" data-micro="5"></div>
-	                            	<div class="air__state"></div>
-	                                <!-- <div class="air-icon">
-	                                    <i class="far fa-smile"></i>
-	                                </div> -->
-	                            </div>
-	                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+								<div class="air" id="airChartColor">
+									<div class="progress air-progress" id="airChart" ></div>
+									<div class="air__state" id="airChartState"></div>
+								</div>
+								<span class="card-comment" id="airChartMessage">공기청정기를 ON 해주세요</span>
+
 	                        </a>
 	                    </div>
 	                </li>
@@ -1093,14 +1151,11 @@
 			                    <div class="card-inner">
 			                        <a href="#" class="card-link sensor-card sensor-card--air">
 			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">거실</h3>
-			                            <div class="air">
-			                            	<div class="progress air-progress" data-micro="15"></div>
-			                            	<div class="air__state"></div>
-			                                <!-- <div class="air-icon">
-			                                    <i class="far fa-smile"></i>
-			                                </div> -->
-			                            </div>
-			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+										<div id ="airChartRm1Color" class="air">
+											<div id="airChartRm1" class="progress air-progress"></div>
+											<div class="air__state" id="airChartRm1State"></div>
+										</div>
+			                            <span class="card-comment" id="airChartRm1Message">공기청정기를 ON 해주세요.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -1108,14 +1163,11 @@
 			                    <div class="card-inner">
 			                        <a href="#" class="card-link sensor-card sensor-card--air">
 			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">주방</h3>
-			                            <div class="air">
-			                            	<div class="progress air-progress" data-micro="25"></div>
-			                            	<div class="air__state"></div>
-			                                <!-- <div class="air-icon">
-			                                    <i class="far fa-smile"></i>
-			                                </div> -->
-			                            </div>
-			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+										<div id ="airChartRm2Color" class="air">
+											<div id="airChartRm2" class="progress air-progress"></div>
+											<div class="air__state" id="airChartRm2State"></div>
+										</div>
+										<span class="card-comment" id="airChartRm2Message">공기청정기를 ON 해주세요.</span>
 			                        </a>
 			                    </div>
 			                </li>
@@ -1123,47 +1175,15 @@
 			                    <div class="card-inner">
 			                        <a href="#" class="card-link sensor-card sensor-card--air">
 			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">안방</h3>
-			                            <div class="air">
-			                            	<div class="progress air-progress" data-micro="35"></div>
-			                            	<div class="air__state"></div>
-			                                <!-- <div class="air-icon">
-			                                    <i class="far fa-smile"></i>
-			                                </div> -->
-			                            </div>
-			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
-			                        </a>
+										<div id ="airChartRm3Color" class="air">
+											<div id="airChartRm3" class="progress air-progress"></div>
+											<div class="air__state" id="airChartRm3State"></div>
+										</div>
+										<span class="card-comment" id="airChartRm3Message">공기청정기를 ON 해주세요.</span>
+									</a>
 			                    </div>
 			                </li>
-			                <li class="card">
-			                    <div class="card-inner">
-			                        <a href="#" class="card-link sensor-card sensor-card--air">
-			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">운동</h3>
-			                            <div class="air">
-			                            	<div class="progress air-progress" data-micro="45"></div>
-			                            	<div class="air__state"></div>
-			                                <!-- <div class="air-icon">
-			                                    <i class="far fa-smile"></i>
-			                                </div> -->
-			                            </div>
-			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
-			                        </a>
-			                    </div>
-			                </li>
-			                <li class="card">
-			                    <div class="card-inner">
-			                        <a href="#" class="card-link sensor-card sensor-card--air">
-			                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">창고</h3>
-			                            <div class="air">
-			                            	<div class="progress air-progress" data-micro="55"></div>
-			                            	<div class="air__state"></div>
-			                                <!-- <div class="air-icon">
-			                                    <i class="far fa-smile"></i>
-			                                </div> -->
-			                            </div>
-			                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
-			                        </a>
-			                    </div>
-			                </li>
+
 			            </ul>
 			        </div>
 	        		
