@@ -22,6 +22,53 @@
 
 		<script>
 
+			$(function() {
+				// 조명버튼
+				$('#lightBtn').on('click', function () {
+					$(this).toggleClass('active');
+					if ($(this).hasClass('light active')) {
+						$(this).children('.fa-lightbulb').removeClass('fas');
+						$(this).children('.fa-lightbulb').addClass('far');
+						integratedFun("light", "ON");
+					} else {
+						$(this).children('.fa-lightbulb').removeClass('far');
+						$(this).children('.fa-lightbulb').addClass('fas');
+						integratedFun("light", "OFF");
+					}
+				})
+				// 가전전원버튼
+				$('#electricBtn').on('click', function () {
+					$(this).toggleClass('active');
+					if ($(this).hasClass('electronic active')) {
+						$(this).children('.fa-lightbulb').removeClass('fas');
+						$(this).children('.fa-lightbulb').addClass('far');
+						integratedFun("electric", "ON");
+					} else {
+						$(this).children('.fa-lightbulb').removeClass('far');
+						$(this).children('.fa-lightbulb').addClass('fas');
+						integratedFun("electric", "OFF");
+					}
+				})
+				// 공기청정기 버튼
+				$('#aqBtn').on('click', function () {
+					$(this).toggleClass('active');
+					if ($(this).hasClass('airfresher active')) {
+						integratedFun("aq", "ON");
+					} else {
+						integratedFun("aq", "OFF");
+					}
+				})
+				// 에어컨 온오프버튼(전체)
+				$('#airBtn').on('click', function () {
+					$(this).toggleClass('active');
+					if ($(this).hasClass('aircon active')) {
+						integratedFun("air", "ON");
+					} else {
+						integratedFun("air", "OFF");
+					}
+				})
+			});
+
 			function AutoStart() {
 				setInterval(clock, 60000);
 				setInterval(dataInfo, 60000); // 5초마다 데이터불러와 실행
@@ -60,7 +107,7 @@
 			// 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
 			function integratedFun(name,value) {
 				// console.log("name : "+name);
-				// console.log("value : "+value);
+				console.log("value : "+value);
 				var params = {
 					value: value
 				};
@@ -85,7 +132,15 @@
 						data: params,
 						cache: false
 					});
-				}else{
+				}else if(name==="electric"){
+					$.ajax({
+						url: '/homedata/electricOnOff',
+						type: 'post',
+						data: params,
+						cache: false
+					});
+				}
+				else{
 					alert("알 수 없는 명령");
 					console.log("알 수 없는 명령")
 				}
@@ -109,13 +164,91 @@
 				})
 			}
 
-			function temLink(room){
-				console.log("room : "+room);
-				location.href="/tempdetail/"+room;
+			//공기 표기해주는 함수
+			function airRefresh(elimentId,value) {
+				// 값은 받아오나, 텍스트를 질리프레쉬할수없음.
+				const cp = new CircleProgress('#'+elimentId, {
+					max: 60,
+					value: value,
+					animationDuration: 400,
+					textFormat: (value) => value + '㎍/㎥'
+				});
+				cp.value = value;
+
+				var $tempColor = $('#'+elimentId+'Color');
+				var $tempMessage = $('#'+elimentId+'Message');
+				var $tempState = $('#'+elimentId+'State');
+				if (value <= 15) {
+					$tempColor.addClass('blue').removeClass('red');
+					$tempMessage.text('');
+					$tempState.text('좋음');
+
+				} else if (value <= 35) {
+					$tempColor.removeClass('blue').removeClass('red');
+					$tempMessage.text('');
+					$tempState.text('보통');
+
+				} else {
+					$tempColor.addClass('red').removeClass('blue');
+					$tempMessage.text('공기청정기를 ON 해주세요.');
+					$tempState.text('나쁨');
+
+				}
 			}
-			function humLink(room){
-				console.log("room : "+room);
-				location.href="/humdetail/"+room;
+
+			// 온도표기해주는 함수
+			function tempRefresh(elimentId,value) {
+				console.log('받은 온도 : '+value);
+
+				// 값은 받아오나, 텍스트를 리프레쉬할수없음.
+				const cp = new CircleProgress('#'+elimentId, {
+					max: 48,
+					value: value,
+					animationDuration: 400,
+					textFormat: (value) => value + '°C'
+				});
+				cp.value = value;
+
+				var $tempColor = $('#'+elimentId+'Color');
+				var $tempMessage = $('#'+elimentId+'Message');
+				if (value > 27) {
+					$tempColor.addClass('red').removeClass('blue');
+					$tempMessage.text('실내 온도가 덥습니다.');
+				} else if (value < 18) {
+					$tempColor.addClass('blue').removeClass('red');
+					$tempMessage.text('실내 온도가 춥습니다.');
+				} else {
+					$tempColor.removeClass('blue').removeClass('red');
+					$tempMessage.text('적정 실내 온도입니다.');
+				}
+			}
+
+			//습도 표기해주는 함수
+			function humRefresh(elimentId,value) {
+
+				// 값은 받아오나, 텍스트를 리프레쉬할수없음.
+				const cp = new CircleProgress('#'+elimentId, {
+					max: 100,
+					value: value,
+					animationDuration: 400,
+					textFormat: (value) => value + '%'
+				});
+				cp.value = value;
+
+				var $tempColor = $('#'+elimentId+'Color');
+				var $tempMessage = $('#'+elimentId+'Message');
+				if (value > 60) {
+					$tempColor.addClass('red').removeClass('blue');
+					$tempMessage.text('실내가 습합니다.');
+					if (value>=80) $tempMessage.text('실내가 매우 습합니다.');
+				} else if (value < 40) {
+					$tempColor.addClass('blue').removeClass('red');
+					$tempMessage.text('실내가 건조합니다.');
+					if (value<30) $tempMessage.text('실내가 매우 건조합니다.');
+				} else {
+					$tempColor.removeClass('blue').removeClass('red');
+					$tempMessage.text('적정 실내습도입니다.');
+				}
 			}
 
 		</script>

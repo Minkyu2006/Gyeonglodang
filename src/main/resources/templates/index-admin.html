@@ -35,38 +35,6 @@
                 $('.air__state').text('좋음');
             }
 
-            // 조명버튼
-            $('#lightBtn').on('click', function() {
-                $(this).toggleClass('active');
-                if ($(this).hasClass('light active')) {
-                    $(this).children('.fa-lightbulb').removeClass('fas');
-                    $(this).children('.fa-lightbulb').addClass('far');
-                    integratedFun("light","ON");
-                }else{
-                    $(this).children('.fa-lightbulb').removeClass('far');
-                    $(this).children('.fa-lightbulb').addClass('fas');
-                    integratedFun("light","OFF");
-                }
-            })
-            // 공기청정기 버튼
-            $('#aqBtn').on('click', function() {
-                $(this).toggleClass('active');
-                if ($(this).hasClass('airfresher active')) {
-                    integratedFun("aq","ON");
-                }else{
-                    integratedFun("aq","OFF");
-                }
-            })
-            // 에어컨 온오프버튼(전체)
-            $('#airBtn').on('click', function() {
-                $(this).toggleClass('active');
-                if ($(this).hasClass('aircon active')) {
-                    integratedFun("air","ON");
-                }else{
-                    integratedFun("air","OFF");
-                }
-            })
-
             // 문열기버튼
             $('#openDoorBtn').on('click', function() {
                 integratedFun("door", "OPEN");
@@ -122,6 +90,31 @@
                         }
                     }
 
+                    // 가전전원
+                    if(res.data.electricDate !== ''){
+                        //todo 전원이 하나라도 켜있으면 On 할것
+                        console.log('electricDate Json 데이터 : '+ res.data.electricDate.r_data);
+                        let electric = JSON.parse(res.data.electricDate.r_data);
+                        // console.log('내자신');
+                        // console.log('light 상태 : '+light.rm2lt01);
+                        // console.log('');
+                        let electricCheck = false;
+                        if (electric.rm1zc01 ==="on")  electricCheck = true
+                        // if (electric.rm2zc01 ==="on")  electricCheck = true
+                        // if (electric.rm3zc01 ==="on")  electricCheck = true
+
+                        var $electricBtn = $('#electricBtn');
+                        if(electricCheck) {
+                            $electricBtn.addClass("active")
+                            $electricBtn.children('.fa-lightbulb').removeClass('fas');
+                            $electricBtn.children('.fa-lightbulb').addClass('far');
+                        }else{
+                            $electricBtn.removeClass("active")
+                            $electricBtn.children('.fa-lightbulb').addClass('fas');
+                            $electricBtn.children('.fa-lightbulb').removeClass('far');
+                        }
+                    }
+
                     // 온도셋팅
                     if(res.data.temperatureData !== '') {
                         console.log('temperatureData Json 데이터 : ' + res.data.temperatureData.r_data);
@@ -132,7 +125,7 @@
                         }catch (e){
                             // 에러처리 필요없슴
                         }
-                        if (typeof temDataRm1=='undefined') temDataRm1 = '0';
+                        if (typeof temDataRm1=='undefined' || temDataRm1==="unavailable" ||  temDataRm1==="") temDataRm1 = '0';
                         tempRefresh('temChart', temDataRm1);
                     }
 
@@ -146,9 +139,26 @@
                         }catch (e){
                             // 에러처리 필요없슴
                         }
-                        if (typeof humDataRm1=='undefined') humDataRm1 = '0';
+                        if (typeof humDataRm1=='undefined' || humDataRm1==='unavailable' || humDataRm1==="") humDataRm1 = '0';
                         humRefresh('humChart', humDataRm1);// 거실 습도
                     }
+
+                    if(res.data.airquality !== '') {
+                        // 공기질
+                        console.log('airqualityData Json 데이터 : ' + res.data.airquality.r_data);
+                        var airquality = JSON.parse(res.data.airquality.r_data);
+                        let airDataRm1 = '0'; // 거실 공기질(PM10)
+
+                        try {
+                            airDataRm1 = airquality.rm1pm01pm10; // 거실 공기질(PM10)
+                        }catch (e){
+                            // 에러처리 필요없슴
+                        }
+
+                        if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
+                        airRefresh('airChart', airDataRm1);// 거실 공기질(PM10)
+                    }
+
 
                     if(res.data.airpurification !== '') {
                         // 공기청정기 셋팅
@@ -300,60 +310,6 @@
             });
         }
 
-        // 온도표기해주는 함수
-        function tempRefresh(elimentId,value) {
-            console.log('받은 온도 : '+value);
-
-            // 값은 받아오나, 텍스트를 리프레쉬할수없음.
-            const cp = new CircleProgress('#'+elimentId, {
-                max: 48,
-                value: value,
-                animationDuration: 400,
-                textFormat: (value) => value + '°C'
-            });
-            cp.value = value;
-
-            var $tempColor = $('#'+elimentId+'Color');
-            var $tempMessage = $('#'+elimentId+'Message');
-            if (value > 27) {
-                $tempColor.addClass('red').removeClass('blue');
-                $tempMessage.text('실내 온도가 덥습니다.');
-            } else if (value < 18) {
-                $tempColor.addClass('blue').removeClass('red');
-                $tempMessage.text('실내 온도가 춥습니다.');
-            } else {
-                $tempColor.removeClass('blue').removeClass('red');
-                $tempMessage.text('적정 실내 온도입니다.');
-            }
-        }
-
-        //습도 표기해주는 함수
-        function humRefresh(elimentId,value) {
-
-            // 값은 받아오나, 텍스트를 리프레쉬할수없음.
-            const cp = new CircleProgress('#'+elimentId, {
-                max: 100,
-                value: value,
-                animationDuration: 400,
-                textFormat: (value) => value + '%'
-            });
-            cp.value = value;
-
-            var $tempColor = $('#'+elimentId+'Color');
-            var $tempMessage = $('#'+elimentId+'Message');
-            if (value > 60) {
-                $tempColor.addClass('red').removeClass('blue');
-                $tempMessage.text('실내가 습합니다.');
-                if (value>=80) $tempMessage.text('실내가 매우 습합니다.');
-            } else if (value < 40) {
-                $tempColor.addClass('blue').removeClass('red');
-                $tempMessage.text('실내가 건조합니다.');
-                if (value<30) $tempMessage.text('실내가 매우 건조합니다.');
-            } else {
-                $tempColor.removeClass('blue').removeClass('red');
-                $tempMessage.text('적정 실내습도입니다.');
-            }
-        }
 
     </script>
 </head>
@@ -380,7 +336,7 @@
                     <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
                 </li>
                 <li>
-                    <button class="console-button electronic">가전 전원<span>ON</span></button>
+                    <button id="electricBtn"  class="console-button electronic">가전 전원<span>ON</span></button>
                 </li>
             </ul>
     	</div>
@@ -438,11 +394,11 @@
                     <div class="card-inner">
                         <a href="/admindashboard/air" class="card-link sensor-card sensor-card--air">
                             <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질" />공기질</h3>
-                            <div class="air">
-                                <div class="progress air-progress" data-micro="5"></div>
-                                <div class="air__state"></div>
+                            <div class="air" id="airChartColor">
+                                <div class="progress air-progress" id="airChart" ></div>
+                                <div class="air__state" id="airChartState"></div>
                             </div>
-                            <span class="card-comment">공기청정기를 ON 해주세요.</span>
+                            <span class="card-comment" id="airChartMessage">공기청정기를 ON 해주세요</span>
                         </a>
                     </div>
                 </li>

@@ -13,37 +13,6 @@
             realTime();
             AutoStart();
 
-            // 조명버튼
-            $('#lightBtn').on('click', function() {
-                $(this).toggleClass('active');
-                if ($(this).hasClass('light active')) {
-                    $(this).children('.fa-lightbulb').removeClass('fas');
-                    $(this).children('.fa-lightbulb').addClass('far');
-                    integratedFun("light","ON");
-                }else{
-                    $(this).children('.fa-lightbulb').removeClass('far');
-                    $(this).children('.fa-lightbulb').addClass('fas');
-                    integratedFun("light","OFF");
-                }
-            })
-            // 공기청정기 버튼
-            $('#aqBtn').on('click', function() {
-                $(this).toggleClass('active');
-                if ($(this).hasClass('airfresher active')) {
-                    integratedFun("aq","ON");
-                }else{
-                    integratedFun("aq","OFF");
-                }
-            })
-            // 에어컨 온오프버튼(전체)
-            $('#airBtn').on('click', function() {
-                $(this).toggleClass('active');
-                if ($(this).hasClass('aircon active')) {
-                    integratedFun("air","ON");
-                }else{
-                    integratedFun("air","OFF");
-                }
-            })
         })
 
         // 데이터 받아오는 함수
@@ -123,6 +92,31 @@
                         }
                     }
 
+                    // 가전전원
+                    if(res.data.electricDate !== ''){
+                        //todo 전원이 하나라도 켜있으면 On 할것
+                        console.log('electricDate Json 데이터 : '+ res.data.electricDate.r_data);
+                        let electric = JSON.parse(res.data.electricDate.r_data);
+                        // console.log('내자신');
+                        // console.log('light 상태 : '+light.rm2lt01);
+                        // console.log('');
+                        let electricCheck = false;
+                        if (electric.rm1zc01 ==="on")  electricCheck = true
+                        // if (electric.rm2zc01 ==="on")  electricCheck = true
+                        // if (electric.rm3zc01 ==="on")  electricCheck = true
+
+                        var $electricBtn = $('#electricBtn');
+                        if(electricCheck) {
+                            $electricBtn.addClass("active")
+                            $electricBtn.children('.fa-lightbulb').removeClass('fas');
+                            $electricBtn.children('.fa-lightbulb').addClass('far');
+                        }else{
+                            $electricBtn.removeClass("active")
+                            $electricBtn.children('.fa-lightbulb').addClass('fas');
+                            $electricBtn.children('.fa-lightbulb').removeClass('far');
+                        }
+                    }
+
                     if(res.data.batteryData !== '') {
                         // 배터리 셋팅
                         var battery = JSON.parse(res.data.batteryData.r_data);
@@ -169,11 +163,11 @@
                         }catch (e){
                             // 에러처리 필요없슴
                         }
-                        if (typeof temDataRm1=='undefined') temDataRm1 = '0';
-                        if (typeof temDataRm2=='undefined') temDataRm2 = '0';
-                        if (typeof temDataRm3=='undefined') temDataRm3 = '0';
-                        if (typeof temDataRm4=='undefined') temDataRm4 = '0';
-                        if (typeof temDataRm5=='undefined') temDataRm5 = '0';
+                        if (typeof temDataRm1=='undefined' || temDataRm1==="unavailable" ||  temDataRm1==="") temDataRm1 = '0';
+                        if (typeof temDataRm2=='undefined' || temDataRm2==="unavailable" ||  temDataRm2==="") temDataRm2 = '0';
+                        if (typeof temDataRm3=='undefined' || temDataRm3==="unavailable" ||  temDataRm3==="") temDataRm3 = '0';
+                        if (typeof temDataRm4=='undefined' || temDataRm4==="unavailable" ||  temDataRm4==="") temDataRm4 = '0';
+                        if (typeof temDataRm5=='undefined' || temDataRm5==="unavailable" ||  temDataRm5==="") temDataRm5 = '0';
 
                         console.log('========temDataRm5' +temDataRm5 )
 
@@ -241,7 +235,7 @@
                     <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
                 </li>
                 <li>
-                    <button class="console-button electronic">가전 전원<span>ON</span></button>
+                    <button id="electricBtn" class="console-button electronic">가전 전원<span>ON</span></button>
                 </li>
             </ul>
     	</div>

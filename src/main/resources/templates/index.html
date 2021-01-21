@@ -219,8 +219,11 @@
 					warningAudioPlay(receiveData.type);
                 }
                 //refresh 이면 오면 화면 재갱신 함수 호출
-                if(receiveData.type=="refresh"){
+                if(receiveData.type==="refresh"){
 					dataInfo();
+				}
+				if(receiveData.type==="screenrefresh"){
+					location.reload();
 				}
 
             };
@@ -378,11 +381,11 @@
 						}catch (e){
 							// 에러처리 필요없슴
 						}
-						if (typeof temDataRm1=='undefined') temDataRm1 = '0';
-						if (typeof temDataRm2=='undefined') temDataRm2 = '0';
-						if (typeof temDataRm3=='undefined') temDataRm3 = '0';
-						if (typeof temDataRm4=='undefined') temDataRm4 = '0';
-						if (typeof temDataRm5=='undefined') temDataRm5 = '0';
+						if (typeof temDataRm1=='undefined' || temDataRm1==='unavailable'  ||  temDataRm1==="") temDataRm1 = '0';
+						if (typeof temDataRm2=='undefined' || temDataRm2==='unavailable'  ||  temDataRm2==="") temDataRm2 = '0';
+						if (typeof temDataRm3=='undefined' || temDataRm3==='unavailable'  ||  temDataRm3==="") temDataRm3 = '0';
+						if (typeof temDataRm4=='undefined' || temDataRm4==='unavailable'  ||  temDataRm4==="") temDataRm4 = '0';
+						if (typeof temDataRm5=='undefined' || temDataRm5==='unavailable'  ||  temDataRm5==="") temDataRm5 = '0';
 
 
 						tempRefresh('temChart', temDataRm1);
@@ -414,11 +417,11 @@
 						}catch (e){
 							// 에러처리 필요없슴
 						}
-						if (typeof humDataRm1=='undefined') humDataRm1 = '0';
-						if (typeof humDataRm2=='undefined') humDataRm2 = '0';
-						if (typeof humDataRm3=='undefined') humDataRm3 = '0';
-						if (typeof humDataRm4=='undefined') humDataRm4 = '0';
-						if (typeof humDataRm5=='undefined') humDataRm5 = '0';
+						if (typeof humDataRm1=='undefined' || humDataRm1==='unavailable' || humDataRm1==='') humDataRm1 = '0';
+						if (typeof humDataRm2=='undefined' || humDataRm2==='unavailable' || humDataRm2==='') humDataRm2 = '0';
+						if (typeof humDataRm3=='undefined' || humDataRm3==='unavailable' || humDataRm3==='') humDataRm3 = '0';
+						if (typeof humDataRm4=='undefined' || humDataRm4==='unavailable' || humDataRm4==='') humDataRm4 = '0';
+						if (typeof humDataRm5=='undefined' || humDataRm5==='unavailable' || humDataRm5==='') humDataRm5 = '0';
 
 						humRefresh('humChart', humDataRm1);// 거실 습도
 						humRefresh('humChartRm1', humDataRm1);// 거실 습도
@@ -440,20 +443,18 @@
 							airDataRm1 = airquality.rm1pm01pm10; // 거실 공기질(PM10)
 							airDataRm2 = airquality.rm2pm01pm10; // 주방 공기질(PM10)
 							airDataRm3 = airquality.rm3pm01pm10;// 안방 공기질(PM10)
-
 						}catch (e){
 							// 에러처리 필요없슴
 						}
-						if (typeof airDataRm1=='undefined') airDataRm1 = '0';
-						if (typeof airDataRm2=='undefined') airDataRm2 = '0';
-						if (typeof airDataRm3=='undefined') airDataRm3 = '0';
 
+						if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
+						if (typeof airDataRm2=='undefined' || airDataRm2==='unknown') airDataRm2 = '0';
+						if (typeof airDataRm3=='undefined' || airDataRm3==='unknown') airDataRm3 = '0';
 
 						airRefresh('airChart', airDataRm1);// 거실 공기질(PM10)
 						airRefresh('airChartRm1', airDataRm1);// 거실 공기질(PM10)
 						airRefresh('airChartRm2', airDataRm2);// 주방 공기질(PM10)
 						airRefresh('airChartRm3', airDataRm3);// 안방 공기질(PM10)
-
 					}
 
 					if(res.data.airpurification != '') {

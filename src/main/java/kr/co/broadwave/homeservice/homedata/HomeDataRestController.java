@@ -85,6 +85,7 @@ public class HomeDataRestController {
             log.info("습도 데이터 : "+sensorData);
             data.put("humidity",sensorData);
         }
+
         Optional<HomeData> airquality = homeDataService.findByIdData("airquality");
         if(!airquality.isPresent()) {
             log.info("airquality 받아오기 실패");
@@ -163,6 +164,15 @@ public class HomeDataRestController {
             sensorData = battery.get();
             log.info("배터리 데이터 : "+sensorData);
             data.put("batteryData",sensorData);
+        }
+
+        Optional<HomeData> electric = homeDataService.findByIdData("electric");
+        if(!electric.isPresent()) {
+            log.info("electric 받아오기 실패");
+        }else{
+            sensorData = electric.get();
+            log.info("가전전원 데이터 : "+electric);
+            data.put("electricDate",sensorData);
         }
 
 //        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
@@ -246,6 +256,33 @@ public class HomeDataRestController {
                     client.sender("command/smart/lighton","{\"Dashboard\":\"lightONCommand\"}");
                 }else{
                     client.sender("command/smart/lightoff","{\"Dashboard\":\"lightOFFCommand\"}");
+                }
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        return ResponseEntity.ok(res.success());
+    }
+
+    @PostMapping("electricOnOff")
+    public ResponseEntity<Map<String,Object>> electricOnOff(@RequestParam(value="value", defaultValue="") String value) throws MqttException {
+        AjaxResponse res = new AjaxResponse();
+
+        log.info("가전전원 명령하기 : "+value);
+        final Consumer<HashMap<Object, Object>> pdk = (arg)->{};
+
+        MyMqttClient client = new MyMqttClient(pdk);  //해당 함수를 생성자로 넣어준다.
+        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL, "command");
+
+        new Thread( ()->{
+            try {
+                Thread.sleep(100);
+                if(value.equals("ON")){
+                    client.sender("command/smart/elon","{\"Dashboard\":\"electricONCommand\"}");
+                }else{
+                    client.sender("command/smart/eloff","{\"Dashboard\":\"electricOFFCommand\"}");
                 }
                 client.close();
             } catch (Exception e) {

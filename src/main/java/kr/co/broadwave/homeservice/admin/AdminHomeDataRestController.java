@@ -104,6 +104,16 @@ public class AdminHomeDataRestController {
             data.put("lightData",sensorData);
         }
 
+        Optional<HomeData> airquality = homeDataService.findByIdData("airquality");
+        if(!airquality.isPresent()) {
+            log.info("airquality 받아오기 실패");
+            data.put("airquality","");
+        }else{
+            sensorData = airquality.get();
+            log.info("공기질 데이터 : "+sensorData);
+            data.put("airquality",sensorData);
+        }
+
         Optional<HomeData> airpurification = homeDataService.findByIdData("airpurification");
         if(!airpurification.isPresent()) {
             log.info("airpurification 받아오기 실패");
@@ -131,6 +141,15 @@ public class AdminHomeDataRestController {
             sensorData = battery.get();
             log.info("온도 데이터 : "+sensorData);
             data.put("batteryData",sensorData);
+        }
+
+        Optional<HomeData> electric = homeDataService.findByIdData("electric");
+        if(!electric.isPresent()) {
+            log.info("electric 받아오기 실패");
+        }else{
+            sensorData = electric.get();
+            log.info("가전전원 데이터 : "+electric);
+            data.put("electricDate",sensorData);
         }
 
         res.addResponse("data",data);
