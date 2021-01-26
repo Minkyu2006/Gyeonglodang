@@ -10,6 +10,7 @@
             AutoStart();
             curveGraph();
             dataInfo();
+            $("#humChartLoading").show();
         });
         // 데이터 받아오는 함수
         function dataInfo() {
@@ -121,6 +122,7 @@
                 }
             });
         }
+
         var humChart=null;
         function curveGraph() {
             $.ajax({
@@ -138,15 +140,15 @@
                     console.log("$room : "+$room);
                     var label;
                     if($room === "rm1mu01"){
-                        label = "거실 습도 그래프";
+                        label = "거실 습도 그래프(%)";
                     }else if($room === "rm2mu01"){
-                        label = "주방 습도 그래프";
+                        label = "주방 습도 그래프(%)";
                     }else if($room === "rm3mu01"){
-                        label = "안방 습도 그래프";
+                        label = "안방 습도 그래프(%)";
                     }else if($room === "rm4mu01"){
-                        label = "운동방 습도 그래프";
+                        label = "운동방 습도 그래프(%)";
                     }else{
-                        label = "창고방 습도 그래프";
+                        label = "창고방 습도 그래프(%)";
                     }
                     $.each(res.data.datarow, function (key, value) {
                         humidity = value.sensordata[$room];
@@ -168,6 +170,7 @@
                             fill: false
                         }]
                     };
+
                     humChart = new Chart(ctx, {
                         type: 'line',
                         data: chartData,
@@ -181,7 +184,7 @@
                                 posiont:'top',
                                 labels: {
                                     fontColor: '#000000',
-                                    fontSize: 15
+                                    fontSize: 20
                                 }
                             },
                             maintainAspectRatio: false,
@@ -216,7 +219,7 @@
                                 }],
                                 yAxes: [{
                                     ticks: {
-                                        fontSize: 15
+                                        fontSize: 20
                                     },
                                     id: 'hum',
                                     display: true,
@@ -225,6 +228,7 @@
                             }
                         }
                     });
+                    $("#humChartLoading").hide();
                 }
             });
         }
@@ -280,7 +284,10 @@
         </div>
         <input type="hidden" id="room" th:value="${room}" />
         <div class="chart">
-            <canvas id='humChart'></canvas>
+            <div class="c-loader">
+                <div id="humChartLoading" class="c-loader__active c-loader__active--ring2"></div>
+                <canvas id='humChart'></canvas>
+            </div>
         </div>
     </div>
 </div>

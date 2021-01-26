@@ -13,76 +13,13 @@
 		<link rel="stylesheet" href="/assets/css/fontawesome/solid.min.css">
 		<link rel="stylesheet" type="text/css" href="/assets/css/common.css">
 
+		<link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico">
+
 		<script src="/assets/js/jquery.min.js"></script>
 		<script src="/assets/js/circle-progress/circle-progress.js"></script>
 		<script src="/assets/js/common.js"></script>
 
 		<script>
-			// 퇴실버튼
-			// function outGo() {
-			// 	$.ajax({
-			// 		url: '/exitGo/outGo',
-			// 		type: 'post',
-			// 		cache: false,
-			// 		error: function () {
-			// 			alert('퇴실실패');
-			// 		},
-			// 		success: function (res) {
-			// 			var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-			// 			let doorCheckRm1 =false; //거실
-			// 			let doorCheckRm2 =false; //주방
-			// 			let doorCheckRm3 =false; //안방
-			// 			let doorCheckRm4 =false; //운동
-			// 			let doorCheckRm5 =false; //창고
-			//
-			// 			if (doorsensor.rm1dr01 =="on")  doorCheckRm1 = true
-			// 			if (doorsensor.rm1dr02 =="on")  doorCheckRm1 = true
-			// 			if (doorsensor.rm1dr03 =="on")  doorCheckRm1 = true
-			//
-			// 			if (doorsensor.rm2dr03 =="on")  doorCheckRm2 = true
-			// 			if (doorsensor.rm2dr04 =="on")  doorCheckRm2 = true
-			// 			if (doorsensor.rm2dr05 =="on")  doorCheckRm2 = true
-			// 			if (doorsensor.rm2dr06 =="on")  doorCheckRm2 = true
-			// 			if (doorsensor.rm2dr07 =="on")  doorCheckRm2 = true
-			//
-			// 			if (doorsensor.rm3dr01 =="on")  doorCheckRm3 = true
-			// 			if (doorsensor.rm3dr02 =="on")  doorCheckRm3 = true
-			// 			if (doorsensor.rm3dr03 =="on")  doorCheckRm3 = true
-			//
-			// 			if (doorsensor.rm4dr01 =="on")  doorCheckRm4 = true
-			// 			if (doorsensor.rm4dr02 =="on")  doorCheckRm4 = true
-			// 			if (doorsensor.rm4dr03 =="on")  doorCheckRm4 = true
-			//
-			// 			if (doorsensor.rm5dr01 =="on")  doorCheckRm5 = true
-			// 			if (doorsensor.rm5dr02 =="on")  doorCheckRm5 = true
-			//
-			// 			var $doorStatus = $('#doorStatus');
-			// 			if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5 ){
-			// 				$doorStatus.addClass("active")
-			// 				let doorType ='';
-			// 				if(doorCheckRm1) doorType = "거실";
-			// 				if(doorCheckRm2) doorType = "주방";
-			// 				if(doorCheckRm3) doorType = "안방";
-			// 				if(doorCheckRm4) doorType = "운동방";
-			// 				if(doorCheckRm5) doorType = "창고방";
-			// 				$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.<br>(현재 " + doorType +  " 창문(문)이 열려있습니다.)")
-			// 				$('#alertarea').addClass('active');
-			// 				$('#doorMessage').text(doorType + "창문(문)이 열렸습니다.");
-			// 				setTimeout(function() {
-			// 					$('#alertarea').removeClass('active');
-			// 				}, 5000)
-			// 			}else{
-			// 				$doorStatus.removeClass("active")
-			// 				$('#alertmsg').html("약 30분후 <br> 가전, 조명, 전기가 차단됩니다.")
-			// 				$('#alertarea').addClass('active');
-			// 				$('#doorMessage').text(doorType + "창문 보안 안전");
-			// 				setTimeout(function() {
-			// 					$('#alertarea').removeClass('active');
-			// 				}, 5000)
-			// 			}
-			// 		}
-			// 	});
-			// }
 			//문열기
 			function doorOpen(value) {
 				var params = {

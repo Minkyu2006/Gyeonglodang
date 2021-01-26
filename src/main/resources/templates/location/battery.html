@@ -12,14 +12,76 @@
             realTime();
             AutoStart();
 
-            // 30%이하만 표시 배터리체크
+            // 60%이하만 표시 배터리체크
             $("#battery-check").on('click',function () {
-                lowBatteryInit();
+                low3060BatteryInit("30");
+            });
+            // 30%이하만 표시 배터리체크
+            $("#battery-check2").on('click',function () {
+                low3060BatteryInit("60");
             });
 
         });
 
-        function lowBatteryInit() {
+        function low3060BatteryInit(value) {
+            var chk30 = document.getElementById("battery-check").checked; // 30%
+            var chk60 = document.getElementById("battery-check2").checked; // 60%
+            var parent = $(".battery-item").parent();
+            var  $batteryitem2 = $(".battery-item2");
+            var  $batteryitem3 = $(".battery-item3");
+            var  $batteryitem4 = $(".battery-item4");
+
+            if(value==="30"){
+                if(chk30){
+                    parent.css('display','none');
+                    $batteryitem3.css('background-color','rgb(255 119 119)').css('color','white');
+                    $batteryitem4.css('background-color','rgb(255 119 119)').css('color','white');
+
+                    if(chk60){
+                        $batteryitem2.parent().css('display','block');
+                        $batteryitem2.css('background-color','rgb(255 119 119)').css('color','white').css('display','block');
+                    }else{
+                        $batteryitem2.parent().css('display','none');
+                    }
+                }else{
+                    if(chk60){
+                        parent.css('display','none');
+                        $batteryitem2.parent().css('display','block');
+                        $batteryitem2.css('background-color','rgb(255 119 119)').css('color','white').css('display','block');
+                        $batteryitem3.css('background-color','rgb(255 119 119)').css('color','white');
+                    }else{
+                        parent.css('display','block');
+                        $batteryitem2.parent().css('display','block');
+                        $batteryitem2.css('background-color','white').css('color','black')
+                        $batteryitem3.css('background-color','white').css('color','black')
+                        $batteryitem4.css('background-color','white').css('color','black')
+                    }
+                }
+            }
+            else if(value==="60") {
+                if (chk60) {
+                    parent.css('display', 'none');
+                    $batteryitem2.parent().css('display', 'block');
+                    $batteryitem2.css('background-color', 'rgb(255 119 119)').css('color', 'white').css('display', 'block');
+                    $batteryitem3.css('background-color', 'rgb(255 119 119)').css('color', 'white');
+                    $batteryitem4.css('background-color','rgb(255 119 119)').css('color','white');
+                } else {
+                    if (chk30) {
+                        $batteryitem3.css('background-color', 'rgb(255 119 119)').css('color', 'white');
+                        $batteryitem2.parent().css('display', 'none');
+                        parent.css('display', 'none');
+                    } else {
+                        parent.css('display', 'block');
+                        $batteryitem2.parent().css('display', 'block');
+                        $batteryitem2.css('background-color', 'white').css('color', 'black')
+                        $batteryitem3.css('background-color', 'white').css('color', 'black')
+                        $batteryitem4.css('background-color', 'white').css('color', 'black')
+                    }
+                }
+            }
+        }
+
+        function low30BatteryInit() {
             var chk = document.getElementById("battery-check").checked;
             var parent = $(".battery-item").parent();
             if(chk){
@@ -158,11 +220,13 @@
                                     // console.log('mu : '+key);
                                     html1 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html1 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html1 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html1 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html1 += '<div class="battery-item">'
-                                    } else{
-                                        html1 += '<div class="battery-item2">'
                                     }
                                     html1 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -177,11 +241,13 @@
                                     sernserNmae = "도어락"+key.substr(key.length-2,key.length);
                                     html1 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html1 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html1 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html1 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html1 += '<div class="battery-item">'
-                                    } else{
-                                        html1 += '<div class="battery-item2">'
                                     }
                                     html1 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -196,11 +262,13 @@
                                     sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
                                     html1 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html1 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html1 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html1 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html1 += '<div class="battery-item">'
-                                    } else{
-                                        html1 += '<div class="battery-item2">'
                                     }
                                     html1 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -215,11 +283,13 @@
                                     sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
                                     html1 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html1 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html1 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html1 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html1 += '<div class="battery-item">'
-                                    } else{
-                                        html1 += '<div class="battery-item2">'
                                     }
                                     html1 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -236,11 +306,13 @@
                                     // console.log('mu : '+key);
                                     html2 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html2 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html2 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html2 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html2 += '<div class="battery-item">'
-                                    } else{
-                                        html2 += '<div class="battery-item2">'
                                     }
                                     html2 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -255,11 +327,13 @@
                                     sernserNmae = "도어락"+key.substr(key.length-2,key.length);
                                     html2 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html2 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html2 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html2 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html2 += '<div class="battery-item">'
-                                    } else{
-                                        html2 += '<div class="battery-item2">'
                                     }
                                     html2 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -274,11 +348,13 @@
                                     sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
                                     html2 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html2 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html2 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html2 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html2 += '<div class="battery-item">'
-                                    } else{
-                                        html2 += '<div class="battery-item2">'
                                     }
                                     html2 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -293,11 +369,13 @@
                                     sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
                                     html2 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html2 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html2 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html2 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html2 += '<div class="battery-item">'
-                                    } else{
-                                        html2 += '<div class="battery-item2">'
                                     }
                                     html2 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -314,11 +392,13 @@
                                     // console.log('mu : '+key);
                                     html3 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html3 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html3 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html3 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html3 += '<div class="battery-item">'
-                                    } else{
-                                        html3 += '<div class="battery-item2">'
                                     }
                                     html3 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -333,11 +413,13 @@
                                     sernserNmae = "도어락"+key.substr(key.length-2,key.length);
                                     html3 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html3 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html3 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html3 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html3 += '<div class="battery-item">'
-                                    } else{
-                                        html3 += '<div class="battery-item2">'
                                     }
                                     html3 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -352,11 +434,13 @@
                                     sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
                                     html3 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html3 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html3 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html3 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html3 += '<div class="battery-item">'
-                                    } else{
-                                        html3 += '<div class="battery-item2">'
                                     }
                                     html3 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -371,11 +455,13 @@
                                     sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
                                     html3 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html3 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html3 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html3 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html3 += '<div class="battery-item">'
-                                    } else{
-                                        html3 += '<div class="battery-item2">'
                                     }
                                     html3 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -392,11 +478,13 @@
                                     // console.log('mu : '+key);
                                     html4 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html4 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html4 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html4 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html4 += '<div class="battery-item">'
-                                    } else{
-                                        html4 += '<div class="battery-item2">'
                                     }
                                     html4 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -411,11 +499,13 @@
                                     sernserNmae = "도어락"+key.substr(key.length-2,key.length);
                                     html4 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html4 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html4 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html4 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html4 += '<div class="battery-item">'
-                                    } else{
-                                        html4 += '<div class="battery-item2">'
                                     }
                                     html4 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -430,11 +520,13 @@
                                     sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
                                     html4 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html4 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html4 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html4 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html4 += '<div class="battery-item">'
-                                    } else{
-                                        html4 += '<div class="battery-item2">'
                                     }
                                     html4 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -449,11 +541,13 @@
                                     sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
                                     html4 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html4 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html4 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html4 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html4 += '<div class="battery-item">'
-                                    } else{
-                                        html4 += '<div class="battery-item2">'
                                     }
                                     html4 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -470,11 +564,13 @@
                                     // console.log('mu : '+key);
                                     html5 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html5 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html5 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html5 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html5 += '<div class="battery-item">'
-                                    } else{
-                                        html5 += '<div class="battery-item2">'
                                     }
                                     html5 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -489,11 +585,13 @@
                                     sernserNmae = "도어락"+key.substr(key.length-2,key.length);
                                     html5 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html5 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html5 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html5 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html5 += '<div class="battery-item">'
-                                    } else{
-                                        html5 += '<div class="battery-item2">'
                                     }
                                     html5 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -508,11 +606,13 @@
                                     sernserNmae = "문열림센서"+key.substr(key.length-2,key.length);
                                     html5 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html5 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html5 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html5 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html5 += '<div class="battery-item">'
-                                    } else{
-                                        html5 += '<div class="battery-item2">'
                                     }
                                     html5 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -527,11 +627,13 @@
                                     sernserNmae = "연기감지센서"+key.substr(key.length-2,key.length);
                                     html5 += '<li>'
                                     if (value === "" || value === "unavailable") {
+                                        html5 += '<div class="battery-item4">'
+                                    } else if(Number(value) <= 30){ //30
+                                        html5 += '<div class="battery-item3">'
+                                    } else if(Number(value) <= 60){ //60
                                         html5 += '<div class="battery-item2">'
-                                    } else if(Number(value) >= 30){
+                                    }else{
                                         html5 += '<div class="battery-item">'
-                                    } else{
-                                        html5 += '<div class="battery-item2">'
                                     }
                                     html5 += '<span class="battery-name">' + sernserNmae + '</span>'
                                     if (value === "" || value === "unavailable"){
@@ -557,7 +659,7 @@
                         });
                         console.log('제일 낮은 battery : ' + batteryLowValue);
                         batteryRefresh(batteryLowValue)
-                        lowBatteryInit();
+                        low3060BatteryInit("30");
                     }
                 }
             });
@@ -620,6 +722,8 @@
                 <div class="battery-check">
                     <input type="checkbox" id="battery-check">
                     <label for="battery-check">30% 이하만 표시</label>
+                    <input type="checkbox" id="battery-check2">
+                    <label for="battery-check">60% 이하만 표시</label>
                 </div>
             </div>
             <div class="battery-contents">

@@ -152,15 +152,15 @@
                     console.log("$room : "+$room);
                     var label;
                     if($room === "rm1mu01"){
-                        label = "거실 온도 그래프";
+                        label = "거실 온도 그래프(℃)";
                     }else if($room === "rm2mu01"){
-                        label = "주방 온도 그래프";
+                        label = "주방 온도 그래프(℃)";
                     }else if($room === "rm3mu01"){
-                        label = "안방 온도 그래프";
+                        label = "안방 온도 그래프(℃)";
                     }else if($room === "rm4mu01"){
-                        label = "운동방 온도 그래프";
+                        label = "운동방 온도 그래프(℃)";
                     }else{
-                        label = "창고방 온도 그래프";
+                        label = "창고방 온도 그래프(℃)";
                     }
                     $.each(res.data.datarow, function (key, value) {
                         temperature = value.sensordata[$room];
@@ -185,7 +185,7 @@
                     };
 
                     temChart = new Chart(ctx, {
-                    type: 'line',
+                        type: 'line',
                         data: chartData,
                         options: {
                             elements: {
@@ -197,7 +197,7 @@
                                 posiont:'top',
                                 labels: {
                                     fontColor: '#000000',
-                                    fontSize: 15
+                                    fontSize: 20
                                 }
                             },
                             maintainAspectRatio: false,
@@ -232,7 +232,7 @@
                                 }],
                                 yAxes: [{
                                     ticks: {
-                                        fontSize: 15
+                                        fontSize: 20
                                     },
                                     id: 'temp',
                                     display: true,
@@ -241,6 +241,7 @@
                             }
                         }
                     });
+                    $("#temChartLoading").hide();
                 }
             });
         }
@@ -296,10 +297,12 @@
                 <li><a href="/admindashboard/temp" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
             </ul>
         </div>
-
         <input type="hidden" id="room" th:value="${room}" />
         <div class="chart">
-            <canvas id='temChart'></canvas>
+            <div class="c-loader">
+                <div id="temChartLoading" class="c-loader__active c-loader__active--ring"></div>
+                <canvas id='temChart'></canvas>
+            </div>
         </div>
     </div>
 </div>
