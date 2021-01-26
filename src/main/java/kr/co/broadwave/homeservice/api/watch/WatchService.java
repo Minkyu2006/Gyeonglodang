@@ -35,6 +35,10 @@ public class WatchService {
         watchRepository.save(watchMapper.convertWatch());
 
     }
+    public List<Watch> getAll(){
+        log.info("스마트워치 재실정보 조회(테스트API)");
+        return watchRepository.findAll();
+    }
 
     public void add(ResponseBodyEmitter emitter) {
         emitterCountMap.put(emitter, new AtomicInteger(0));
