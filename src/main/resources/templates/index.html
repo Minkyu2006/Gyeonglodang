@@ -377,7 +377,7 @@
 							temDataRm2 = temperature.rm2mu01; // 주방 온도
 							temDataRm3 = temperature.rm3mu01; // 안방 온도
 							temDataRm4 = temperature.rm4mu01; // 운동 온도
-							temDataRm5 = temperature.rm5mu01; // 창고 온도
+							// temDataRm5 = temperature.rm5mu01; // 창고 온도
 						}catch (e){
 							// 에러처리 필요없슴
 						}
@@ -393,7 +393,7 @@
 						tempRefresh('temChartRm2', temDataRm2);
 						tempRefresh('temChartRm3', temDataRm3);
 						tempRefresh('temChartRm4', temDataRm4);
-						tempRefresh('temChartRm5', temDataRm5);
+						// tempRefresh('temChartRm5', temDataRm5);
 
 					}
 
@@ -413,7 +413,7 @@
 							humDataRm2 = humidity.rm2mu01; // 주방 습도
 							humDataRm3 = humidity.rm3mu01;// 안방 습도
 							humDataRm4 = humidity.rm4mu01;// 운동 습도
-							humDataRm5 = humidity.rm5mu01; // 창고 습도
+							// humDataRm5 = humidity.rm5mu01; // 창고 습도
 						}catch (e){
 							// 에러처리 필요없슴
 						}
@@ -428,7 +428,7 @@
 						humRefresh('humChartRm2', humDataRm2);// 주방 습도
 						humRefresh('humChartRm3', humDataRm3);// 안방 습도
 						humRefresh('humChartRm4', humDataRm4);// 운동 습도
-						humRefresh('humChartRm5', humDataRm5);// 창고 습도
+						// humRefresh('humChartRm5', humDataRm5);// 창고 습도
 					}
 
 					if(res.data.airquality != '') {
@@ -1057,6 +1057,7 @@
 			                        </a>
 			                    </div>
 			                </li>
+			                <!-- 
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
@@ -1068,6 +1069,7 @@
 			                        </a>
 			                    </div>
 			                </li>
+			                 -->
 			            </ul>
 			        </div>
 	        		
@@ -1125,6 +1127,7 @@
 			                        </a>
 			                    </div>
 			                </li>
+			                <!-- 
 			                <li class="card">
 			                    <div class="card-inner">
 			                        <a class="card-link">
@@ -1136,6 +1139,7 @@
 			                        </a>
 			                    </div>
 			                </li>
+			                 -->
 			            </ul>
 			        </div>
 	        		
