@@ -3,16 +3,15 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate ="~{layout/admindefault}">
-
 <head>
     <script type="text/javascript">
-
-        $(function() {
-            dataInfo();
+        $(function(){
             realTime();
             AutoStart();
-        })
-
+            curveGraph();
+            dataInfo();
+            $("#airChartLoading").show();
+        });
         // 데이터 받아오는 함수
         function dataInfo() {
             $.ajax({
@@ -23,7 +22,6 @@
                     alert('데이터받기 실패');
                 },
                 success: function (res) {
-
                     if (res.data.lightData !== '') {
                         //todo 조명이 하나라도 켜있으면 On 할것
                         console.log('lightData Json 데이터 : ' + res.data.lightData);
@@ -34,7 +32,6 @@
                         if (light.rm2ls202 ==="on")  lightCheck = true
                         if (light.rm3ls101 ==="on")  lightCheck = true
                         if (light.rm4ls101 ==="on")  listhCheck = true
-
                         var $lightBtn = $('#lightBtn');
                         if(lightCheck) {
                             $lightBtn.addClass("active")
@@ -46,7 +43,6 @@
                             $lightBtn.children('.fa-lightbulb').removeClass('far');
                         }
                     }
-
                     // 가전전원
                     if(res.data.electricDate !== ''){
                         //todo 전원이 하나라도 켜있으면 On 할것
@@ -71,29 +67,6 @@
                             $electricBtn.children('.fa-lightbulb').removeClass('far');
                         }
                     }
-
-                    if(res.data.airquality !== '') {
-                        // 공기질
-                        console.log('airqualityData Json 데이터 : ' + res.data.airquality.r_data);
-                        var airquality = JSON.parse(res.data.airquality.r_data);
-                        let airDataRm1 = '0'; // 거실 공기질(PM10)
-                        let airDataRm2 = '0'; // 주방 공기질(PM10)
-                        let airDataRm3 = '0';// 안방 공기질(PM10)
-                        try {
-                            airDataRm1 = airquality.rm1pm01; // 거실 공기질(PM10)
-                            airDataRm2 = airquality.rm2pm01; // 주방 공기질(PM10)
-                            airDataRm3 = airquality.rm3pm01;// 안방 공기질(PM10)
-                        }catch (e){
-                            // 에러처리 필요없슴
-                        }
-                        if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
-                        if (typeof airDataRm2=='undefined' || airDataRm2==='unknown') airDataRm2 = '0';
-                        if (typeof airDataRm3=='undefined' || airDataRm3==='unknown') airDataRm3 = '0';
-                        airRefresh('airChartRm1', airDataRm1);// 거실 공기질(PM10)
-                        airRefresh('airChartRm2', airDataRm2);// 주방 공기질(PM10)
-                        airRefresh('airChartRm3', airDataRm3);// 안방 공기질(PM10)
-                    }
-
                     if(res.data.airpurification !== '') {
                         // 공기청정기 셋팅
                         console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
@@ -108,13 +81,11 @@
                             $aqBtn.removeClass("active")
                         }
                     }
-
                     if(res.data.aircondition !== '') {
                         // 에어컨 셋팅
                         console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
                         var aircondition = JSON.parse(res.data.aircondition.r_data);
                         console.log('aircondition 상태 : ' + aircondition.rm2ac01);
-
                         let airconditionCheck = false
                         if (aircondition.rm1ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
                             $('#air1').addClass("active");
@@ -128,7 +99,6 @@
                             $('#air3').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air3').removeClass("active");}
-
                         var $airBtn = $('#airBtn');
                         if (airconditionCheck) {
                             $airBtn.addClass("active")
@@ -136,12 +106,10 @@
                             $airBtn.removeClass("active")
                         }
                     }
-
                     if(res.data.batteryData !== '') {
                         // 배터리 셋팅
                         var battery = JSON.parse(res.data.batteryData.r_data);
                         console.log('');
-
                         var batteryLowValue = 100;
                         $.each(battery,function(key, value){
                             if(value!=="" && batteryLowValue>Number(value)){
@@ -155,9 +123,125 @@
             });
         }
 
+        var airChart=null;
+        function curveGraph() {
+            $.ajax({
+                url: '/chart/airhistory',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    // alert("데이터부르기 실패")
+                },
+                success: function (res) {
+                    var airhistory;
+                    var air = []; // 공기질 히스토리
+                    var timeStamp = []; // 시간 히스토리
+                    var $room = $("#room").val();
+                    console.log("$room : "+$room);
+                    var label;
+                    if($room === "rm1pm01"){
+                        label = "거실 공기질 그래프(㎍/㎥)";
+                    }else if($room === "rm2pm01"){
+                        label = "주방 공기질 그래프(㎍/㎥)";
+                    }else{
+                        label = "안방 공기질 그래프(㎍/㎥)";
+                    }
+
+                    $.each(res.data.datarow, function (key, value) {
+                        airhistory = value.sensordata[$room];
+                        timeStamp.push(parseInt(value.timestamp));
+                        air.push(airhistory);
+                    });
+                    // console.log("timeStamp : "+timeStamp);
+                    // console.log("temp : "+temp);
+                    var ctx = document.getElementById('airChart').getContext("2d");
+                    var chartData = {
+                        labels: timeStamp,
+                        datasets: [{
+                            label: label,
+                            yAxisID: 'air',
+                            backgroundColor: "#54de56",
+                            borderWidth: 3,
+                            borderColor: "#54de56",
+                            data: air,
+                            fill: false
+                        }]
+                    };
+
+                    humChart = new Chart(ctx, {
+                        type: 'line',
+                        data: chartData,
+                        options: {
+                            elements: {
+                                point:{
+                                    radius: 0
+                                }
+                            },
+                            legend:{
+                                posiont:'top',
+                                labels: {
+                                    fontColor: '#000000',
+                                    fontSize: 20
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            stacked : true,
+                            tooltips: { //팁(모드설정)
+                                titleFontSize: 15,
+                                bodyFontSize: 15,
+                                caretPadding: 10,
+                                borderWidth:3,
+                                borderColor : 'rgb(138,109,255)',
+                                mode: 'index',
+                                intersect: false,
+                                caretSize:0
+                            },
+                            hover: { //점 나오기
+                                mode: 'index',
+                                intersect: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        drawOnChartArea: false
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: '시간',
+                                        fontSize: 15
+                                    },
+                                    display: true,
+                                    time: {
+                                        unit: 'hour',
+                                        tooltipFormat: 'YYYY' + '년' + 'MM' + '월' + 'DD' + '일 ' + 'HH:mm:ss a',
+                                    },
+                                    type: 'time',
+                                    ticks: {
+                                        fontSize: 15
+                                    },
+                                }],
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: '공기질(㎍/㎥)',
+                                        fontSize: 15
+                                    },
+                                    ticks: {
+                                        fontSize: 20
+                                    },
+                                    id: 'air',
+                                    display: true,
+                                    position: 'left',
+                                }]
+                            }
+                        }
+                    });
+                    $("#airChartLoading").hide();
+                }
+            });
+        }
     </script>
 </head>
-
 <body>
 <div class="wrap">
     <div class="console">
@@ -198,54 +282,20 @@
             </div>
         </div>
     </div>
-
     <div class="contents">
         <div class="button-list">
             <!-- 장소별 페이지 버튼 리스트 수정 -->
             <ul>
-                <li><a href="/admindashboard/" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
+                <li><a href="/admindashboard/">HOME</a></li>
+                <li><a href="/admindashboard/air" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
             </ul>
         </div>
-
-        <div class="card-list">
-            <ul>
-                <li class="card">
-                    <div class="card-inner">
-                        <a href="/air/airdetail/rm1pm01" class="card-link sensor-card sensor-card--air">
-                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">거실</h3>
-                            <div id ="airChartRm1Color" class="air">
-                                <div id="airChartRm1" class="progress air-progress"></div>
-                                <div class="air__state" id="airChartRm1State"></div>
-                            </div>
-                            <span class="card-comment" id="airChartRm1Message">공기청정기를 ON 해주세요.</span>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a href="/air/airdetail/rm2pm01" class="card-link sensor-card sensor-card--air">
-                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">주방</h3>
-                            <div id ="airChartRm2Color" class="air">
-                                <div id="airChartRm2" class="progress air-progress"></div>
-                                <div class="air__state" id="airChartRm2State"></div>
-                            </div>
-                            <span class="card-comment" id="airChartRm2Message">공기청정기를 ON 해주세요.</span>
-                        </a>
-                    </div>
-                </li>
-                <li class="card">
-                    <div class="card-inner">
-                        <a href="/air/airdetail/rm3pm01" class="card-link sensor-card sensor-card--air">
-                            <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">안방</h3>
-                            <div id ="airChartRm3Color" class="air">
-                                <div id="airChartRm3" class="progress air-progress"></div>
-                                <div class="air__state" id="airChartRm3State"></div>
-                            </div>
-                            <span class="card-comment" id="airChartRm3Message">공기청정기를 ON 해주세요.</span>
-                        </a>
-                    </div>
-                </li>
-            </ul>
+        <input type="hidden" id="room" th:value="${room}" />
+        <div class="chart">
+            <div class="c-loader">
+                <div id="airChartLoading" class="c-loader__active c-loader__active--ring2"></div>
+                <canvas id='airChart'></canvas>
+            </div>
         </div>
     </div>
 </div>

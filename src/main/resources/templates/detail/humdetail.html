@@ -208,16 +208,27 @@
                                     gridLines: {
                                         drawOnChartArea: false
                                     },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: '시간',
+                                        fontSize: 15
+                                    },
                                     display: true,
-                                    type: 'time',
                                     time: {
+                                        unit: 'hour',
                                         tooltipFormat: 'YYYY' + '년' + 'MM' + '월' + 'DD' + '일 ' + 'HH:mm:ss a',
                                     },
+                                    type: 'time',
                                     ticks: {
                                         fontSize: 15
                                     },
                                 }],
                                 yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: '습도(%)',
+                                        fontSize: 15
+                                    },
                                     ticks: {
                                         fontSize: 20
                                     },

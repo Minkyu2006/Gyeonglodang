@@ -30,4 +30,11 @@ public class DetailController {
         return "detail/humdetail";
     }
 
+    // 관리자전용 - 공기질 상세보기(그래프)
+    @RequestMapping("/air/airdetail/{room}")
+    public String airdetail(Model model, @PathVariable String room){
+        model.addAttribute("room", room);
+        return "detail/airdetail";
+    }
+
 }

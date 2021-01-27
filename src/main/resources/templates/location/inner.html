@@ -110,7 +110,7 @@
                         var airquality = JSON.parse(res.data.airquality.r_data);
                         let airDataRm3 = '0';// 안방 공기질(PM10)
                         try {
-                            airDataRm3 = airquality.rm3pm01pm10;// 안방 공기질(PM10)
+                            airDataRm3 = airquality.rm3pm01;// 안방 공기질(PM10)
                         }catch (e){
                             // 에러처리 필요없슴
                         }
@@ -366,7 +366,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/admindashboard/air" class="card-link sensor-card sensor-card--air">
+                        <a href="/air/airdetail/rm3pm01" class="card-link sensor-card sensor-card--air">
                             <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">공기질</h3>
                             <div id ="airChartRm3Color" class="air">
                                 <div id="airChartRm3" class="progress air-progress"></div>

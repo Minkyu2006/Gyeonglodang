@@ -46,12 +46,6 @@
 
         });
 
-
-        // // 시계호출
-        // function realTime() {
-        //     clock();
-        // }
-
         // 데이터 받아오는 함수
         function dataInfo() {
             $.ajax({
@@ -150,7 +144,7 @@
                         let airDataRm1 = '0'; // 거실 공기질(PM10)
 
                         try {
-                            airDataRm1 = airquality.rm1pm01pm10; // 거실 공기질(PM10)
+                            airDataRm1 = airquality.rm1pm01; // 거실 공기질(PM10)
                         }catch (e){
                             // 에러처리 필요없슴
                         }

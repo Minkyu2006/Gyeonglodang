@@ -53,8 +53,10 @@ public class ChartService {
         String url;
         if(sensor.equals("temp")){
             url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/jb/v1/sensordata/temperature?intervalhour=12";
-        }else{
+        }else if(sensor.equals("hum")){
             url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/jb/v1/sensordata/humidity?intervalhour=12" ;
+        }else{
+            url = "https://elj7fafay2.execute-api.ap-northeast-2.amazonaws.com/SensorData/jb/v1/sensordata/airquality10?intervalhour=12" ;
         }
 
         RestTemplate restTemplate = new RestTemplate();

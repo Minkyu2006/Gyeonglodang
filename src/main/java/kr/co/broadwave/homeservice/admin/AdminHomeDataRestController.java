@@ -104,7 +104,7 @@ public class AdminHomeDataRestController {
             data.put("lightData",sensorData);
         }
 
-        Optional<HomeData> airquality = homeDataService.findByIdData("airquality");
+        Optional<HomeData> airquality = homeDataService.findByIdData("airquality10");
         if(!airquality.isPresent()) {
             log.info("airquality 받아오기 실패");
             data.put("airquality","");

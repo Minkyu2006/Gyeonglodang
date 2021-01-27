@@ -75,4 +75,18 @@ public class ChartRestController {
         return ResponseEntity.ok(res.success());
     }
 
+    @PostMapping("airhistory")
+    public ResponseEntity<Map<String,Object>> airhistory() {
+        AjaxResponse res = new AjaxResponse();
+        HashMap<String, Object> data = new HashMap<>();
+
+        HashMap<String, Object> resData = chartService.getHistory("air");
+
+        log.info("data : "+resData.get("data"));
+
+        data.put("datarow",resData.get("data"));
+        res.addResponse("data",data);
+        return ResponseEntity.ok(res.success());
+    }
+
 }
