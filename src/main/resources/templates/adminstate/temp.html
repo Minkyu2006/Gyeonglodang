@@ -12,7 +12,6 @@
             dataInfoTemp();
             realTime();
             AutoStart();
-
         })
 
         // 데이터 받아오는 함수
@@ -31,11 +30,12 @@
                         console.log('lightData Json 데이터 : ' + res.data.lightData);
                         let light = JSON.parse(res.data.lightData.r_data);
                         let lightCheck =false;
-                        if (light.rm1ls101 ==="on")  lightCheck = true
-                        if (light.rm2ls201 ==="on")  lightCheck = true
-                        if (light.rm2ls202 ==="on")  lightCheck = true
-                        if (light.rm3ls101 ==="on")  lightCheck = true
-                        if (light.rm4ls101 ==="on")  listhCheck = true
+
+                        if (light.SS021ls101 === "on")  lightCheck = true
+                        if (light.SS022ls201 === "on")  lightCheck = true
+                        if (light.SS022ls202 === "on")  lightCheck = true
+                        if (light.SS023ls101 === "on")  lightCheck = true
+                        if (light.SS024ls101 === "on")  lightCheck = true
 
                         var $lightBtn = $('#lightBtn');
                         if(lightCheck) {
@@ -53,9 +53,9 @@
                         // 공기청정기 셋팅
                         console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
                         var airpurification = JSON.parse(res.data.airpurification.r_data);
-                        console.log('airpurification 상태 : ' + airpurification.rm1aq01);
+                        console.log('airpurification 상태 : ' + airpurification.SS021aq01);
                         console.log('');
-                        var airpurificationPower = airpurification.rm1aq01;
+                        var airpurificationPower = airpurification.SS021aq01;
                         var $aqBtn = $('#aqBtn');
                         if (airpurificationPower === "on") {
                             $aqBtn.addClass("active")
@@ -68,18 +68,18 @@
                         // 에어컨 셋팅
                         console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
                         var aircondition = JSON.parse(res.data.aircondition.r_data);
-                        console.log('aircondition 상태 : ' + aircondition.rm2ac01);
+                        console.log('aircondition 상태 : ' + aircondition.SS021ac01);
 
                         let airconditionCheck = false
-                        if (aircondition.rm1ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
+                        if (aircondition.SS021ac01 === "cool" || aircondition.SS021ac01 === "dry" ){
                             $('#air1').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air1').removeClass("active");}
-                        if (aircondition.rm2ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
+                        if (aircondition.SS022ac01 === "cool" || aircondition.SS022ac01 === "dry" ){
                             $('#air2').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air2').removeClass("active");}
-                        if (aircondition.rm3ac01 === "cool" || aircondition.rm3ac01 === "dry" ){
+                        if (aircondition.SS023ac01 === "cool" || aircondition.SS023ac01 === "dry" ){
                             $('#air3').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air3').removeClass("active");}
@@ -97,13 +97,10 @@
                         //todo 전원이 하나라도 켜있으면 On 할것
                         console.log('electricDate Json 데이터 : '+ res.data.electricDate.r_data);
                         let electric = JSON.parse(res.data.electricDate.r_data);
-                        // console.log('내자신');
-                        // console.log('light 상태 : '+light.rm2lt01);
-                        // console.log('');
                         let electricCheck = false;
-                        if (electric.rm1zc01 ==="on")  electricCheck = true
-                        // if (electric.rm2zc01 ==="on")  electricCheck = true
-                        // if (electric.rm3zc01 ==="on")  electricCheck = true
+                        if (electric.SS021zc01 ==="on")  electricCheck = true
+                        // if (electric.SS022zc01 ==="on")  electricCheck = true
+                        // if (electric.SS023zc01 ==="on")  electricCheck = true
 
                         var $electricBtn = $('#electricBtn');
                         if(electricCheck) {
@@ -155,11 +152,11 @@
                         let temDataRm4 = '0'; // 운동 온도
                         let temDataRm5 = '0'; // 창고 온도
                         try {
-                            temDataRm1 = temperature.rm1mu01; // 거실 온도
-                            temDataRm2 = temperature.rm2mu01; // 주방 온도
-                            temDataRm3 = temperature.rm3mu01; // 안방 온도
-                            temDataRm4 = temperature.rm4mu01; // 운동 온도
-                            temDataRm5 = temperature.rm5mu01; // 창고 온도
+                            temDataRm1 = temperature.SS021mu01; // 거실 온도
+                            temDataRm2 = temperature.SS022mu01; // 주방 온도
+                            temDataRm3 = temperature.SS023mu01; // 안방 온도
+                            temDataRm4 = temperature.SS024mu01; // 운동 온도
+                            temDataRm5 = temperature.SS025mu01; // 창고 온도
                         }catch (e){
                             // 에러처리 필요없슴
                         }
@@ -265,7 +262,7 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/temp/tempdetail/rm1mu01" class="card-link">
+                        <a href="/temp/tempdetail/SS021mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">거실</h3>
                             <div id="temChartRm1Color" class="temp">
                                 <div id="temChartRm1" class="progress temp-progress"></div>
@@ -277,7 +274,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/temp/tempdetail/rm2mu01" class="card-link">
+                        <a href="/temp/tempdetail/SS022mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">주방</h3>
                             <div id="temChartRm2Color" class="temp">
                                 <div id="temChartRm2" class="progress temp-progress"></div>
@@ -288,7 +285,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/temp/tempdetail/rm3mu01" class="card-link">
+                        <a href="/temp/tempdetail/SS023mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">안방</h3>
                             <div id="temChartRm3Color" class="temp">
                                 <div id="temChartRm3" class="progress temp-progress"></div>
@@ -299,7 +296,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/temp/tempdetail/rm4mu01" class="card-link">
+                        <a href="/temp/tempdetail/SS024mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">운동방</h3>
                             <div id="temChartRm4Color" class="temp">
                                 <div id="temChartRm4" class="progress temp-progress"></div>
@@ -310,7 +307,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/temp/tempdetail/rm5mu01" class="card-link">
+                        <a href="/temp/tempdetail/SS025mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">창고방</h3>
                             <div id="temChartRm5Color" class="temp">
                                 <div id="temChartRm5" class="progress temp-progress"></div>

@@ -30,14 +30,15 @@
                         console.log('lightData Json 데이터 : '+ res.data.lightData.r_data);
                         let light = JSON.parse(res.data.lightData.r_data);
                         // console.log('내자신');
-                        // console.log('light 상태 : '+light.rm2lt01);
+                        // console.log('light 상태 : '+light.SS022lt01);
                         // console.log('');
                         let lightCheck =false;
-                        if (light.rm1ls101 ==="on")  lightCheck = true
-                        if (light.rm2ls201 ==="on")  lightCheck = true
-                        if (light.rm2ls202 ==="on")  lightCheck = true
-                        if (light.rm3ls101 ==="on")  lightCheck = true
-                        if (light.rm4ls101 ==="on")  listhCheck = true
+
+                        if (light.SS021ls101 === "on")  lightCheck = true
+                        if (light.SS022ls201 === "on")  lightCheck = true
+                        if (light.SS022ls202 === "on")  lightCheck = true
+                        if (light.SS023ls101 === "on")  lightCheck = true
+                        if (light.SS024ls101 === "on")  lightCheck = true
 
                         var $lightBtn = $('#lightBtn');
                         if(lightCheck) {
@@ -56,13 +57,10 @@
                         //todo 전원이 하나라도 켜있으면 On 할것
                         console.log('electricDate Json 데이터 : '+ res.data.electricDate.r_data);
                         let electric = JSON.parse(res.data.electricDate.r_data);
-                        // console.log('내자신');
-                        // console.log('light 상태 : '+light.rm2lt01);
-                        // console.log('');
                         let electricCheck = false;
-                        if (electric.rm1zc01 ==="on")  electricCheck = true
-                        // if (electric.rm2zc01 ==="on")  electricCheck = true
-                        // if (electric.rm3zc01 ==="on")  electricCheck = true
+                        if (electric.SS021zc01 ==="on")  electricCheck = true
+                        // if (electric.SS022zc01 ==="on")  electricCheck = true
+                        // if (electric.SS023zc01 ==="on")  electricCheck = true
 
                         var $electricBtn = $('#electricBtn');
                         if(electricCheck) {
@@ -82,7 +80,7 @@
                         var temperature = JSON.parse(res.data.temperatureData.r_data);
                         let temDataRm3 = '0'; // 거실 온도
                         try {
-                            temDataRm3 = temperature.rm3mu01; // 거실 온도
+                            temDataRm3 = temperature.SS023mu01; // 거실 온도
                         }catch (e){
                             // 에러처리 필요없슴
                         }
@@ -96,7 +94,7 @@
                         var humidity = JSON.parse(res.data.humidity.r_data);
                         let humDataRm3 = '0'; // 거실 습도
                         try {
-                            humDataRm3 = humidity.rm3mu01; // 거실 습도
+                            humDataRm3 = humidity.SS023mu01; // 거실 습도
                         }catch (e){
                             // 에러처리 필요없슴
                         }
@@ -110,7 +108,7 @@
                         var airquality = JSON.parse(res.data.airquality.r_data);
                         let airDataRm3 = '0';// 안방 공기질(PM10)
                         try {
-                            airDataRm3 = airquality.rm3pm01;// 안방 공기질(PM10)
+                            airDataRm3 = airquality.SS023pm01;// 안방 공기질(PM10)
                         }catch (e){
                             // 에러처리 필요없슴
                         }
@@ -123,9 +121,9 @@
                         // 공기청정기 셋팅
                         console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
                         var airpurification = JSON.parse(res.data.airpurification.r_data);
-                        console.log('airpurification 상태 : ' + airpurification.rm1aq01);
+                        console.log('airpurification 상태 : ' + airpurification.SS021aq01);
                         console.log('');
-                        var airpurificationPower = airpurification.rm1aq01;
+                        var airpurificationPower = airpurification.SS021aq01;
                         var $aqBtn = $('#aqBtn');
                         if (airpurificationPower === "on") {
                             $aqBtn.addClass("active")
@@ -138,18 +136,18 @@
                         // 에어컨 셋팅
                         console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
                         var aircondition = JSON.parse(res.data.aircondition.r_data);
-                        console.log('aircondition 상태 : ' + aircondition.rm2ac01);
+                        console.log('aircondition 상태 : ' + aircondition.SS022ac01);
 
                         let airconditionCheck = false
-                        if (aircondition.rm1ac01 == "cool" || aircondition.rm2ac01 == "dry" ){
+                        if (aircondition.SS021ac01 === "cool" || aircondition.SS021ac01 === "dry" ){
                             $('#air1').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air1').removeClass("active");}
-                        if (aircondition.rm2ac01 == "cool" || aircondition.rm2ac01 == "dry" ){
+                        if (aircondition.SS022ac01 === "cool" || aircondition.SS022ac01 === "dry" ){
                             $('#air2').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air2').removeClass("active");}
-                        if (aircondition.rm3ac01 == "cool" || aircondition.rm3ac01 == "dry" ){
+                        if (aircondition.SS023ac01 === "cool" || aircondition.SS023ac01 === "dry" ){
                             $('#air3').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air3').removeClass("active");}
@@ -168,9 +166,9 @@
                         var doorsensor = JSON.parse(res.data.doorsensor.r_data);
                         let doorCheckRm3 =false; //안방
 
-                        if (doorsensor.rm3dr01 === "on")  doorCheckRm3 = true
-                        if (doorsensor.rm3dr02 === "on")  doorCheckRm3 = true
-                        if (doorsensor.rm3dr03 === "on")  doorCheckRm3 = true
+                        if (doorsensor.SS023dr01 === "on")  doorCheckRm3 = true
+                        if (doorsensor.SS023dr02 === "on")  doorCheckRm3 = true
+                        if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
 
                         if(doorCheckRm3){
                             let doorType= "";
@@ -189,15 +187,15 @@
                         // 화재 셋팅
                         console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
                         var smoke = JSON.parse(res.data.smoke.r_data);
-                        console.log('smoke 상태 : ' + smoke.rm1sm01);
+                        console.log('smoke 상태 : ' + smoke.SS021sm01);
                         console.log('');
 
                         let checkSmoke = false;
-                        if (smoke.rm1sm01 === "detected") checkSmoke = true;
-                        if (smoke.rm2sm01 === "detected") checkSmoke = true;
-                        if (smoke.rm3sm01 === "detected") checkSmoke = true;
-                        if (smoke.rm4sm01 === "detected") checkSmoke = true;
-                        if (smoke.rm5sm01 === "detected") checkSmoke = true;
+                        if (smoke.SS021sm01 === "detected") checkSmoke = true;
+                        if (smoke.SS022sm01 === "detected") checkSmoke = true;
+                        if (smoke.SS023sm01 === "detected") checkSmoke = true;
+                        if (smoke.SS024sm01 === "detected") checkSmoke = true;
+                        if (smoke.SS025sm01 === "detected") checkSmoke = true;
 
                         var $smoke = $('#smoke');
                         if (checkSmoke){
@@ -344,7 +342,7 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/temp/tempdetail/rm3mu01" class="card-link">
+                        <a href="/temp/tempdetail/SS023mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_temperature.png" alt="온도">온도</h3>
                             <div id="temChartRm3Color" class="temp">
                                 <div id="temChartRm3" class="progress temp-progress"></div>
@@ -355,7 +353,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/humidity/humdetail/rm3mu01" class="card-link">
+                        <a href="/humidity/humdetail/SS023mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">습도</h3>
                             <div id ="humChartRm3Color" class="humidity">
                                 <div id="humChartRm3" class="progress temp-progress"></div>
@@ -366,7 +364,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/air/airdetail/rm3pm01" class="card-link sensor-card sensor-card--air">
+                        <a href="/air/airdetail/SS023pm01" class="card-link sensor-card sensor-card--air">
                             <h3 class="card-title"><img src="/assets/images/icon_air.png" alt="공기질">공기질</h3>
                             <div id ="airChartRm3Color" class="air">
                                 <div id="airChartRm3" class="progress air-progress"></div>

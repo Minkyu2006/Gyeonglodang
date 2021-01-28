@@ -32,11 +32,12 @@
                         console.log('lightData Json 데이터 : ' + res.data.lightData);
                         let light = JSON.parse(res.data.lightData.r_data);
                         let lightCheck =false;
-                        if (light.rm1ls101 ==="on")  lightCheck = true
-                        if (light.rm2ls201 ==="on")  lightCheck = true
-                        if (light.rm2ls202 ==="on")  lightCheck = true
-                        if (light.rm3ls101 ==="on")  lightCheck = true
-                        if (light.rm4ls101 ==="on")  listhCheck = true
+
+                        if (light.SS021ls101 === "on")  lightCheck = true
+                        if (light.SS022ls201 === "on")  lightCheck = true
+                        if (light.SS022ls202 === "on")  lightCheck = true
+                        if (light.SS023ls101 === "on")  lightCheck = true
+                        if (light.SS024ls101 === "on")  lightCheck = true
 
                         var $lightBtn = $('#lightBtn');
                         if(lightCheck) {
@@ -55,13 +56,10 @@
                         //todo 전원이 하나라도 켜있으면 On 할것
                         console.log('electricDate Json 데이터 : '+ res.data.electricDate.r_data);
                         let electric = JSON.parse(res.data.electricDate.r_data);
-                        // console.log('내자신');
-                        // console.log('light 상태 : '+light.rm2lt01);
-                        // console.log('');
                         let electricCheck = false;
-                        if (electric.rm1zc01 ==="on")  electricCheck = true
-                        // if (electric.rm2zc01 ==="on")  electricCheck = true
-                        // if (electric.rm3zc01 ==="on")  electricCheck = true
+                        if (electric.SS021zc01 ==="on")  electricCheck = true
+                        // if (electric.SS022zc01 ==="on")  electricCheck = true
+                        // if (electric.SS023zc01 ==="on")  electricCheck = true
 
                         var $electricBtn = $('#electricBtn');
                         if(electricCheck) {
@@ -79,9 +77,9 @@
                         // 공기청정기 셋팅
                         console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
                         var airpurification = JSON.parse(res.data.airpurification.r_data);
-                        console.log('airpurification 상태 : ' + airpurification.rm1aq01);
+                        console.log('airpurification 상태 : ' + airpurification.SS021aq01);
                         console.log('');
-                        var airpurificationPower = airpurification.rm1aq01;
+                        var airpurificationPower = airpurification.SS021aq01;
                         var $aqBtn = $('#aqBtn');
                         if (airpurificationPower === "on") {
                             $aqBtn.addClass("active")
@@ -94,18 +92,18 @@
                         // 에어컨 셋팅
                         console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
                         var aircondition = JSON.parse(res.data.aircondition.r_data);
-                        console.log('aircondition 상태 : ' + aircondition.rm2ac01);
+                        console.log('aircondition 상태 : ' + aircondition.SS021ac01);
 
                         let airconditionCheck = false
-                        if (aircondition.rm1ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
+                        if (aircondition.SS021ac01 === "cool" || aircondition.SS021ac01 === "dry" ){
                             $('#air1').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air1').removeClass("active");}
-                        if (aircondition.rm2ac01 === "cool" || aircondition.rm2ac01 === "dry" ){
+                        if (aircondition.SS022ac01 === "cool" || aircondition.SS022ac01 === "dry" ){
                             $('#air2').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air2').removeClass("active");}
-                        if (aircondition.rm3ac01 === "cool" || aircondition.rm3ac01 === "dry" ){
+                        if (aircondition.SS023ac01 === "cool" || aircondition.SS023ac01 === "dry" ){
                             $('#air3').addClass("active");
                             airconditionCheck = true;
                         } else { $('#air3').removeClass("active");}
@@ -155,11 +153,11 @@
                         let humDataRm4 = '0';// 운동 습도
                         let humDataRm5 = '0'; // 창고 습도
                         try {
-                            humDataRm1 = humidity.rm1mu01; // 거실 습도
-                            humDataRm2 = humidity.rm2mu01; // 주방 습도
-                            humDataRm3 = humidity.rm3mu01;// 안방 습도
-                            humDataRm4 = humidity.rm4mu01;// 운동 습도
-                            humDataRm5 = humidity.rm5mu01; // 창고 습도
+                            humDataRm1 = humidity.SS021mu01; // 거실 습도
+                            humDataRm2 = humidity.SS022mu01; // 주방 습도
+                            humDataRm3 = humidity.SS023mu01;// 안방 습도
+                            humDataRm4 = humidity.SS024mu01;// 운동 습도
+                            humDataRm5 = humidity.SS025mu01; // 창고 습도
                         }catch (e){
                             // 에러처리 필요없슴
                         }
@@ -262,7 +260,7 @@
             <ul>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/humidity/humdetail/rm1mu01" class="card-link">
+                        <a href="/humidity/humdetail/SS021mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">거실</h3>
                             <div id ="humChartRm1Color" class="humidity">
                                 <div id="humChartRm1" class="progress temp-progress"></div>
@@ -274,7 +272,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/humidity/humdetail/rm2mu01" class="card-link">
+                        <a href="/humidity/humdetail/SS022mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">주방</h3>
                             <div id ="humChartRm2Color" class="humidity">
                                 <div id="humChartRm2" class="progress temp-progress"></div>
@@ -285,7 +283,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/humidity/humdetail/rm3mu01" class="card-link">
+                        <a href="/humidity/humdetail/SS023mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">안방</h3>
                             <div id ="humChartRm3Color" class="humidity">
                                 <div id="humChartRm3" class="progress temp-progress"></div>
@@ -296,7 +294,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/humidity/humdetail/rm4mu01" class="card-link">
+                        <a href="/humidity/humdetail/SS024mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">운동방</h3>
                             <div id ="humChartRm4Color" class="humidity">
                                 <div id="humChartRm4" class="progress temp-progress"></div>
@@ -307,7 +305,7 @@
                 </li>
                 <li class="card">
                     <div class="card-inner">
-                        <a href="/humidity/humdetail/rm5mu01" class="card-link">
+                        <a href="/humidity/humdetail/SS025mu01" class="card-link">
                             <h3 class="card-title"><img src="/assets/images/icon_humidity.png" alt="습도">창고방</h3>
                             <div id ="humChartRm5Color" class="humidity">
                                 <div id="humChartRm5" class="progress temp-progress"></div>

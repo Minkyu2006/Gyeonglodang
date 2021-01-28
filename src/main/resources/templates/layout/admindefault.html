@@ -107,7 +107,7 @@
 			// 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
 			function integratedFun(name,value) {
 				// console.log("name : "+name);
-				console.log("value : "+value);
+				// console.log("value : "+value);
 				var params = {
 					value: value
 				};
@@ -175,30 +175,27 @@
 				});
 				cp.value = value;
 
-				var $tempColor = $('#'+elimentId+'Color');
-				var $tempMessage = $('#'+elimentId+'Message');
-				var $tempState = $('#'+elimentId+'State');
+				var $airColor = $('#'+elimentId+'Color');
+				var $airMessage = $('#'+elimentId+'Message');
+				var $airState = $('#'+elimentId+'State');
 				if (value <= 15) {
-					$tempColor.addClass('blue').removeClass('red');
-					$tempMessage.text('');
-					$tempState.text('좋음');
-
+					$airColor.addClass('blue').removeClass('red');
+					$airMessage.text('');
+					$airState.text('좋음');
 				} else if (value <= 35) {
-					$tempColor.removeClass('blue').removeClass('red');
-					$tempMessage.text('');
-					$tempState.text('보통');
-
+					$airColor.removeClass('blue').removeClass('red');
+					$airMessage.text('');
+					$airState.text('보통');
 				} else {
-					$tempColor.addClass('red').removeClass('blue');
-					$tempMessage.text('공기청정기를 ON 해주세요.');
-					$tempState.text('나쁨');
-
+					$airColor.addClass('red').removeClass('blue');
+					$airMessage.text('공기청정기를 ON 해주세요.');
+					$airState.text('나쁨');
 				}
 			}
 
 			// 온도표기해주는 함수
 			function tempRefresh(elimentId,value) {
-				console.log('받은 온도 : '+value);
+				// console.log('받은 온도 : '+value);
 
 				// 값은 받아오나, 텍스트를 리프레쉬할수없음.
 				const cp = new CircleProgress('#'+elimentId, {
