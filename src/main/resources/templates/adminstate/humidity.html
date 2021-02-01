@@ -27,93 +27,24 @@
                 },
                 success: function (res) {
 
-                    if (res.data.lightData !== '') {
-                        //todo 조명이 하나라도 켜있으면 On 할것
-                        console.log('lightData Json 데이터 : ' + res.data.lightData);
-                        let light = JSON.parse(res.data.lightData.r_data);
-                        let lightCheck =false;
-
-                        if (light.SS021ls101 === "on")  lightCheck = true
-                        if (light.SS022ls201 === "on")  lightCheck = true
-                        if (light.SS022ls202 === "on")  lightCheck = true
-                        if (light.SS023ls101 === "on")  lightCheck = true
-                        if (light.SS024ls101 === "on")  lightCheck = true
-
-                        var $lightBtn = $('#lightBtn');
-                        if(lightCheck) {
-                            $lightBtn.addClass("active")
-                            $lightBtn.children('.fa-lightbulb').removeClass('fas');
-                            $lightBtn.children('.fa-lightbulb').addClass('far');
-                        }else{
-                            $lightBtn.removeClass("active")
-                            $lightBtn.children('.fa-lightbulb').addClass('fas');
-                            $lightBtn.children('.fa-lightbulb').removeClass('far');
-                        }
-                    }
-
-                    // 가전전원
-                    if(res.data.electricDate !== ''){
-                        //todo 전원이 하나라도 켜있으면 On 할것
-                        console.log('electricDate Json 데이터 : '+ res.data.electricDate.r_data);
-                        let electric = JSON.parse(res.data.electricDate.r_data);
-                        let electricCheck = false;
-                        if (electric.SS021zc01 ==="on")  electricCheck = true
-                        // if (electric.SS022zc01 ==="on")  electricCheck = true
-                        // if (electric.SS023zc01 ==="on")  electricCheck = true
-
-                        var $electricBtn = $('#electricBtn');
-                        if(electricCheck) {
-                            $electricBtn.addClass("active")
-                            $electricBtn.children('.fa-lightbulb').removeClass('fas');
-                            $electricBtn.children('.fa-lightbulb').addClass('far');
-                        }else{
-                            $electricBtn.removeClass("active")
-                            $electricBtn.children('.fa-lightbulb').addClass('fas');
-                            $electricBtn.children('.fa-lightbulb').removeClass('far');
-                        }
-                    }
-
-                    if(res.data.airpurification !== '') {
-                        // 공기청정기 셋팅
-                        console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
-                        var airpurification = JSON.parse(res.data.airpurification.r_data);
-                        console.log('airpurification 상태 : ' + airpurification.SS021aq01);
-                        console.log('');
-                        var airpurificationPower = airpurification.SS021aq01;
-                        var $aqBtn = $('#aqBtn');
-                        if (airpurificationPower === "on") {
-                            $aqBtn.addClass("active")
-                        } else {
-                            $aqBtn.removeClass("active")
-                        }
-                    }
-
+                    // 에어컨셋팅
                     if(res.data.aircondition !== '') {
-                        // 에어컨 셋팅
-                        console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
-                        var aircondition = JSON.parse(res.data.aircondition.r_data);
-                        console.log('aircondition 상태 : ' + aircondition.SS021ac01);
+                        airconditionCheck(res.data.aircondition.r_data);
+                    }
 
-                        let airconditionCheck = false
-                        if (aircondition.SS021ac01 === "cool" || aircondition.SS021ac01 === "dry" ){
-                            $('#air1').addClass("active");
-                            airconditionCheck = true;
-                        } else { $('#air1').removeClass("active");}
-                        if (aircondition.SS022ac01 === "cool" || aircondition.SS022ac01 === "dry" ){
-                            $('#air2').addClass("active");
-                            airconditionCheck = true;
-                        } else { $('#air2').removeClass("active");}
-                        if (aircondition.SS023ac01 === "cool" || aircondition.SS023ac01 === "dry" ){
-                            $('#air3').addClass("active");
-                            airconditionCheck = true;
-                        } else { $('#air3').removeClass("active");}
+                    // 조명셋팅
+                    if(res.data.lightData !== ''){
+                        lightCheck(res.data.lightData.r_data)
+                    }
 
-                        var $airBtn = $('#airBtn');
-                        if (airconditionCheck) {
-                            $airBtn.addClass("active")
-                        } else {
-                            $airBtn.removeClass("active")
-                        }
+                    // 공기청정기셋팅
+                    if(res.data.airpurification !== '') {
+                        airpurificationCheck(res.data.airpurification.r_data);
+                    }
+
+                    // 가전전원셋팅
+                    if(res.data.electricDate !== ''){
+                        electricCheck(res.data.electricDate.r_data);
                     }
 
                     if(res.data.batteryData !== '') {
