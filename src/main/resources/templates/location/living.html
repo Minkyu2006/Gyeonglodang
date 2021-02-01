@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate ="~{layout/admindefault}">
 
-<head>
     <script type="text/javascript">
 
         $(function() {
@@ -90,7 +88,7 @@
                         }catch (e){
                             // 에러처리 필요없슴
                         }
-                        if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
+                        if (typeof airDataRm1=='undefined' || airDataRm1==='unavailable' || airDataRm1==='unknown') airDataRm1 = '0';
                         airRefresh('airChartRm1', airDataRm1);// 거실 공기질(PM10)
                     }
 
@@ -279,7 +277,6 @@
         }
 
     </script>
-</head>
 
 <body>
 <div class="wrap">

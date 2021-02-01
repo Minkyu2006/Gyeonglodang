@@ -83,9 +83,9 @@
                         }catch (e){
                             // 에러처리 필요없슴
                         }
-                        if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
-                        if (typeof airDataRm2=='undefined' || airDataRm2==='unknown') airDataRm2 = '0';
-                        if (typeof airDataRm3=='undefined' || airDataRm3==='unknown') airDataRm3 = '0';
+                        if (typeof airDataRm1=='undefined' || airDataRm1==='unavailable' || airDataRm1==='unknown') airDataRm1 = '0';
+                        if (typeof airDataRm2=='undefined' || airDataRm2==='unavailable' || airDataRm2==='unknown') airDataRm2 = '0';
+                        if (typeof airDataRm3=='undefined' || airDataRm3==='unavailable' || airDataRm3==='unknown') airDataRm3 = '0';
                         airRefresh('airChartRm1', airDataRm1);// 거실 공기질(PM10)
                         airRefresh('airChartRm2', airDataRm2);// 주방 공기질(PM10)
                         airRefresh('airChartRm3', airDataRm3);// 안방 공기질(PM10)

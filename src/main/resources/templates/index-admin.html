@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate ="~{layout/admindefault}">
-
-<head>
 
     <script type="text/javascript">
 
@@ -129,7 +126,7 @@
                             // 에러처리 필요없슴
                         }
 
-                        if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
+                        if (typeof airDataRm1=='undefined' ||  airDataRm1==='unavailable' || airDataRm1==='unknown') airDataRm1 = '0';
                         airRefresh('airChart', airDataRm1);// 거실 공기질(PM10)
                     }
 
@@ -145,7 +142,6 @@
                         if (airpurificationPower === "on") {
                             $aqBtn.addClass("active")
                         } else {
-                            $aqBtn.removeClass("active")
                         }
                     }
 
@@ -283,10 +279,8 @@
                 }
             });
         }
-
-
     </script>
-</head>
+
 <body>
 <div class="wrap">
 	<div class="console">

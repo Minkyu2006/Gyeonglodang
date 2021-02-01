@@ -112,7 +112,7 @@
 						}catch (e){
 							// 에러처리 필요없슴
 						}
-						if (typeof airDataRm2=='undefined' || airDataRm2==='unknown') airDataRm2 = '0';
+						if (typeof airDataRm2=='undefined' || airDataRm2==='unavailable' || airDataRm2==='unknown') airDataRm2 = '0';
 						airRefresh('airChartRm2', airDataRm2);// 주방 공기질(PM10)
 					}
 

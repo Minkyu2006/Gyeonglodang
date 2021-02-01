@@ -112,7 +112,7 @@
                         }catch (e){
                             // 에러처리 필요없슴
                         }
-                        if (typeof airDataRm3=='undefined' || airDataRm3==='unknown') airDataRm3 = '0';
+                        if (typeof airDataRm3=='undefined' || airDataRm3==='unavailable' || airDataRm3==='unknown') airDataRm3 = '0';
                         airRefresh('airChartRm3', airDataRm3);// 안방 공기질(PM10)
                     }
 

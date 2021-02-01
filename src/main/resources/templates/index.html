@@ -447,9 +447,9 @@
 							// 에러처리 필요없슴
 						}
 
-						if (typeof airDataRm1=='undefined' || airDataRm1==='unknown') airDataRm1 = '0';
-						if (typeof airDataRm2=='undefined' || airDataRm2==='unknown') airDataRm2 = '0';
-						if (typeof airDataRm3=='undefined' || airDataRm3==='unknown') airDataRm3 = '0';
+						if (typeof airDataRm1=='undefined' || airDataRm1==='unavailable' || airDataRm1==='unknown') airDataRm1 = '0';
+						if (typeof airDataRm2=='undefined' || airDataRm2==='unavailable' || airDataRm2==='unknown') airDataRm2 = '0';
+						if (typeof airDataRm3=='undefined' || airDataRm3==='unavailable' || airDataRm3==='unknown') airDataRm3 = '0';
 
 						airRefresh('airChart', airDataRm1);// 거실 공기질(PM10)
 						airRefresh('airChartRm1', airDataRm1);// 거실 공기질(PM10)
@@ -719,11 +719,11 @@
 			var $airState = $('#'+elimentId+'State');
 			if (value <= 15) {
 				$airColor.addClass('blue').removeClass('red');
-				$airMessage.text('');
+				$airMessage.text('현재 공기질 상태는 쾌적합니다.');
 				$airState.text('좋음');
 			} else if (value <= 35) {
 				$airColor.removeClass('blue').removeClass('red');
-				$airMessage.text('');
+				$airMessage.text('현재 공기질 상태는 보통입니다.');
 				$airState.text('보통');
 			} else {
 				$airColor.addClass('red').removeClass('blue');

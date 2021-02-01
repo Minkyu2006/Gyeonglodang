@@ -180,11 +180,11 @@
 				var $airState = $('#'+elimentId+'State');
 				if (value <= 15) {
 					$airColor.addClass('blue').removeClass('red');
-					$airMessage.text('');
+					$airMessage.text('현재 공기질 상태는 쾌적합니다.');
 					$airState.text('좋음');
 				} else if (value <= 35) {
 					$airColor.removeClass('blue').removeClass('red');
-					$airMessage.text('');
+					$airMessage.text('현재 공기질 상태는 보통입니다.');
 					$airState.text('보통');
 				} else {
 					$airColor.addClass('red').removeClass('blue');
