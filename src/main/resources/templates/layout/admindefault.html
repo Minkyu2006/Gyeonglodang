@@ -183,11 +183,37 @@
 
 				let lightCheck =false;
 
+				//todo "SS021ls101":"거실 1구 조명 스위치1",
+				//todo "SS021ls102":"거실 1구 조명 스위치2(화장실)",
+				//todo "SS021ls103":"거실 1구 조명 스위치3(주방쪽벽)",
+				//todo "SS021ls201":"거실 2구 조명 스위치1-1",
+				//todo "SS021ls202":"거실 2구 조명 스위치1-2",
+				//todo "SS021ls203":"거실 2구 조명 스위치2-1",
+				//todo "SS021ls204":"거실 2구 조명 스위치2-2",
+
+				//todo "SS022ls101":"주방 1구 조명 스위치1",
+				//todo "SS022ls102":"주방 1구 조명 스위치2",
+				//todo "SS022ls103":"주방 1구 조명 스위치3",
+
+				//todo "SS023ls101":"안방 1구 조명 스위치",
+				//todo "SS024ls101":"운동 1구 조명 스위치",
+				//todo "SS025ls101":"창고 1구 조명 스위치"
+
 				if (light.SS021ls101 === "on")  lightCheck = true
-				if (light.SS022ls201 === "on")  lightCheck = true
-				if (light.SS022ls202 === "on")  lightCheck = true
+				if (light.SS021ls102 === "on")  lightCheck = true
+				if (light.SS021ls103 === "on")  lightCheck = true
+				if (light.SS021ls201 === "on")  lightCheck = true
+				if (light.SS021ls202 === "on")  lightCheck = true
+				if (light.SS021ls203 === "on")  lightCheck = true
+				if (light.SS021ls204 === "on")  lightCheck = true
+
+				if (light.SS022ls101 === "on")  lightCheck = true
+				if (light.SS022ls102 === "on")  lightCheck = true
+				if (light.SS022ls103 === "on")  lightCheck = true
+
 				if (light.SS023ls101 === "on")  lightCheck = true
 				if (light.SS024ls101 === "on")  lightCheck = true
+				if (light.SS025ls101 === "on")  lightCheck = true
 
 				var $lightBtn = $('#lightBtn');
 				if(lightCheck) {
