@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate ="~{layout/admindefault}">
+
+<head>
+    <script type="text/javascript">
+
+        $(function() {
+            dataInfo();
+            realTime();
+            AutoStart();
+        })
+
+        // 데이터 받아오는 함수
+        function dataInfo() {
+            $.ajax({
+                url: '/adminhomedata/adminMenuDataInfo',
+                type: 'post',
+                cache: false,
+                error: function () {
+                    alert('데이터받기 실패');
+                },
+                success: function (res) {
+
+                    // 에어컨셋팅
+                    if(res.data.aircondition !== '') {
+                        airconditionCheck(res.data.aircondition.r_data);
+                    }
+
+                    // 조명셋팅
+                    if(res.data.lightData !== ''){
+                        lightCheck(res.data.lightData.r_data)
+                    }
+
+                    // 공기청정기셋팅
+                    if(res.data.airpurification !== '') {
+                        airpurificationCheck(res.data.airpurification.r_data);
+                    }
+
+                    // 가전전원셋팅
+                    if(res.data.electricDate !== ''){
+                        electricCheck(res.data.electricDate.r_data);
+                    }
+
+                    if(res.data.batteryData !== '') {
+                        // 배터리 셋팅
+                        var battery = JSON.parse(res.data.batteryData.r_data);
+                        console.log('');
+
+                        var batteryLowValue = 100;
+                        $.each(battery,function(key, value){
+                            if(value!=="" && batteryLowValue>Number(value)){
+                                batteryLowValue = Number(value);
+                            }
+                        });
+                        console.log('제일 낮은 battery : ' + batteryLowValue);
+                        batteryRefresh(batteryLowValue)
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="console">
+        <div class="infobox">
+            <h2 class="info-title">Manager Mode</h2>
+            <div class="datetime">
+                <span class="date">2021.01.18 월요일</span>
+                <span class="time">am 10:16</span>
+            </div>
+        </div>
+        <div class="iot-buttons">
+            <h3>IoT 가전제어</h3>
+            <ul>
+                <li>
+                    <button id="airBtn" class="console-button aircon">에어컨<span>ON</span></button>
+                </li>
+                <li>
+                    <button id="lightBtn" class="console-button light">조명<span>ON</span></button>
+                </li>
+                <li>
+                    <button id="aqBtn" class="console-button airfresher">공기청정기<span>ON</span></button>
+                </li>
+                <li>
+                    <button id="electricBtn" class="console-button electronic">가전 전원<span>ON</span></button>
+                </li>
+            </ul>
+        </div>
+        <div class="battery">
+            <div class="battery__head">
+                <h3 class="battery_title">배터리</h3>
+                <span class="battery-percent"></span>
+                <a href="/admindashboard/battery" class="battery-link"><img src="/assets/images/btn_setting.png" alt="" /></a>
+            </div>
+            <div class="battery__contents">
+                <div class="battery__progress" data-percent="80">
+                    <div class="battery__bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contents">
+        <div class="button-list">
+            <!-- 장소별 페이지 버튼 리스트 수정 -->
+            <ul>
+                <li><a href="/admindashboard/" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
+            </ul>
+        </div>
+
+        <div class="card-list">
+            <ul>
+                <li class="card">
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
