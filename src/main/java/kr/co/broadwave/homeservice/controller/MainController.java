@@ -1,7 +1,7 @@
 package kr.co.broadwave.homeservice.controller;
 
-import kr.co.broadwave.homeservice.admin.Account;
-import kr.co.broadwave.homeservice.admin.AccountService;
+//import kr.co.broadwave.homeservice.admin.Account;
+//import kr.co.broadwave.homeservice.admin.AccountService;
 import kr.co.broadwave.homeservice.common.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ import java.util.Optional;
 @Slf4j
 @Controller
 public class MainController {
-    private final AccountService accountService;
-
-    @Autowired
-    public MainController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+//    private final AccountService accountService;
+//
+//    @Autowired
+//    public MainController(AccountService accountService) {
+//        this.accountService = accountService;
+//    }
 
     // 스마트경로당 시작 빈페이지
     @RequestMapping("/")
@@ -47,20 +47,20 @@ public class MainController {
         return "login";
     }
 
-    @RequestMapping("/loginsuccess")
-    public String loginsuccess(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String login_ip = CommonUtils.getIp(request);
-        Optional<Account> optionalAccount = accountService.findByUserid(request.getUserPrincipal().getName());
-        if (optionalAccount.isPresent()) {
-            log.info("============Login Success============");
-            log.info(" 로그인 IP " + login_ip);
-            log.info(" session userid " + session.getAttribute("userid"));
-            log.info(" session role " + session.getAttribute("role"));
-            log.info("=====================================");
-        }
-        return "index-admin";
-    }
+//    @RequestMapping("/loginsuccess")
+//    public String loginsuccess(HttpServletRequest request){
+//        HttpSession session = request.getSession();
+//        String login_ip = CommonUtils.getIp(request);
+//        Optional<Account> optionalAccount = accountService.findByUserid(request.getUserPrincipal().getName());
+//        if (optionalAccount.isPresent()) {
+//            log.info("============Login Success============");
+//            log.info(" 로그인 IP " + login_ip);
+//            log.info(" session userid " + session.getAttribute("userid"));
+//            log.info(" session role " + session.getAttribute("role"));
+//            log.info("=====================================");
+//        }
+//        return "index-admin";
+//    }
 
     // 대시보드 메인화면(사용자용)
     @RequestMapping("/localdashboard")
