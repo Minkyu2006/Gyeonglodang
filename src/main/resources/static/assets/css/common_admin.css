@@ -1065,9 +1065,11 @@ a.console-button {
 
 /* system setting */
 .setting {
+	position: relative;
 	width: calc(100% - 100px);
 	margin: 50px auto;
 	padding: 20px;
+	padding-bottom: 80px;
 	background-color: #fff;
 	-webkit-border-radius: 10px;;
 	-moz-border-radius: 10px;;
@@ -1148,7 +1150,25 @@ a.console-button {
 	width: 20px;
 	height: 20px;
 }
-
+.setting__btn {
+	position: absolute;
+	right: 30px;
+	bottom: 30px;
+	height: 40px;
+	padding: 0 10px;
+	background-color: #5fa3f0;
+	border: 0 none;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 24px;
+	font-wieght: 700;
+	cursor: pointer;
+}
+.setting__btn:hover {
+	background-color: #1a75bd;
+}
 
 
 @keyframes dual-ring {
