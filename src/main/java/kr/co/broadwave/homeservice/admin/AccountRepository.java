@@ -16,4 +16,8 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account,Long>,QuerydslPredicateExecutor<Account> {
     @Query("select a from Account a where a.userid = :userid")
     Optional<Account> findByUserid(@Param("userid") String userid);
+
+    @Query("select a from Account a where a.userid = :userid")
+    Optional<Account> findByUseridAndApprovalType(@Param("userid") String userid);
+
 }

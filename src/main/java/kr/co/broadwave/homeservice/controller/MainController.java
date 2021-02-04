@@ -34,32 +34,12 @@ public class MainController {
         return "start";
     }
 
-    // 시스템환경설정
-    @RequestMapping("/system")
-    public String system(){
-        return "adminstate/system";
-    }
-
+    // 로그인페이지(관리자용페이지 진입시)
     @RequestMapping("/login")
     public String login(HttpServletRequest request){
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("prevPage", referrer);
         return "login";
-    }
-
-    @RequestMapping("/loginsuccess")
-    public String loginsuccess(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        String login_ip = CommonUtils.getIp(request);
-        Optional<Account> optionalAccount = accountService.findByUserid(request.getUserPrincipal().getName());
-        if (optionalAccount.isPresent()) {
-            log.info("============Login Success============");
-            log.info(" 로그인 IP " + login_ip);
-            log.info(" session userid " + session.getAttribute("userid"));
-            log.info(" session role " + session.getAttribute("role"));
-            log.info("=====================================");
-        }
-        return "index-admin";
     }
 
     // 대시보드 메인화면(사용자용)

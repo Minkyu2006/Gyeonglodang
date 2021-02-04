@@ -40,12 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .successHandler(successHandler())
                     .failureHandler(failureHandler())
+                    .permitAll()
         ;
     }
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
-        return new LoginSuccessHandler("/loginsuccess");
+        return new LoginSuccessHandler("/admindashboard");
     }
 
     @Bean
