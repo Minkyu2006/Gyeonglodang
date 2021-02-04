@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+		<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 		<title>Dashboard</title>
 
@@ -21,6 +26,10 @@
 		<script src="/assets/js/charts/ChartBundle.min.js"></script>
 
 		<script>
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$(function() {
 				// 조명버튼
@@ -104,7 +113,7 @@
 				clock();
 			}
 
-			// 상단 버튼 함수들 ( 조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
+			// 상단 버튼 함수들 (조명버튼, 공기청정기버튼, 문열기버튼, 전원장치버튼)
 			function integratedFun(name,value) {
 				// console.log("name : "+name);
 				// console.log("value : "+value);
@@ -265,8 +274,7 @@
 					$electricBtn.children('.fa-lightbulb').removeClass('far');
 				}
 			}
-
-			// 배터리표기 함수
+			//todo 대시보드 메뉴 배터리표기 함수
 			function batteryRefresh(value) {
 				// battery progress
 				$('.battery__progress').each(function() {
@@ -282,35 +290,6 @@
 					$('.battery__bar').width(_percent + "%");
 					$('.battery-percent').text(_percent + "%")
 				})
-			}
-
-			//공기 표기해주는 함수
-			function airRefresh(elimentId,value) {
-				// 값은 받아오나, 텍스트를 질리프레쉬할수없음.
-				const cp = new CircleProgress('#'+elimentId, {
-					max: 60,
-					value: value,
-					animationDuration: 400,
-					textFormat: (value) => value + '㎍/㎥'
-				});
-				cp.value = value;
-
-				var $airColor = $('#'+elimentId+'Color');
-				var $airMessage = $('#'+elimentId+'Message');
-				var $airState = $('#'+elimentId+'State');
-				if (value <= 15) {
-					$airColor.addClass('blue').removeClass('red');
-					$airMessage.text('현재 공기질 상태는 쾌적합니다.');
-					$airState.text('좋음');
-				} else if (value <= 35) {
-					$airColor.removeClass('blue').removeClass('red');
-					$airMessage.text('현재 공기질 상태는 보통입니다.');
-					$airState.text('보통');
-				} else {
-					$airColor.addClass('red').removeClass('blue');
-					$airMessage.text('공기청정기를 ON 해주세요.');
-					$airState.text('나쁨');
-				}
 			}
 
 			// 온도표기해주는 함수
@@ -365,6 +344,35 @@
 				} else {
 					$tempColor.removeClass('blue').removeClass('red');
 					$tempMessage.text('적정 실내습도입니다.');
+				}
+			}
+
+			//공기질 표기해주는 함수
+			function airRefresh(elimentId,value) {
+				// 값은 받아오나, 텍스트를 질리프레쉬할수없음.
+				const cp = new CircleProgress('#'+elimentId, {
+					max: 60,
+					value: value,
+					animationDuration: 400,
+					textFormat: (value) => value + '㎍/㎥'
+				});
+				cp.value = value;
+
+				var $airColor = $('#'+elimentId+'Color');
+				var $airMessage = $('#'+elimentId+'Message');
+				var $airState = $('#'+elimentId+'State');
+				if (value <= 15) {
+					$airColor.addClass('blue').removeClass('red');
+					$airMessage.text('현재 공기질 상태는 쾌적합니다.');
+					$airState.text('좋음');
+				} else if (value <= 35) {
+					$airColor.removeClass('blue').removeClass('red');
+					$airMessage.text('현재 공기질 상태는 보통입니다.');
+					$airState.text('보통');
+				} else {
+					$airColor.addClass('red').removeClass('blue');
+					$airMessage.text('공기청정기를 ON 해주세요.');
+					$airState.text('나쁨');
 				}
 			}
 

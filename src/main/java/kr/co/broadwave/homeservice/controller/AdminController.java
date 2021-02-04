@@ -21,6 +21,12 @@ public class AdminController {
         return "index-admin";
     }
 
+//    // 시스템환경설정
+//    @RequestMapping("/system")
+//    public String system(){
+//        return "adminstate/system";
+//    }
+
     // 관리자 - 온도페이지
     @RequestMapping("/temp")
     public String admintemp(){

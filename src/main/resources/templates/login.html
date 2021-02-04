@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+	<script src="/assets/js/jquery.min.js"></script>
+
+	<script>
+
+		$(function() {
+			$("#loginClick").on('click', function () {
+				console.log("아이디 : "+$("#username").val())
+				console.log("비번 : "+$("#password").val());
+				login();
+			})
+		})
+
+		function login(){
+			$.ajax({
+				url : "/login",
+				type : "POST",
+				dataType : "json",
+				data : {
+					username : $("#username").val(),
+					password : $("#password").val()
+				},
+				beforeSend : function(xhr) {
+					var $token = $("#token");
+					xhr.setRequestHeader($token.data("token-name"), $token.val());
+				},
+				error : function(a,b,c){
+					console.log(a,b,c);
+				},
+				success : function(response) {
+					if(response.code === "200"){
+						window.location = response.item.url;	//이전페이지로 돌아가기
+					} else {
+						alert(response.message);
+					}
+				}
+			})
+
+		}
+
+	</script>
+
+	<form th:action="@{/login}" method="post">
+		<div>
+			<label><input type="text" name="username" placeholder="아이디를 입력하세요." required ></label>
+		</div>
+		<div>
+			<label><input type="password" name="password" placeholder="패스워드를 입력하세요." required></label>
+		</div>
+		<div><input type="submit" style="font-size: 15px" value="로그인"/></div>
+		<div th:if="${param.error}" class="login__message">
+			아이디 또는 비밀번호가 잘못되었습니다.
+		</div>
+	</form>
+
+</html>
+

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Slf4j
 @Controller
+@RequestMapping("/admindashboard")
 public class DetailController {
 
     // 관리자전용 - 온도 상세보기(그래프)
