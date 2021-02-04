@@ -11,7 +11,15 @@
             dataInfo();
             realTime();
             AutoStart();
+			operlationGet();
         })
+
+		// 글자제한함수
+		function numberMaxLength(e){
+			if(e.value.length > e.maxLength){
+				e.value = e.value.slice(0, e.maxLength);
+			}
+		}
 
         // 데이터 받아오는 함수
         function dataInfo() {
@@ -61,6 +69,60 @@
                 }
             });
         }
+
+		// todo 운영정책 데이터 저장하기.
+        function operlationPut() {
+
+		}
+
+		// todo 운영정책 데이터 가져오기.
+		function operlationGet() {
+			var params = {
+				value : "http://square.abrain.co.kr:8080/square/operation/commonSetting?system_id=S002"
+			};
+			$.ajax({
+				url: '/apiData/operationGet',
+				type: 'post',
+				data: params,
+				cache: false,
+				error: function () {
+					alert('데이터받기 실패');
+				},
+				success: function (res) {
+
+					if (res.data.operationDate !== '') {
+						console.log("운영정책 데이터 system_id=S002 : "+res.data.operationDate);
+						console.log();
+						var operationDate = JSON.parse(res.data.operationDate);
+						// console.log("operationDate : "+operationDate);
+
+						$("#opentime1").val(operationDate.data.opentime.substring(0,2));
+						$("#opentime2").val(operationDate.data.opentime.substring(3,5));
+
+						$("#closetime1").val(operationDate.data.closetime.substring(0,2));
+						$("#closetime2").val(operationDate.data.closetime.substring(3,5));
+
+						$("#dooropentime1").val(operationDate.data.dooropentime.substring(0,2));
+						$("#dooropentime2").val(operationDate.data.dooropentime.substring(3,5));
+
+						$("#doorclosetime1").val(operationDate.data.doorclosetime.substring(0,2));
+						$("#doorclosetime2").val(operationDate.data.doorclosetime.substring(3,5));
+
+						$("#motiontimer").val(operationDate.data.motiontimer);
+
+						var dayofweek = operationDate.data.dayofweek;
+						// console.log("dayofweek : "+dayofweek);
+						for(i=0; i<dayofweek.length; i++){
+							if(dayofweek.substring(i,i+1)==="1"){
+								$("#dayofweek"+i).prop('checked', true);
+							}
+						}
+
+					}
+
+				}
+			});
+		}
 
     </script>
 </head>
@@ -119,33 +181,33 @@
         		<li>
         			<h5 class="setting__title">open time</h5>
         			<div class="setting__console">
-	        			<input type="text" class="setting__input-text" placeholder="10"  />
+	        			<input type="number" id="opentime1" class="setting__input-text" placeholder="10" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
-	        			<input type="text" class="setting__input-text" placeholder="00" />
+	        			<input type="number" id="opentime2" class="setting__input-text" placeholder="00" maxlength="2" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
         		<li>
         			<h5 class="setting__title">close time</h5>
         			<div class="setting__console">
-	        			<input type="text" class="setting__input-text" placeholder="16" />
+	        			<input type="number" id="closetime1" class="setting__input-text" placeholder="16" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
-	        			<input type="text" class="setting__input-text" placeholder="00" />
+	        			<input type="number" id="closetime2" class="setting__input-text" placeholder="00" maxlength="2" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
         		<li>
         			<h5 class="setting__title">door open time</h5>
         			<div class="setting__console">
-	        			<input type="text" class="setting__input-text" placeholder="09" />
+	        			<input type="number" id="dooropentime1" class="setting__input-text" placeholder="09" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
-	        			<input type="text" class="setting__input-text" placeholder="30" />
+	        			<input type="number" id="dooropentime2" class="setting__input-text" placeholder="30" maxlength="2" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
         		<li>
         			<h5 class="setting__title">door close time</h5>
         			<div class="setting__console">
-	        			<input type="text" class="setting__input-text" placeholder="17" />
+	        			<input type="number" id="doorclosetime1" class="setting__input-text" placeholder="17" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
-	        			<input type="text" class="setting__input-text" placeholder="00" />
+	        			<input type="number" id="doorclosetime2" class="setting__input-text" placeholder="00" maxlength="2" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
         		<li>
@@ -153,44 +215,44 @@
         			<div class="setting__console">
         				<ul>
         					<li>
-	        					<input type="checkbox" class="setting__input-check" id="sunday" />
-	        					<label for="sunday" class="setting__label">일</label>
+	        					<input id="dayofweek0" type="checkbox" class="setting__input-check" />
+	        					<label for="dayofweek0" class="setting__label">일</label>
         					</li>
         					<li>
-	        					<input type="checkbox" class="setting__input-check" id="monday" />
-	        					<label for="monday" class="setting__label">월</label>
+	        					<input id="dayofweek1" type="checkbox" class="setting__input-check" />
+	        					<label for="dayofweek1" class="setting__label">월</label>
         					</li>
         					<li>
-	        					<input type="checkbox" class="setting__input-check" id="tuesday" />
-	        					<label for="tuesday" class="setting__label">화</label>
+	        					<input id="dayofweek2" type="checkbox" class="setting__input-check" />
+	        					<label for="dayofweek2" class="setting__label">화</label>
         					</li>
         					<li>
-	        					<input type="checkbox" class="setting__input-check" id="wednesday" />
-	        					<label for="wednesday" class="setting__label">수</label>
+	        					<input id="dayofweek3" type="checkbox" class="setting__input-check" />
+	        					<label for="dayofweek3" class="setting__label">수</label>
         					</li>
         					<li>
-	        					<input type="checkbox" class="setting__input-check" id="thursday" />
-	        					<label for="thursday" class="setting__label">목</label>
+	        					<input id="dayofweek4" type="checkbox" class="setting__input-check" />
+	        					<label for="dayofweek4" class="setting__label">목</label>
         					</li>
         					<li>
-	        					<input type="checkbox" class="setting__input-check" id="friday" />
-	        					<label for="friday" class="setting__label">금</label>
+	        					<input id="dayofweek5" type="checkbox" class="setting__input-check" />
+	        					<label for="dayofweek5" class="setting__label">금</label>
         					</li>
-        					<li>
-	        					<label for="saturday" class="setting__label">토</label>
-	        					<input type="checkbox" class="setting__input-check" id="saturday" />
-        					</li>
+							<li>
+								<input id="dayofweek6" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek6" class="setting__label">토</label>
+							</li>
         				</ul>
         			</div>
         		</li>
         		<li>
         			<h5 class="setting__title">motion timer</h5>
         			<div class="setting__console">
-	        			<input type="text" class="setting__input-text" placeholder="30" />
+	        			<input type="number" id="motiontimer" class="setting__input-text" placeholder="30" maxlength="2" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
         	</ul>
-			<button class="setting__btn">저장</button>
+			<button onclick="operlationPut()" class="setting__btn">저장</button>
         </div>
     </div>
 </div>
