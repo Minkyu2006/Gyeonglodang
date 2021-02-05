@@ -18,12 +18,14 @@
 		<link rel="stylesheet" href="/assets/css/fontawesome/regular.min.css">
 		<link rel="stylesheet" href="/assets/css/fontawesome/solid.min.css">
 		<link rel="stylesheet" href="/assets/css/common_admin.css">
+		<link rel="stylesheet" href="/assets/js/alert/min_alert.css"/>
 
 		<script src="/assets/js/jquery.min.js"></script>
 		<script src="/assets/js/circle-progress/circle-progress.js"></script>
 		<script src="/assets/js/common_admin.js"></script>
 		<script src="/assets/js/charts/Chart.min.js"></script>
 		<script src="/assets/js/charts/ChartBundle.min.js"></script>
+		<script src="/assets/js/alert/min_alert.js"></script>
 
 		<script>
 
@@ -32,6 +34,22 @@
 			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$(function() {
+
+				$('#passwordchange').on('click', function(e) {
+					$('.password-pop').addClass('active');
+					e.preventDefault();
+				});
+
+				$('#passwordcencel').on('click', function(e) {
+					$('.password-pop').removeClass('active');
+					e.preventDefault();
+				});
+
+				// 비밀번호변경 저장클릭
+				$("#passwordbtnPassSave").on('click',function(){
+					passSave();
+				});
+
 				// 조명버튼
 				$('#lightBtn').on('click', function () {
 					$(this).toggleClass('active');
@@ -80,7 +98,7 @@
 
 			function AutoStart() {
 				setInterval(clock, 60000);
-				setInterval(dataInfo, 60000); // 5초마다 데이터불러와 실행
+				setInterval(dataInfo, 60000);
 			}
 
 			var week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
@@ -376,6 +394,89 @@
 				}
 			}
 
+			//비밀번호 변경
+			function passSave() {
+				var $oldpassword = $("#oldpassword");
+				var $newpassword = $("#newpassword")
+				var $passwordconfirm = $("#passwordconfirm");
+
+				if ($oldpassword.val().trim() === '') {
+					alertCaution("현재비밀번호를 입력하세요..");
+					$oldpassword.trigger('focus');
+					return false;
+				}
+
+				if ($newpassword.val().trim() === '') {
+					alertCaution("신규비밀번호를 입력하세요.");
+					$newpassword.trigger('focus');
+					return false;
+				}
+
+				if ($passwordconfirm.val().trim() === '') {
+					alertCaution("비밀번호 확인을 주세요.");
+					$passwordconfirm.trigger('focus');
+					return false;
+				}
+
+				var $form = $('form[name="profilepassword"]');
+				var params = $form.serialize();
+
+				$.ajax({
+					url:'/adminhomedata/modifypassword',
+					type : 'post',
+					data : params,
+					cache:false,
+					error:function(){
+						alert("데이터 전송실패");
+					},
+					success: function(res){
+						// console.log("status : "+res.status);
+						if(res.status===200){
+							alertSuccess('비밀번호가 변경되었습니다.');
+							$('.password-pop').removeClass('active');
+							$("#oldpassword").val('');
+							$("#newpassword").val('');
+							$("#passwordconfirm").val('');
+						}else{
+							alertCaution(res.err_msg);
+						}
+					}
+				});
+			}
+
 		</script>
     </head>
+
+	<div class="password-pop">
+		<form name="profilepassword" class="password-pop__form">
+			<div class="password-pop__list">
+				<div class="passowrd-pop__item">
+					<div class="c-text">
+						<label for="oldpassword" class="c-text__label">현재 비밀번호 확인</label>
+						<input id="oldpassword" name="oldpassword" type="password" class="c-text__input" />
+					</div>
+				</div>
+				<div class="passowrd-pop__item">
+					<div class="c-text">
+						<label for="newpassword" class="c-text__label">새 비밀번호</label>
+						<input id="newpassword" name="newpassword" type="password" class="c-text__input" />
+					</div>
+				</div>
+				<div class="passowrd-pop__item">
+					<div class="c-text">
+						<label for="passwordconfirm" class="c-text__label">새 비밀번호 확인</label>
+						<input id="passwordconfirm" name="passwordconfirm" type="password" class="c-text__input" />
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="c-function">
+			<div class="c-function__group c-function__group--right">
+				<div class="c-function__item"><button id="passwordbtnPassSave" class="c-button c-button--point">저장</button></div>
+				<div class="c-function__item"><button id="passwordcencel" class="c-button c-button--point">취소</button></div>
+			</div>
+		</div>
+	</div>
+
+	<div id='alertpop'></div>
 </html>

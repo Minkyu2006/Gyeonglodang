@@ -1,20 +1,26 @@
 package kr.co.broadwave.homeservice.admin;
 
 import kr.co.broadwave.homeservice.common.AjaxResponse;
+import kr.co.broadwave.homeservice.common.CommonUtils;
 import kr.co.broadwave.homeservice.homedata.HomeData;
 import kr.co.broadwave.homeservice.homedata.HomeDataService;
 import kr.co.broadwave.homeservice.mqttsetting.MyMqttClient;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,10 +41,19 @@ import java.util.function.Consumer;
 public class AdminHomeDataRestController {
 
     private final HomeDataService homeDataService;
+    private final ModelMapper modelMapper;
+    private final AccountService accountService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminHomeDataRestController(HomeDataService homeDataService) {
+    public AdminHomeDataRestController(HomeDataService homeDataService,
+                                       ModelMapper modelMapper,
+                                       AccountService accountService,
+                                       PasswordEncoder passwordEncoder) {
         this.homeDataService = homeDataService;
+        this.modelMapper = modelMapper;
+        this.accountService = accountService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 관리자페이지 전용(모든 온도나타내기)
@@ -154,6 +169,39 @@ public class AdminHomeDataRestController {
 
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
+    }
+
+    // admin 비밀번호변경
+    @Transactional
+    @PostMapping("modifypassword")
+    public ResponseEntity<Map<String,Object>> modifypassword(@ModelAttribute AccountMapperDtoModify accountMapperDtoModify,
+                                                             HttpServletRequest request){
+        AjaxResponse res = new AjaxResponse();
+
+        Account account = modelMapper.map(accountMapperDtoModify, Account.class);
+        String currentuserid = CommonUtils.getCurrentuser(request);
+
+        Optional<Account> optionalAccount = accountService.findByUserid(currentuserid);
+
+        if(optionalAccount.isPresent()){
+            //현재암호비교
+            if (!passwordEncoder.matches(accountMapperDtoModify.getOldpassword(),optionalAccount.get().getPassword())){
+                return ResponseEntity.ok(res.fail("", "현재 비밀번호가 일치하지 않습니다."));
+            }
+            //신규암호같은지 확인
+            if( !accountMapperDtoModify.getNewpassword().equals(accountMapperDtoModify.getPasswordconfirm()) ){
+                return ResponseEntity.ok(res.fail("", "신규 비밀번호가 일치하지 않습니다."));
+            }
+            account.setId(optionalAccount.get().getId());
+            account.setUserid(currentuserid);
+            account.setRole(optionalAccount.get().getRole());
+            account.setInsertDateTime(optionalAccount.get().getInsertDateTime());
+            account.setPassword(accountMapperDtoModify.getPasswordconfirm());
+        }
+        account.setModifyDateTime(LocalDateTime.now());
+        accountService.saveAccount(account);
+        return ResponseEntity.ok(res.success());
+
     }
 
 }

@@ -12,6 +12,7 @@
             realTime();
             AutoStart();
 			operlationGet();
+			setInterval(operlationGet, 60000); // 1분마다 데이터불러와 실행
         })
 
 		// 글자제한함수
@@ -70,9 +71,52 @@
             });
         }
 
-		// todo 운영정책 데이터 저장하기.
+		// todo 운영정책 데이터 보내기
         function operlationPut() {
 
+        	// 기존 기본값
+			// "opentime": "10:00",
+			// "closetime": "16:00",
+			// "dooropentime": "09:30",
+			// "doorclosetime": "17:00",
+			// "dayofweek": "1111111",
+			// "motiontimer": "30"
+
+			var opentime = $("#opentime1").val()+":"+$("#opentime2").val();
+			var closetime = $("#closetime1").val()+":"+$("#closetime2").val();
+			var dooropentime = $("#dooropentime1").val()+":"+$("#dooropentime2").val();
+			var doorclosetime = $("#doorclosetime1").val()+":"+$("#doorclosetime2").val();
+			var dayofweek = "";
+			for(i=0; i<=6; i++){
+				if($("#dayofweek"+i).is(":checked") === true){
+					dayofweek += "1";
+				}else{
+					dayofweek += "0";
+				}
+			}
+			// console.log("dayofweek : "+dayofweek);
+			var motiontimer = $("#motiontimer").val();
+
+			var settings = {
+				"url": "http://square.abrain.co.kr:8080/square/operation/commonSetting?system_id=S002",
+				"method": "PUT",
+				"timeout": 0,
+				"headers": {
+					"Content-Type": "application/json"
+				},
+				"data": JSON.stringify({"opentime":opentime,
+										"closetime":closetime,
+										"dooropentime":dooropentime,
+										"doorclosetime":doorclosetime,
+										"dayofweek":dayofweek,
+										"motiontimer":motiontimer}),
+			};
+
+			$.ajax(settings).done(function (response) {
+				console.log(response);
+				alertSuccess("저장되었습니다.");
+				operlationGet();
+			});
 		}
 
 		// todo 운영정책 데이터 가져오기.
@@ -91,22 +135,22 @@
 				success: function (res) {
 
 					if (res.data.operationDate !== '') {
-						console.log("운영정책 데이터 system_id=S002 : "+res.data.operationDate);
-						console.log();
+						// console.log("운영정책 데이터 system_id=S002 : "+res.data.operationDate);
+						// console.log("");
 						var operationDate = JSON.parse(res.data.operationDate);
 						// console.log("operationDate : "+operationDate);
 
-						$("#opentime1").val(operationDate.data.opentime.substring(0,2));
-						$("#opentime2").val(operationDate.data.opentime.substring(3,5));
+						$("#opentime1").val(operationDate.data.opentime.split(':')[0]);
+						$("#opentime2").val(operationDate.data.opentime.split(':')[1]);
 
-						$("#closetime1").val(operationDate.data.closetime.substring(0,2));
-						$("#closetime2").val(operationDate.data.closetime.substring(3,5));
+						$("#closetime1").val(operationDate.data.closetime.split(':')[0]);
+						$("#closetime2").val(operationDate.data.closetime.split(':')[1]);
 
-						$("#dooropentime1").val(operationDate.data.dooropentime.substring(0,2));
-						$("#dooropentime2").val(operationDate.data.dooropentime.substring(3,5));
+						$("#dooropentime1").val(operationDate.data.dooropentime.split(':')[0]);
+						$("#dooropentime2").val(operationDate.data.dooropentime.split(':')[1]);
 
-						$("#doorclosetime1").val(operationDate.data.doorclosetime.substring(0,2));
-						$("#doorclosetime2").val(operationDate.data.doorclosetime.substring(3,5));
+						$("#doorclosetime1").val(operationDate.data.doorclosetime.split(':')[0]);
+						$("#doorclosetime2").val(operationDate.data.doorclosetime.split(':')[1]);
 
 						$("#motiontimer").val(operationDate.data.motiontimer);
 
@@ -119,7 +163,6 @@
 						}
 
 					}
-
 				}
 			});
 		}
@@ -131,7 +174,12 @@
 <div class="wrap">
     <div class="console">
         <div class="infobox">
-            <h2 class="info-title">Manager Mode</h2>
+            <h2 class="info-title">Manager Mode
+				<ul>
+					<li><a href="/admindashboard/system" class="up-icon"><img src="/assets/images/btn_setting.png" alt=""/></a></li>
+					<li><a id="passwordchange" href="#" class="up-icon"><img src="/assets/images/icon_password.png" alt=""/></a></li>
+				</ul>
+			</h2>
             <div class="datetime">
                 <span class="date">2021.01.18 월요일</span>
                 <span class="time">am 10:16</span>
@@ -179,7 +227,7 @@
         <div class="setting">
         	<ul class="setting__list">
         		<li>
-        			<h5 class="setting__title">open time</h5>
+        			<h5 class="setting__title">운영시간</h5>
         			<div class="setting__console">
 	        			<input type="number" id="opentime1" class="setting__input-text" placeholder="10" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
@@ -187,7 +235,7 @@
         			</div>
         		</li>
         		<li>
-        			<h5 class="setting__title">close time</h5>
+        			<h5 class="setting__title">비운영시간</h5>
         			<div class="setting__console">
 	        			<input type="number" id="closetime1" class="setting__input-text" placeholder="16" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
@@ -195,7 +243,7 @@
         			</div>
         		</li>
         		<li>
-        			<h5 class="setting__title">door open time</h5>
+        			<h5 class="setting__title">도어락 개방시간</h5>
         			<div class="setting__console">
 	        			<input type="number" id="dooropentime1" class="setting__input-text" placeholder="09" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
@@ -203,7 +251,7 @@
         			</div>
         		</li>
         		<li>
-        			<h5 class="setting__title">door close time</h5>
+        			<h5 class="setting__title">도어락 비개방시간</h5>
         			<div class="setting__console">
 	        			<input type="number" id="doorclosetime1" class="setting__input-text" placeholder="17" maxlength="2" oninput="numberMaxLength(this);" />
 	        			<span>:</span>
@@ -211,7 +259,7 @@
         			</div>
         		</li>
         		<li>
-        			<h5 class="setting__title">day of week</h5>
+        			<h5 class="setting__title">운영날</h5>
         			<div class="setting__console">
         				<ul>
         					<li>
@@ -246,9 +294,9 @@
         			</div>
         		</li>
         		<li>
-        			<h5 class="setting__title">motion timer</h5>
+        			<h5 class="setting__title">움직임 시간</h5>
         			<div class="setting__console">
-	        			<input type="number" id="motiontimer" class="setting__input-text" placeholder="30" maxlength="2" oninput="numberMaxLength(this);" />
+	        			<input type="number" id="motiontimer" class="setting__input-text" placeholder="30" maxlength="3" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
         	</ul>
