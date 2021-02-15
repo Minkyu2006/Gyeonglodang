@@ -28,7 +28,7 @@ public class AppRunner implements ApplicationRunner {
         //사용자저장
         Account account = Account.builder()
                 .userid("admin")
-                .password("1")
+                .password("123789")
                 .insertDateTime(LocalDateTime.now())
                 .role(AccountRole.ROLE_ADMIN)
                 .build();

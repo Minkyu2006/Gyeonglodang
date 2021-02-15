@@ -175,23 +175,6 @@ public class HomeDataRestController {
             data.put("electricDate",sensorData);
         }
 
-//        Consumer<HashMap<Object, Object>> pdk = (arg)->{  // 메시지를 받는 콜백 행위
-//            arg.forEach((key, value)->{
-//                System.out.println("값 : "+value);
-//            });
-//        };
-//
-//        MyMqttClient client = new MyMqttClient(pdk);
-//
-//        client.initConnectionLost( (arg)->{  // 서버와의 연결이 끊기면 동작
-//            arg.forEach((key, value)->{
-//                System.out.println( String.format("커넥션 끊김 키 -> %s, 값 -> %s", key, value) );
-//            });
-//        });
-//
-//        client.init(BROADWAVE_USERNAME, BROADWAVE_PASSWORD, BROADWAVE_URL,"notice");
-//        client.subscribe("notice/alert");
-
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
 

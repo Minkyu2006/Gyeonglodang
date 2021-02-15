@@ -1,33 +1,27 @@
 package kr.co.broadwave.homeservice.admin;
 
+import kr.co.broadwave.homeservice.api.system.SystemService;
 import kr.co.broadwave.homeservice.common.AjaxResponse;
 import kr.co.broadwave.homeservice.common.CommonUtils;
 import kr.co.broadwave.homeservice.homedata.HomeData;
 import kr.co.broadwave.homeservice.homedata.HomeDataService;
-import kr.co.broadwave.homeservice.mqttsetting.MyMqttClient;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+import java.util.*;
 
 /**
  * @author 민규
@@ -44,20 +38,24 @@ public class AdminHomeDataRestController {
     private final ModelMapper modelMapper;
     private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
+    private final SystemService systemService;
 
     @Autowired
     public AdminHomeDataRestController(HomeDataService homeDataService,
                                        ModelMapper modelMapper,
+                                       SystemService systemService,
                                        AccountService accountService,
                                        PasswordEncoder passwordEncoder) {
         this.homeDataService = homeDataService;
         this.modelMapper = modelMapper;
+        this.systemService = systemService;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
     }
 
     // 관리자페이지 전용(모든 온도나타내기)
     @PostMapping("adminTempDataInfo")
+
     public ResponseEntity<Map<String,Object>> adminTempDataInfo(){
 
         AjaxResponse res = new AjaxResponse();
@@ -102,7 +100,7 @@ public class AdminHomeDataRestController {
 
     // 관리자페이지 전용(메뉴데이터)
     @PostMapping("adminMenuDataInfo")
-    public ResponseEntity<Map<String,Object>> adminMenuDataInfo(){
+    public ResponseEntity<Map<String,Object>> adminMenuDataInfo() throws ParseException {
 
         AjaxResponse res = new AjaxResponse();
         HashMap<String, Object> data = new HashMap<>();
@@ -166,6 +164,27 @@ public class AdminHomeDataRestController {
             log.info("가전전원 데이터 : "+electric);
             data.put("electricDate",sensorData);
         }
+
+        // 방목록가져오기
+//        String rooms = systemService.callURL("http://square.abrain.co.kr:8080/square/operation/commonSetting/room?system_id=S002");
+//        log.info("rooms : "+rooms);
+//        JSONParser jsonParser = new JSONParser();
+//        JSONObject roomJsonData = (JSONObject) jsonParser.parse(rooms);
+//        log.info("roomJsonData : "+roomJsonData);
+//
+//        JSONObject roomObject = (JSONObject) roomJsonData.get("data");
+//        log.info("roomObject : "+roomObject);
+//
+//        List<String> rommName = new ArrayList<>();
+//        rommName.add((String) roomObject.get("SS021"));
+//        rommName.add((String) roomObject.get("SS022"));
+//        rommName.add((String) roomObject.get("SS023"));
+//        rommName.add((String) roomObject.get("SS024"));
+//        rommName.add((String) roomObject.get("SS025"));
+//        log.info("rommName : "+rommName);
+//        for(int i=0; i<roomObject.size(); i++){
+//            log.info("rommName : "+i+"번째 "+rommName.get(i));
+//        }
 
         res.addResponse("data",data);
         return ResponseEntity.ok(res.success());
