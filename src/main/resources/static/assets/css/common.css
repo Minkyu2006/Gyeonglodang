@@ -123,6 +123,30 @@ button {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+.btn__refresh {
+	position: absolute;
+	top: 30px;
+	right: 60px;
+	height: 60px;
+	padding: 0 6px;
+	background-color: #fff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 0 none;
+	color: #303030;
+	font-size: 24px;
+	line-height: 60px;
+	font-weight: 700;
+	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, .2);
+	box-shadow: 0 1px  5px rgba(0, 0, 0, .2);
+	outline: none;
+}
+.btn__refresh img {
+	height: 48px;
+	margin-top: 6px;
+}
 
 /* button-list */
 .button-list {}
