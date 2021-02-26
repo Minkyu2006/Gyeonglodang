@@ -94,7 +94,7 @@
 
                         if (doorsensor.SS023dr01 === "on")  doorCheckRm3 = true
                         if (doorsensor.SS023dr02 === "on")  doorCheckRm3 = true
-                        if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
+                        // if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
 
                         if(doorCheckRm3){
                             let doorType= "";
@@ -113,15 +113,11 @@
                         // 화재 셋팅
                         console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
                         var smoke = JSON.parse(res.data.smoke.r_data);
-                        console.log('smoke 상태 : ' + smoke.SS021sm01);
+                        console.log('smoke 상태 : ' + smoke.SS023sm01);
                         console.log('');
 
                         let checkSmoke = false;
-                        if (smoke.SS021sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS022sm01 === "detected") checkSmoke = true;
                         if (smoke.SS023sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS024sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS025sm01 === "detected") checkSmoke = true;
 
                         var $smoke = $('#smoke');
                         if (checkSmoke){

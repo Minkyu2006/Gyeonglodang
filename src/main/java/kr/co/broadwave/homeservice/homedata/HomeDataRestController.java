@@ -122,7 +122,7 @@ public class HomeDataRestController {
             data.put("aircondition","");
         }else{
             sensorData = aircondition.get();
-            log.info("날씨 데이터 : "+sensorData);
+            log.info("에어컨 데이터 : "+sensorData);
             data.put("aircondition",sensorData);
         }
 
@@ -370,9 +370,9 @@ public class HomeDataRestController {
             try {
                 Thread.sleep(100);
                 if(value.equals("ON")){
-                    client.sender("command/smart/aircon/rm1on","{\"Dashboard\":\"airONCommand\"}");
+                    client.sender("command/smart/aircon/rm1on","{\"Dashboard\":\"air1ONCommand\"}");
                 }else{
-                    client.sender("command/smart/aircon/rm1off","{\"Dashboard\":\"airOFFCommand\"}");
+                    client.sender("command/smart/aircon/rm1off","{\"Dashboard\":\"air1OFFCommand\"}");
                 }
                 client.close();
             } catch (Exception e) {
@@ -396,9 +396,9 @@ public class HomeDataRestController {
             try {
                 Thread.sleep(100);
                 if(value.equals("ON")){
-                    client.sender("command/smart/aircon/rm2on","{\"Dashboard\":\"airONCommand\"}");
+                    client.sender("command/smart/aircon/rm2on","{\"Dashboard\":\"air2ONCommand\"}");
                 }else{
-                    client.sender("command/smart/aircon/rm2off","{\"Dashboard\":\"airOFFCommand\"}");
+                    client.sender("command/smart/aircon/rm2off","{\"Dashboard\":\"air2OFFCommand\"}");
                 }
                 client.close();
             } catch (Exception e) {
@@ -422,9 +422,9 @@ public class HomeDataRestController {
             try {
                 Thread.sleep(100);
                 if(value.equals("ON")){
-                    client.sender("command/smart/aircon/rm3on","{\"Dashboard\":\"airONCommand\"}");
+                    client.sender("command/smart/aircon/rm3on","{\"Dashboard\":\"air3ONCommand\"}");
                 }else{
-                    client.sender("command/smart/aircon/rm3off","{\"Dashboard\":\"airOFFCommand\"}");
+                    client.sender("command/smart/aircon/rm3off","{\"Dashboard\":\"air3OFFCommand\"}");
                 }
                 client.close();
             } catch (Exception e) {

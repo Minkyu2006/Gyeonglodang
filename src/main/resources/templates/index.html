@@ -23,46 +23,124 @@
                 e.preventDefault();
             })
 
+			var airconditionState;
             // 에어컨 온오프버튼
             $('#airBtn').on('click', function() {
                 $(this).toggleClass('active');
                 if ($(this).hasClass('aircon active')) {
                     console.log("에어컨온")
                     integratedFun("air","ON");
+					airconditionState = true;
                 }else{
                     console.log("에어컨오프")
                     integratedFun("air","OFF");
+					airconditionState = false;
+                }
+
+                var $air1 = $('#air1');
+				var $air2 = $('#air2');
+				var $air3 = $('#air3');
+                if(airconditionState){
+					if(!$air1.hasClass('aircon active')) {
+						$air1.toggleClass('active');
+					}
+					if(!$air2.hasClass('aircon active')) {
+						$air2.toggleClass('active');
+					}
+					if(!$air3.hasClass('aircon active')) {
+						$air3.toggleClass('active');
+					}
+				}else{
+					if($air1.hasClass('aircon active')) {
+						$air1.removeClass('active');
+					}
+					if($air2.hasClass('aircon active')) {
+						$air2.removeClass('active');
+					}
+					if($air3.hasClass('aircon active')) {
+						$air3.removeClass('active');
+					}
                 }
             })
 
             $('#air1').on('click', function() {
-                $(this).toggleClass('active');
+				$(this).toggleClass('active');
+				var airconditionCheck;
 				if ($(this).hasClass('aircon active')) {
-					console.log("거실 에어컨온")
+					console.log("거실 에어컨온");
 					integratedFun("air1","ON");
+					airconditionCheck = true;
+				}else {
+					console.log("에어컨오프");
+					integratedFun("air1", "OFF");
+					if($('#air2').hasClass('aircon active')){
+						airconditionCheck = true;
+					}
+					if($('#air3').hasClass('aircon active')){
+						airconditionCheck = true;
+					}
+				}
+				var $airBtn = $('#airBtn');
+				if (!airconditionCheck) {
+					$airBtn.removeClass("active");
 				}else{
-					console.log("에어컨오프")
-					integratedFun("air1","OFF");
+					if(!$airBtn.hasClass('aircon active')) {
+						$airBtn.toggleClass('active');
+					}
 				}
             })
+
             $('#air2').on('click', function() {
-                $(this).toggleClass('active');
+				$(this).toggleClass('active');
+				var airconditionCheck;
 				if ($(this).hasClass('aircon active')) {
-					console.log("주방 에어컨온")
+					console.log("주방 에어컨온");
 					integratedFun("air2","ON");
+					airconditionCheck = true;
 				}else{
-					console.log("에어컨오프")
+					console.log("에어컨오프");
 					integratedFun("air2","OFF");
+					if($('#air1').hasClass('aircon active')){
+						airconditionCheck = true;
+					}
+					if($('#air3').hasClass('aircon active')){
+						airconditionCheck = true;
+					}
 				}
-            })
-            $('#air3').on('click', function() {
-                $(this).toggleClass('active');
-				if ($(this).hasClass('aircon active')) {
-					console.log("안방 에어컨온")
-					integratedFun("air3","ON");
+				var $airBtn = $('#airBtn');
+				if (!airconditionCheck) {
+					$airBtn.removeClass("active");
 				}else{
-					console.log("안방 에어컨오프")
+					if(!$airBtn.hasClass('aircon active')) {
+						$airBtn.toggleClass('active');
+					}
+				}
+			})
+
+            $('#air3').on('click', function() {
+				$(this).toggleClass('active');
+				var airconditionCheck;
+				if ($(this).hasClass('aircon active')) {
+					console.log("안방 에어컨온");
+					integratedFun("air3","ON");
+					airconditionCheck = true;
+				}else{
+					console.log("안방 에어컨오프");
 					integratedFun("air3","OFF");
+					if($('#air1').hasClass('aircon active')){
+						airconditionCheck = true;
+					}
+					if($('#air2').hasClass('aircon active')){
+						airconditionCheck = true;
+					}
+				}
+				var $airBtn = $('#airBtn');
+				if (!airconditionCheck) {
+					$airBtn.removeClass("active");
+				}else{
+					if(!$airBtn.hasClass('aircon active')) {
+						$airBtn.toggleClass('active');
+					}
 				}
             })
 
@@ -334,7 +412,6 @@
                 },
                 success: function (res) {
 
-
                     // 조명셋팅
 					if(res.data.lightData !== ''){
 						//todo 조명이 하나라도 켜있으면 On 할것
@@ -348,17 +425,15 @@
 						if (light.SS021ls101 === "on")  lightCheck = true
 						if (light.SS021ls102 === "on")  lightCheck = true
 						if (light.SS021ls103 === "on")  lightCheck = true
-						if (light.SS021ls201 === "on")  lightCheck = true
-						if (light.SS021ls202 === "on")  lightCheck = true
 						if (light.SS021ls203 === "on")  lightCheck = true
 						if (light.SS021ls204 === "on")  lightCheck = true
 
 						if (light.SS022ls101 === "on")  lightCheck = true
-						if (light.SS022ls102 === "on")  lightCheck = true
-						if (light.SS022ls103 === "on")  lightCheck = true
 
 						if (light.SS023ls101 === "on")  lightCheck = true
+
 						if (light.SS024ls101 === "on")  lightCheck = true
+
 						if (light.SS025ls101 === "on")  lightCheck = true
 
 						var $lightBtn = $('#lightBtn');
@@ -545,7 +620,6 @@
 						$("#nowHum").text(Number(weather.humidity).toFixed(0) + "%");
 						$("#nowWindSpeed").text(Number(weather.wind_speed).toFixed(1) + "km/h");
 
-
 						var today = new Date();
 						var d = 1;
 						for (i = 0; i < 4; i++) {
@@ -571,9 +645,12 @@
 						let doorCheckRm5 =false; //창고
 
 						if (doorsensor.SS021dr01 === "on")  doorCheckRm1 = true
-						if (doorsensor.SS022dr02 === "on")  doorCheckRm1 = true
-						if (doorsensor.SS023dr03 === "on")  doorCheckRm1 = true
+						if (doorsensor.SS021dr02 === "on")  doorCheckRm1 = true
+						if (doorsensor.SS021dr03 === "on")  doorCheckRm1 = true
+						if (doorsensor.SS021dr04 === "on")  doorCheckRm1 = true
 
+						if (doorsensor.SS022dr01 === "on")  doorCheckRm2 = true
+						if (doorsensor.SS022dr02 === "on")  doorCheckRm2 = true
 						if (doorsensor.SS022dr03 === "on")  doorCheckRm2 = true
 						if (doorsensor.SS022dr04 === "on")  doorCheckRm2 = true
 						if (doorsensor.SS022dr05 === "on")  doorCheckRm2 = true
@@ -582,7 +659,7 @@
 
 						if (doorsensor.SS023dr01 === "on")  doorCheckRm3 = true
 						if (doorsensor.SS023dr02 === "on")  doorCheckRm3 = true
-						if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
+						// if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
 
 						if (doorsensor.SS024dr01 === "on")  doorCheckRm4 = true
 						if (doorsensor.SS024dr02 === "on")  doorCheckRm4 = true
@@ -649,8 +726,8 @@
 
 
                 }
-            });setWeatherIcon
-        }
+			});
+		}
         //날씨아이콘 바꾸는 함수
 		function setWeatherIcon(elimentId,weatherType){
 

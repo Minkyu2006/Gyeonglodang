@@ -162,6 +162,7 @@ public class AdminHomeDataRestController {
         }else{
             sensorData = electric.get();
             log.info("가전전원 데이터 : "+electric);
+            System.out.println();
             data.put("electricDate",sensorData);
         }
 

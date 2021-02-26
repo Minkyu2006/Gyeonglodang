@@ -93,6 +93,8 @@
 
 						let doorCheckRm2 =false; //주방
 
+						if (doorsensor.SS022dr01 === "on")  doorCheckRm2 = true
+						if (doorsensor.SS022dr02 === "on")  doorCheckRm2 = true
 						if (doorsensor.SS022dr03 === "on")  doorCheckRm2 = true
 						if (doorsensor.SS022dr04 === "on")  doorCheckRm2 = true
 						if (doorsensor.SS022dr05 === "on")  doorCheckRm2 = true
@@ -132,15 +134,11 @@
 
 						console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
 						var smoke = JSON.parse(res.data.smoke.r_data);
-						console.log('smoke 상태 : ' + smoke.SS021sm01);
+						console.log('smoke 상태 : ' + smoke.SS022sm01);
 						console.log('');
 
 						let checkSmoke = false;
-						if (smoke.SS021sm01 === "detected") checkSmoke = true;
 						if (smoke.SS022sm01 === "detected") checkSmoke = true;
-						if (smoke.SS023sm01 === "detected") checkSmoke = true;
-						if (smoke.SS024sm01 === "detected") checkSmoke = true;
-						if (smoke.SS025sm01 === "detected") checkSmoke = true;
 
 						var $smoke = $('#smoke');
 						if (checkSmoke){

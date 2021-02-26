@@ -224,10 +224,10 @@
 				success: function (res) {
 
 					if (res.data.operationDate !== '') {
-						// console.log("운영정책 데이터 system_id=S002 : "+res.data.operationDate);
-						// console.log("");
+						console.log("운영정책 데이터 system_id=S002 : "+res.data.operationDate);
+						console.log("");
 						var operationDate = JSON.parse(res.data.operationDate);
-						// console.log("operationDate : "+operationDate);
+						console.log("operationDate : "+operationDate);
 
 						$("#opentime1").val(operationDate.data.opentime.split(':')[0]);
 						$("#opentime2").val(operationDate.data.opentime.split(':')[1]);

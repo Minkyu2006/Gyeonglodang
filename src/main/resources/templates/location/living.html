@@ -92,9 +92,10 @@
                         var doorsensor = JSON.parse(res.data.doorsensor.r_data);
                         let doorCheckRm1 =false; //거실
 
-                        if (doorsensor.SS021dr01 ==="on")  doorCheckRm1 = true
-                        if (doorsensor.SS021dr02 ==="on")  doorCheckRm1 = true
-                        if (doorsensor.SS021dr03 ==="on")  doorCheckRm1 = true
+                        if (doorsensor.SS021dr01 === "on")  doorCheckRm1 = true
+                        if (doorsensor.SS021dr02 === "on")  doorCheckRm1 = true
+                        if (doorsensor.SS021dr03 === "on")  doorCheckRm1 = true
+                        if (doorsensor.SS021dr04 === "on")  doorCheckRm1 = true
 
                         if(doorCheckRm1){
                             let doorType= "";
@@ -116,10 +117,6 @@
 
                         let checkSmoke = false;
                         if (smoke.SS021sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS022sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS023sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS024sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS025sm01 === "detected") checkSmoke = true;
 
                         var $smoke = $('#smoke');
                         if (checkSmoke){
