@@ -1170,6 +1170,9 @@ a.console-button {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+.setting__list .setting__list > li {
+	padding: 0;
+}
 .setting__title {
 	color: #303030;
 	font-size: 30px;
