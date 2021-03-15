@@ -13,6 +13,19 @@
             AutoStart();
 			operlationGet();
 			setInterval(operlationGet, 60000); // 1분마다 데이터불러와 실행
+			
+			var sensorInput = '<li><input type="text" class="sensor__input" /><button class="sensor__delete">삭제</button></li>'
+			
+			$('.sensor__add').on('click', function() {
+				var list = $(this).parent('.sensor__head').next().children();
+				console.log(list)
+				list.append(sensorInput);
+			})
+			
+			$('.sensor__body ul li .sensor__delete').on('click', function() {
+				$(this).parent('li').remove();
+				console.log('remove');
+			})
         })
 
 		// 글자제한함수
@@ -325,9 +338,8 @@
         </div>
 
         <div class="setting">
-
+			<!-- 
 			<ul>
-
 				<li>
 					<h5 class="setting__title">test1</h5>
 					<div class="setting__console">
@@ -341,8 +353,53 @@
 						<input type="number" id="test2" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
 					</div>
 				</li>
-
 			</ul>
+			 -->
+			 
+			<div class="sensor">
+				<div class="sensor__head">
+					<h4 class="sensor__title">연기센서</h4>
+					<button class="sensor__add">추가</button>
+				</div>
+				<div class="sensor__body">
+					<ul>
+						<li>
+							<input type="text" class="sensor__input" />
+							<button class="sensor__delete">삭제</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="sensor">
+				<div class="sensor__head">
+					<h4 class="sensor__title">가스센서</h4>
+					<button class="sensor__add">추가</button>
+				</div>
+				<div class="sensor__body">
+					<ul>
+						<li>
+							<input type="text" class="sensor__input" />
+							<button class="sensor__delete">삭제</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="sensor">
+				<div class="sensor__head">
+					<h4 class="sensor__title">멀티센서</h4>
+					<button class="sensor__add">추가</button>
+				</div>
+				<div class="sensor__body">
+					<ul>
+						<li>
+							<input type="text" class="sensor__input" />
+							<button class="sensor__delete">삭제</button>
+						</li>
+					</ul>
+				</div>
+			</div>
 
 			<button onclick="operlationPut()" class="setting__btn">저장</button>
         </div>
