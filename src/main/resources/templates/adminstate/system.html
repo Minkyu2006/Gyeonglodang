@@ -186,6 +186,40 @@
 				return;
 			}
 
+			var aircon_monthdate_from = $("#aircon_monthdate_from").val();
+			var aircon_monthdate_to = $("#aircon_monthdate_to").val();
+			var aircon_tmp_from = $("#aircon_tmp_from").val();
+			var aircon_tmp_to = $("#aircon_tmp_to").val();
+
+			if(aircon_monthdate_from===""){
+				alertCaution("에어컨날짜 from을 셋팅해주세요.");
+				return;
+			}else{
+				if(aircon_monthdate_from.length!==4){
+					alertCaution("에어컨날짜 from을 확인해주세요.\nex)00월00일");
+					return;
+				}
+			}
+			if(aircon_monthdate_to===""){
+				alertCaution("에어컨날짜 to를 셋팅해주세요.");
+				return;
+			}else{
+				if(aircon_monthdate_to.length!==4){
+					alertCaution("에어컨날짜 to를 확인해주세요.\nex)00월00일");
+					return;
+				}
+			}
+
+			if(aircon_tmp_from===""){
+				alertCaution("에어컨온도 from을 셋팅해주세요.");
+				return;
+			}
+			if(aircon_tmp_to===""){
+				alertCaution("에어컨온도 to을 셋팅해주세요.");
+				return;
+			}
+
+
 			var settings = {
 				"url": "http://square.abrain.co.kr:8080/square/operation/commonSetting?system_id=S002",
 				"method": "PUT",
@@ -198,7 +232,11 @@
 										"dooropentime":dooropentime,
 										"doorclosetime":doorclosetime,
 										"dayofweek":dayofweek,
-										"motiontimer":motiontimer}),
+										"motiontimer":motiontimer,
+										"aircon_monthdate_from":aircon_monthdate_from,
+										"aircon_monthdate_to":aircon_monthdate_to,
+										"aircon_tmp_from":aircon_tmp_from,
+										"aircon_tmp_to":aircon_tmp_to}),
 			};
 
 			$.ajax(settings).done(function (response) {
@@ -326,6 +364,7 @@
 
         <div class="setting">
         	<ul class="setting__list">
+
         		<li>
         			<ul class="setting__list">
         				<li>
@@ -362,51 +401,9 @@
 			        			<input type="number" id="doorclosetime1" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 			        			<span>:</span>
 								<input type="number" id="doorclosetime2" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
-		<!--	        			<input type="number" id="doorclosetime2" class="setting__input-text" placeholder="00" maxlength="2" oninput="numberMaxLength(this);" />-->
 		        			</div>
         				</li>
         			</ul>
-        		</li>
-        		<li>
-        			<h5 class="setting__title">운영날</h5>
-        			<div class="setting__console">
-        				<ul>
-        					<li>
-	        					<input id="dayofweek0" type="checkbox" class="setting__input-check" />
-	        					<label for="dayofweek0" class="setting__label">일</label>
-        					</li>
-        					<li>
-	        					<input id="dayofweek1" type="checkbox" class="setting__input-check" />
-	        					<label for="dayofweek1" class="setting__label">월</label>
-        					</li>
-        					<li>
-	        					<input id="dayofweek2" type="checkbox" class="setting__input-check" />
-	        					<label for="dayofweek2" class="setting__label">화</label>
-        					</li>
-        					<li>
-	        					<input id="dayofweek3" type="checkbox" class="setting__input-check" />
-	        					<label for="dayofweek3" class="setting__label">수</label>
-        					</li>
-        					<li>
-	        					<input id="dayofweek4" type="checkbox" class="setting__input-check" />
-	        					<label for="dayofweek4" class="setting__label">목</label>
-        					</li>
-        					<li>
-	        					<input id="dayofweek5" type="checkbox" class="setting__input-check" />
-	        					<label for="dayofweek5" class="setting__label">금</label>
-        					</li>
-							<li>
-								<input id="dayofweek6" type="checkbox" class="setting__input-check" />
-								<label for="dayofweek6" class="setting__label">토</label>
-							</li>
-        				</ul>
-        			</div>
-        		</li>
-        		<li>
-        			<h5 class="setting__title">움직임 시간</h5>
-        			<div class="setting__console">
-	        			<input type="number" id="motiontimer" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
-        			</div>
         		</li>
 
 				<li>
@@ -414,13 +411,13 @@
 						<li>
 							<h5 class="setting__title">에어컨날짜 from</h5>
 						<div class="setting__console">
-							<input type="number" id="aircon_monthdate_from" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+							<input type="number" id="aircon_monthdate_from" class="setting__input-text" maxlength="4" oninput="numberMaxLength(this);" />
 						</div>
 						</li>
 						<li>
 							<h5 class="setting__title">에어컨날짜 to</h5>
 							<div class="setting__console">
-								<input type="number" id="aircon_monthdate_to" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+								<input type="number" id="aircon_monthdate_to" class="setting__input-text" maxlength="4" oninput="numberMaxLength(this);" />
 							</div>
 						</li>
 					</ul>
@@ -430,17 +427,60 @@
 						<li>
 							<h5 class="setting__title">에어컨온도 from</h5>
 							<div class="setting__console">
-								<input type="number" id="aircon_tmp_from" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+								<input type="number" id="aircon_tmp_from" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 							</div>
 						</li>
 						<li>
 							<h5 class="setting__title">에어컨온도 to</h5>
 							<div class="setting__console">
-								<input type="number" id="aircon_tmp_to" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+								<input type="number" id="aircon_tmp_to" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 							</div>
 						</li>
 					</ul>
 				</li>
+
+				<li>
+					<h5 class="setting__title">운영날</h5>
+					<div class="setting__console">
+						<ul>
+							<li>
+								<input id="dayofweek0" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek0" class="setting__label">일</label>
+							</li>
+							<li>
+								<input id="dayofweek1" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek1" class="setting__label">월</label>
+							</li>
+							<li>
+								<input id="dayofweek2" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek2" class="setting__label">화</label>
+							</li>
+							<li>
+								<input id="dayofweek3" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek3" class="setting__label">수</label>
+							</li>
+							<li>
+								<input id="dayofweek4" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek4" class="setting__label">목</label>
+							</li>
+							<li>
+								<input id="dayofweek5" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek5" class="setting__label">금</label>
+							</li>
+							<li>
+								<input id="dayofweek6" type="checkbox" class="setting__input-check" />
+								<label for="dayofweek6" class="setting__label">토</label>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h5 class="setting__title">움직임 시간</h5>
+					<div class="setting__console">
+						<input type="number" id="motiontimer" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+					</div>
+				</li>
+
         	</ul>
 			<button onclick="operlationPut()" class="setting__btn">저장</button>
         </div>
