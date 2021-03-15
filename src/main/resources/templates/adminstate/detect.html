@@ -11,29 +11,19 @@
             dataInfo();
             realTime();
             AutoStart();
-			operlationGet();
-			setInterval(operlationGet, 60000); // 1분마다 데이터불러와 실행
+			detectGet();
+			setInterval(detectGet, 60000); // 1분마다 데이터 불러와 실행
 			
 			var sensorInput = '<li><input type="text" class="sensor__input" /><button class="sensor__delete">삭제</button></li>'
-			
 			$('.sensor__add').on('click', function() {
 				var list = $(this).parent('.sensor__head').next().children();
-				console.log(list)
 				list.append(sensorInput);
-			})
-			
-			$('.sensor__body ul li .sensor__delete').on('click', function() {
+			});
+            $('.sensor__body ul').on('click', '.sensor__delete', function() {
 				$(this).parent('li').remove();
-				console.log('remove');
-			})
-        })
+			});
 
-		// 글자제한함수
-		function numberMaxLength(e){
-			if(e.value.length > e.maxLength){
-				e.value = e.value.slice(0, e.maxLength);
-			}
-		}
+        })
 
         // 데이터 받아오는 함수
         function dataInfo() {
@@ -84,155 +74,94 @@
             });
         }
 
-		// // todo 운영정책 데이터 보내기
-        // function operlationPut() {
-		//
-        // 	// 기존 기본값
-		// 	// "opentime": "10:00",
-		// 	// "closetime": "16:00",
-		// 	// "dooropentime": "09:30",
-		// 	// "doorclosetime": "17:00",
-		// 	// "dayofweek": "1111111",
-		// 	// "motiontimer": "30"
-		//
-		// 	var $opentime1 = $("#opentime1").val();
-		// 	var $opentime2 = $("#opentime2").val();
-		// 	var opentime,opentime1Val,opentime2Val;
-		// 	if($opentime1==="" || $opentime2===""){
-		// 		alertCaution("운영시간을 입력해주세요.");
-		// 		return;
-		// 	}
-		// 	else{
-		// 		if($opentime1.length===1){
-		// 			opentime1Val = "0"+$opentime1;
-		// 		}else{
-		// 			opentime1Val = $opentime1;
-		// 		}
-		// 		if($opentime2.length===1){
-		// 			opentime2Val = "0"+$opentime2;
-		// 		}else{
-		// 			opentime2Val = $opentime2;
-		// 		}
-		// 		opentime = opentime1Val+":"+opentime2Val;
-		// 	}
-		//
-		// 	var $closetime1 = $("#closetime1").val();
-		// 	var $closetime2 = $("#closetime2").val();
-		// 	var closetime,closetime1Val,closetime2Val;
-		// 	if($closetime1==="" || $closetime2===""){
-		// 		alertCaution("비운영시간을 입력해주세요.");
-		// 		return;
-		// 	}
-		// 	else{
-		// 		if($closetime1.length===1){
-		// 			closetime1Val = "0"+$closetime1;
-		// 		}else{
-		// 			closetime1Val = $closetime1;
-		// 		}
-		// 		if($closetime2.length===1){
-		// 			closetime2Val = "0"+$closetime2;
-		// 		}else{
-		// 			closetime2Val = $closetime2;
-		// 		}
-		// 		closetime = closetime1Val+":"+closetime2Val;
-		// 	}
-		//
-		// 	var $dooropentime1 = $("#dooropentime1").val();
-		// 	var $dooropentime2 = $("#dooropentime2").val();
-		// 	var dooropentime,dooropentime1Val,dooropentime2Val;
-		// 	if($dooropentime1==="" || $dooropentime2===""){
-		// 		alertCaution("도어락 개방시간을 입력해주세요.");
-		// 		return;
-		// 	}
-		// 	else{
-		// 		if($dooropentime1.length===1){
-		// 			dooropentime1Val = "0"+$dooropentime1;
-		// 		}else{
-		// 			dooropentime1Val = $dooropentime1;
-		// 		}
-		// 		if($dooropentime2.length===1){
-		// 			dooropentime2Val = "0"+$dooropentime2;
-		// 		}else{
-		// 			dooropentime2Val = $dooropentime2;
-		// 		}
-		// 		dooropentime = dooropentime1Val+":"+dooropentime2Val;
-		// 	}
-		//
-		// 	var $doorclosetime1 = $("#doorclosetime1").val();
-		// 	var $doorclosetime2 = $("#doorclosetime2").val();
-		// 	var doorclosetime,doorclosetime1Val,doorclosetime2Val;
-		// 	if($doorclosetime1==="" || $doorclosetime2===""){
-		// 		alertCaution("도어락 비개방시간을 입력해주세요.");
-		// 		return;
-		// 	}
-		// 	else{
-		// 		if($doorclosetime1.length===1){
-		// 			doorclosetime1Val = "0"+$doorclosetime1;
-		// 		}else{
-		// 			doorclosetime1Val = $doorclosetime1;
-		// 		}
-		// 		if($doorclosetime2.length===1){
-		// 			doorclosetime2Val = "0"+$doorclosetime2;
-		// 		}else{
-		// 			doorclosetime2Val = $doorclosetime2;
-		// 		}
-		// 		doorclosetime = doorclosetime1Val+":"+doorclosetime2Val;
-		// 	}
-		//
-		// 	var dayofweek = "";
-		// 	for(i=0; i<=6; i++){
-		// 		if($("#dayofweek"+i).is(":checked") === true){
-		// 			dayofweek += "1";
-		// 		}else{
-		// 			dayofweek += "0";
-		// 		}
-		// 	}
-		//
-		// 	if(dayofweek==="0000000"){
-		// 		alertCaution("운영날을 선택해주세요.");
-		// 		return;
-		// 	}
-		//
-		// 	var motiontimer = $("#motiontimer").val();
-		// 	if(motiontimer===""){
-		// 		alertCaution("움직임 시간을 입력해주세요.");
-		// 		return;
-		// 	}
-		//
-		// 	var settings = {
-		// 		"url": "http://square.abrain.co.kr:8080/square/operation/commonSetting?system_id=S002",
-		// 		"method": "PUT",
-		// 		"timeout": 0,
-		// 		"headers": {
-		// 			"Content-Type": "application/json"
-		// 		},
-		// 		"data": JSON.stringify({"opentime":opentime,
-		// 								"closetime":closetime,
-		// 								"dooropentime":dooropentime,
-		// 								"doorclosetime":doorclosetime,
-		// 								"dayofweek":dayofweek,
-		// 								"motiontimer":motiontimer}),
-		// 	};
-		//
-		// 	$.ajax(settings).done(function (response) {
-		// 		console.log(response);
-		// 		alertSuccess("저장되었습니다.");
-		// 		operlationGet();
-		// 	});
-		// }
+		// todo 디텍트 데이터 보내기
+        function detectPut() {
+
+            var $smokeUl = $("#smokeUl");
+            var $gasUl = $("#gasUl");
+            var $motionUl = $("#motionUl");
+
+            var smokedetector = [];
+            var gasdetector = [];
+            var motionsensorchecklist = [];
+
+            var value;
+            $smokeUl.children().each(function(){
+                value = $(this).children('.sensor__input').val();
+                console.log("value : "+value);
+                if(value===""){
+
+                }else if(value===undefined){
+
+                }else{
+                    smokedetector.push({"id":value});
+                }
+            });
+            console.log("smokedetector : "+smokedetector);
+
+            $gasUl.children().each(function(){
+                value = $(this).children('.sensor__input').val();
+                console.log("value : "+value);
+                if(value===""){
+
+                }else if(value===undefined){
+
+                }else{
+                    gasdetector.push({"id":value});
+                }
+            });
+            console.log("gasdetector : "+gasdetector);
+
+            $motionUl.children().each(function(){
+                value = $(this).children('.sensor__input').val();
+                console.log("value : "+value);
+                if(value===""){
+
+                }else if(value===undefined){
+
+                }else{
+                    motionsensorchecklist.push({"id":value});
+                }
+            });
+            console.log("motionsensorchecklist : "+motionsensorchecklist);
+
+			var settings = {
+				"url": "http://square.abrain.co.kr:8080/square/operation/detector?system_id=S002",
+				"method": "PUT",
+				"timeout": 0,
+				"headers": {
+					"Content-Type": "application/json"
+				},
+				"data": JSON.stringify({"smokedetector":smokedetector,
+										"gasdetector":gasdetector,
+										"motionsensorchecklist":motionsensorchecklist}),
+			};
+
+			$.ajax(settings).done(function (response) {
+                console.log("response : "+response);
+				if(response==="400"){
+                    alertSuccess("필수 입력 요소가 누락되었거나 값이 잘못되었습니다.");
+                }
+				alertSuccess("저장되었습니다.");
+                detectGet();
+			});
+
+		}
 
 		// todo 운영정책 데이터 가져오기.
-		function operlationGet() {
+		function detectGet() {
+
 			var params = {
 				value : "http://square.abrain.co.kr:8080/square/operation/detector?system_id=S002"
 			};
+
 			$.ajax({
 				url: '/apiData/operationGet',
 				type: 'post',
 				data: params,
 				cache: false,
 				error: function () {
-					alert('운영정책 데이터받기 실패');
+					alert('디텍트 데이터받기 실패');
 				},
 				success: function (res) {
 
@@ -240,40 +169,60 @@
 						console.log("디텍트 셋팅데이터 system_id=S002 : "+res.data.operationDate);
 						console.log("");
 						var operationDate = JSON.parse(res.data.operationDate);
-						console.log("operationDate : "+operationDate);
-						//
-						// $("#opentime1").val(operationDate.data.opentime.split(':')[0]);
-						// $("#opentime2").val(operationDate.data.opentime.split(':')[1]);
-						//
-						// $("#closetime1").val(operationDate.data.closetime.split(':')[0]);
-						// $("#closetime2").val(operationDate.data.closetime.split(':')[1]);
-						//
-						// $("#dooropentime1").val(operationDate.data.dooropentime.split(':')[0]);
-						// $("#dooropentime2").val(operationDate.data.dooropentime.split(':')[1]);
-						//
-						// $("#doorclosetime1").val(operationDate.data.doorclosetime.split(':')[0]);
-						// $("#doorclosetime2").val(operationDate.data.doorclosetime.split(':')[1]);
-						//
-						// $("#motiontimer").val(operationDate.data.motiontimer);
-						//
-						// var dayofweek = operationDate.data.dayofweek;
-						// // console.log("dayofweek : "+dayofweek);
-						// for(i=0; i<dayofweek.length; i++){
-						// 	if(dayofweek.substring(i,i+1)==="1"){
-						// 		$("#dayofweek"+i).prop('checked', true);
-						// 	}
-						// }
-						//
-						// // 에어컨셋팅
-						// // from 에어컨날짜
-						// $("#aircon_monthdate_from").val(operationDate.data.aircon_monthdate_from);
-						// // to 에어컨날짜
-						// $("#aircon_monthdate_to").val(operationDate.data.aircon_monthdate_to);
-						//
-						// // from 에어컨온도
-						// $("#aircon_tmp_from").val(operationDate.data.aircon_tmp_from);
-						// // to 에어컨온도
-						// $("#aircon_tmp_to").val(operationDate.data.aircon_tmp_to);
+						// console.log("operationDate : "+operationDate);
+
+                        var smoke = [];
+                        var gas = [];
+                        var motion = [];
+
+                        var $smokeUl = $("#smokeUl");
+                        var $gasUl = $("#gasUl");
+                        var $motionUl = $("#motionUl");
+
+                        operationDate.data.smokedetector.forEach(function(item) {
+                            smoke.push(item.id)
+                        });
+                        console.log("smoke : "+smoke);
+                        $smokeUl.empty();
+                        var htmlSmoke = '';
+                        for(i=0; i<smoke.length; i++) {
+                            htmlSmoke += '<li>'
+                            htmlSmoke += '<input type="text" value="'+smoke[i]+'" class="sensor__input" />'
+                            htmlSmoke += '<button class="sensor__delete">삭제</button>'
+                            htmlSmoke += '</li>'
+                        }
+                        $smokeUl.append(htmlSmoke);
+
+
+                        operationDate.data.gasdetector.forEach(function(item) {
+                            gas.push(item.id)
+                        });
+                        console.log("gas : "+gas);
+                        $gasUl.empty();
+                        var htmlGas = '';
+                        for(i=0; i<gas.length; i++) {
+                            htmlGas += '<li>'
+                            htmlGas += '<input type="text" value="'+gas[i]+'" class="sensor__input" />'
+                            htmlGas += '<button class="sensor__delete">삭제</button>'
+                            htmlGas += '</li>'
+                        }
+                        $gasUl.append(htmlGas);
+
+
+                        operationDate.data.motionsensorchecklist.forEach(function(item) {
+                            motion.push(item.id)
+                        });
+                        console.log("motion : "+motion);
+                        $motionUl.empty();
+                        var htmlMotion = '';
+                        for(i=0; i<motion.length; i++) {
+                            htmlMotion += '<li>'
+                            htmlMotion += '<input type="text" value="'+motion[i]+'" class="sensor__input" />'
+                            htmlMotion += '<button class="sensor__delete">삭제</button>'
+                            htmlMotion += '</li>'
+                        }
+                        $motionUl.append(htmlMotion);
+
 
 					}
 				}
@@ -331,30 +280,12 @@
 
     <div class="contents">
         <div class="button-list">
-            <!-- 장소별 페이지 버튼 리스트 수정 -->
             <ul>
                 <li><a href="/admindashboard/" class="back"><img src="/assets/images/icon_back.png" alt="" />뒤로가기</a></li>
             </ul>
         </div>
 
         <div class="setting">
-			<!-- 
-			<ul>
-				<li>
-					<h5 class="setting__title">test1</h5>
-					<div class="setting__console">
-						<input type="number" id="test1" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
-					</div>
-				</li>
-
-				<li>
-					<h5 class="setting__title">test2</h5>
-					<div class="setting__console">
-						<input type="number" id="test2" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
-					</div>
-				</li>
-			</ul>
-			 -->
 			 
 			<div class="sensor">
 				<div class="sensor__head">
@@ -362,12 +293,8 @@
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
-					<ul>
-						<li>
-							<input type="text" class="sensor__input" />
-							<button class="sensor__delete">삭제</button>
-						</li>
-					</ul>
+                    <ul id="smokeUl">
+                    </ul>
 				</div>
 			</div>
 			
@@ -377,11 +304,7 @@
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
-					<ul>
-						<li>
-							<input type="text" class="sensor__input" />
-							<button class="sensor__delete">삭제</button>
-						</li>
+					<ul id="gasUl">
 					</ul>
 				</div>
 			</div>
@@ -392,16 +315,13 @@
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
-					<ul>
-						<li>
-							<input type="text" class="sensor__input" />
-							<button class="sensor__delete">삭제</button>
-						</li>
+					<ul id="motionUl">
 					</ul>
 				</div>
 			</div>
 
-			<button onclick="operlationPut()" class="setting__btn">저장</button>
+			<button onclick="detectPut()" class="setting__btn">저장</button>
+
         </div>
     </div>
 </div>
