@@ -251,6 +251,17 @@
 							}
 						}
 
+						// 에어컨셋팅
+						// from 에어컨날짜
+						$("#aircon_monthdate_from").val(operationDate.data.aircon_monthdate_from);
+						// to 에어컨날짜
+						$("#aircon_monthdate_to").val(operationDate.data.aircon_monthdate_to);
+
+						// from 에어컨온도
+						$("#aircon_tmp_from").val(operationDate.data.aircon_tmp_from);
+						// to 에어컨온도
+						$("#aircon_tmp_to").val(operationDate.data.aircon_tmp_to);
+
 					}
 				}
 			});
@@ -389,6 +400,35 @@
 	        			<input type="number" id="motiontimer" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
         			</div>
         		</li>
+
+				<li>
+					<h5 class="setting__title">에어컨날짜 from</h5>
+					<div class="setting__console">
+						<input type="number" id="aircon_monthdate_from" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+					</div>
+				</li>
+
+				<li>
+					<h5 class="setting__title">에어컨날짜 to</h5>
+					<div class="setting__console">
+						<input type="number" id="aircon_monthdate_to" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+					</div>
+				</li>
+
+				<li>
+					<h5 class="setting__title">에어컨온도 from</h5>
+					<div class="setting__console">
+						<input type="number" id="aircon_tmp_from" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+					</div>
+				</li>
+
+				<li>
+					<h5 class="setting__title">에어컨온도 to</h5>
+					<div class="setting__console">
+						<input type="number" id="aircon_tmp_to" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
+					</div>
+				</li>
+
         	</ul>
 			<button onclick="operlationPut()" class="setting__btn">저장</button>
         </div>
