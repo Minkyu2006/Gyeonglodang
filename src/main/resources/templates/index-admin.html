@@ -96,48 +96,12 @@
                         airRefresh('airChart', airDataRm1);// 거실 공기질(PM10)
                     }
 
-                    if(res.data.doorsensor !== '') {
+                    // 창문 가스 화재 셋팅
+                    if(res.data.doorsensor !== '' && res.data.gas !== '' && res.data.smoke !== '') {
                         console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-                        doorDetectData("all",res.data.doorsensor.r_data);
-                    }
-
-                    if(res.data.gas !== '') {
-                        // 가스 셋팅
-                        console.log('gas Json 데이터 : ' + res.data.gas.r_data);
-                        var gas = JSON.parse(res.data.gas.r_data);
-                        console.log('gas 상태 : ' + gas.SS022ga01);
-                        console.log('');
-
-                        let checkGas = false;
-                        if (gas.SS022ga01 === "detected") checkGas = true;
-                        var $gas = $('#gas');
-                        if (checkGas) {
-                            $gas.addClass("active")
-                        } else {
-                            $gas.removeClass("active")
-                        }
-                    }
-
-                    if(res.data.smoke !== '') {
-                        // 화재 셋팅
-                        console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
-                        var smoke = JSON.parse(res.data.smoke.r_data);
-                        console.log('smoke 상태 : ' + smoke.SS021sm01);
-                        console.log('');
-
-                        let checkSmoke = false;
-                        if (smoke.SS021sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS022sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS023sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS024sm01 === "detected") checkSmoke = true;
-                        if (smoke.SS025sm01 === "detected") checkSmoke = true;
-
-                        var $smoke = $('#smoke');
-                        if (checkSmoke){
-                            $smoke.addClass("active");
-                        }else{
-                            $smoke.removeClass("active");
-                        }
+                        console.log('gassensor Json 데이터 : ' + res.data.gas.r_data);
+                        console.log('smokesensor Json 데이터 : ' + res.data.smoke.r_data);
+                        detectData("all",res.data.doorsensor.r_data,res.data.gas.r_data,res.data.smoke.r_data);
                     }
 
                     if(res.data.batteryData !== '') {

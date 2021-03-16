@@ -224,7 +224,7 @@
 					alert('퇴실실패');
 				},
 				success: function (res) {
-					doorDetectData(res.data.doorsensor.r_data,true)
+					detectData(res.data.doorsensor.r_data,true,null,null)
 				}
 			});
 		}
@@ -583,51 +583,13 @@
 						}
 					}
 
-					// 창문 셋팅
-					if(res.data.doorsensor !== '') {
+					// 창문 가스 화재 셋팅
+					if(res.data.doorsensor !== '' && res.data.gas !== '' && res.data.smoke !== '') {
 						console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-						doorDetectData(res.data.doorsensor.r_data,false)
+						console.log('gassensor Json 데이터 : ' + res.data.gas.r_data);
+						console.log('smokesensor Json 데이터 : ' + res.data.smoke.r_data);
+						detectData(res.data.doorsensor.r_data,false,res.data.gas.r_data,res.data.smoke.r_data);
 					}
-
-					// 가스 셋팅
-					if(res.data.gas !== '') {
-						console.log('gas Json 데이터 : ' + res.data.gas.r_data);
-						var gas = JSON.parse(res.data.gas.r_data);
-						console.log('gas 상태 : ' + gas.SS022ga01);
-						console.log('');
-
-						let checkGas = false;
-						if (gas.SS0212ga01 === "detected") checkGas = true;
-						var $gas = $('#gas');
-						if (checkGas) {
-							$gas.addClass("active")
-						} else {
-							$gas.removeClass("active")
-						}
-					}
-
-					// 화재 셋팅
-					if(res.data.smoke !== '') {
-						console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
-						var smoke = JSON.parse(res.data.smoke.r_data);
-						console.log('smoke 상태 : ' + smoke.SS021sm01);
-						console.log('');
-
-						let checkSmoke = false;
-						if (smoke.SS021sm01 === "detected") checkSmoke = true;
-						if (smoke.SS022sm01 === "detected") checkSmoke = true;
-						if (smoke.SS023sm01 === "detected") checkSmoke = true;
-						if (smoke.SS024sm01 === "detected") checkSmoke = true;
-						if (smoke.SS025sm01 === "detected") checkSmoke = true;
-
-						var $smoke = $('#smoke');
-						if (checkSmoke){
-							$smoke.addClass("active");
-						}else{
-							$smoke.removeClass("active");
-						}
-					}
-
                 }
 			});
 		}
@@ -783,7 +745,7 @@
 		}
 
 		// 도어센서의 디텍트 데이터 가져오기
-		function doorDetectData(data,outGoCheck) {
+		function detectData(doorData,outGoCheck,gasData,smokeData) {
 
 			var params = {
 				value : "http://square.abrain.co.kr:8080/square/operation/detector?system_id=S002"
@@ -798,9 +760,63 @@
 					alert('디텍트 데이터받기 실패');
 				},
 				success: function (res) {
-					var doorsensor = JSON.parse(data);
+
 					if (res.data.operationDate !== '') {
 						var operationDate = JSON.parse(res.data.operationDate);
+
+						if(gasData!==null){
+							var gas = [];
+							operationDate.data.gasdetector.forEach(function(item) {
+								gas.push(item.id)
+							});
+							console.log("가스센서 디텍트센서리스트 : "+gas);
+
+							var gasSensor = JSON.parse(gasData);
+
+							let checkGas = false;
+							var gasSensorName;
+							for(i=0; i<gas.length; i++){
+								gasSensorName = gas[i];
+								if(gasSensor[gasSensorName] === "detected"){
+									checkGas = true;
+								}
+							}
+
+							var $gas = $('#gas');
+							if (checkGas) {
+								$gas.addClass("active")
+							} else {
+								$gas.removeClass("active")
+							}
+						}
+
+						if(smokeData!==null){
+							var smoke = [];
+							operationDate.data.smokedetector.forEach(function(item) {
+								smoke.push(item.id)
+							});
+							console.log("화재센서 디텍트센서리스트 : "+smoke);
+
+							var smokeSensor = JSON.parse(smokeData);
+
+							let checkSmoke = false;
+							var smokeSensorName;
+							for(i=0; i<smoke.length; i++){
+								smokeSensorName = smoke[i];
+								if(smokeSensor[smokeSensorName] === "detected"){
+									checkSmoke = true;
+								}
+							}
+
+							var $smoke = $('#smoke');
+							if (checkSmoke){
+								$smoke.addClass("active");
+							}else{
+								$smoke.removeClass("active");
+							}
+						}
+
+						var doorsensor = JSON.parse(doorData);
 						var door = [];
 						operationDate.data.doorsensorchecklist.forEach(function(item) {
 							door.push(item.id)

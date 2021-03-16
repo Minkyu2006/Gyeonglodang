@@ -471,8 +471,8 @@
 				});
 			}
 
-			// 도어센서의 디텍트 데이터 가져오기
-			function doorDetectData(room,data) {
+			// 도어,가스,화재 센서의 디텍트 데이터 가져오기
+			function detectData(room,doorData,gasData,smokeData) {
 
 				var params = {
 					value : "http://square.abrain.co.kr:8080/square/operation/detector?system_id=S002"
@@ -487,7 +487,10 @@
 						alert('디텍트 데이터받기 실패');
 					},
 					success: function (res) {
-						var doorsensor = JSON.parse(data);
+						var doorSensor = JSON.parse(doorData);
+						var smokeSensor = JSON.parse(smokeData);
+						var gasSensor = JSON.parse(gasData);
+
 						if (res.data.operationDate !== '') {
 							var operationDate = JSON.parse(res.data.operationDate);
 							var door = [];
@@ -496,7 +499,20 @@
 							});
 							console.log("도어센서 디텍트센서리스트 : "+door);
 
+							var smoke = [];
+							operationDate.data.smokedetector.forEach(function(item) {
+								smoke.push(item.id)
+							});
+							console.log("화재센서 디텍트센서리스트 : "+smoke);
+
+							var gas = [];
+							operationDate.data.gasdetector.forEach(function(item) {
+								gas.push(item.id)
+							});
+							console.log("가스센서 디텍트센서리스트 : "+gas);
+
 							if (room === "all") {
+
 								// 창문 셋팅
 								let doorCheckRm1 = false; //거실
 								let doorCheckRm2 = false; //주방
@@ -504,19 +520,19 @@
 								let doorCheckRm4 = false; //운동
 								let doorCheckRm5 = false; //창고
 
-								var sensorName;
+								var doorSensorName;
 								for(i=0; i<door.length; i++){
-									sensorName = door[i];
-									if(doorsensor[sensorName] === "on"){
-										if(sensorName.substring(0,5)==="SS021"){
+									doorSensorName = door[i];
+									if(doorSensor[doorSensorName] === "on"){
+										if(doorSensorName.substring(0,5)==="SS021"){
 											doorCheckRm1 = true;
-										}else if(sensorName.substring(0,5)==="SS022"){
+										}else if(doorSensorName.substring(0,5)==="SS022"){
 											doorCheckRm2 = true;
-										}else if(sensorName.substring(0,5)==="SS023"){
+										}else if(doorSensorName.substring(0,5)==="SS023"){
 											doorCheckRm3 = true;
-										}else if(sensorName.substring(0,5)==="SS024"){
+										}else if(doorSensorName.substring(0,5)==="SS024"){
 											doorCheckRm4 = true;
-										}else if(sensorName.substring(0,5)==="SS025"){
+										}else if(doorSensorName.substring(0,5)==="SS025"){
 											doorCheckRm5 = true;
 										}
 									}
@@ -536,21 +552,42 @@
 									$('#doorMessage').text("창문 보안 안전");
 								}
 
+								// 가스 셋팅
+								roomGasCheck(gasSensor,gas,"SS022");
+
+								// 화재 셋팅
+								let checkSmoke = false;
+								var smokeSensorName;
+								for(i=0; i<smoke.length; i++){
+									smokeSensorName = smoke[i];
+									if(smokeSensor[smokeSensorName] === "detected"){
+										checkSmoke = true;
+									}
+								}
+
+								var $smoke = $('#smoke');
+								if (checkSmoke){
+									$smoke.addClass("active");
+								}else{
+									$smoke.removeClass("active");
+								}
+
 							} else if(room==="living") {
-								roomDoorCheck(doorsensor,door,"거실","SS021");
-
+								roomDoorCheck(doorSensor,door,"거실","SS021");
+								roomSmokeCheck(smokeSensor,smoke,"SS021");
 							} else if(room==="kitchen") {
-								roomDoorCheck(doorsensor,door,"주방","SS022");
-
+								roomDoorCheck(doorSensor,door,"주방","SS022");
+								roomSmokeCheck(smokeSensor,smoke,"SS022");
+								roomGasCheck(gasSensor,gas,"SS022");
 							} else if(room==="inner") {
-								roomDoorCheck(doorsensor,door,"안방","SS023");
-
+								roomDoorCheck(doorSensor,door,"안방","SS023");
+								roomSmokeCheck(smokeSensor,smoke,"SS023");
 							} else if(room==="exercise") {
-								roomDoorCheck(doorsensor,door,"운동방","SS024");
-
+								roomDoorCheck(doorSensor,door,"운동방","SS024");
+								roomSmokeCheck(smokeSensor,smoke,"SS024");
 							} else if(room==="warehouse") {
-								roomDoorCheck(doorsensor,door,"창고","SS025");
-
+								roomDoorCheck(doorSensor,door,"창고","SS025");
+								roomSmokeCheck(smokeSensor,smoke,"SS025");
 							}else{
 								console.log("존재하지 않은 방입니다.");
 							}
@@ -581,6 +618,48 @@
 				}else{
 					$('#doorStatus').removeClass("active")
 					$('#doorMessage').text("창문 보안 안전");
+				}
+			}
+
+			// 가스센서 체크함수
+			function roomGasCheck(gasSensor,gas,sensorName) {
+				let checkGas = false;
+				var gasSensorName;
+				for(i=0; i<gas.length; i++){
+					gasSensorName = gas[i];
+					if(gasSensor[gasSensorName] === "detected"){
+						if(gasSensorName.substring(0,5)===sensorName){
+							checkGas = true;
+						}
+					}
+				}
+
+				var $gas = $('#gas');
+				if (checkGas) {
+					$gas.addClass("active")
+				} else {
+					$gas.removeClass("active")
+				}
+			}
+
+			// 화재센서 체크함수
+			function roomSmokeCheck(smokeSensor,smoke,sensorName) {
+				// 화재 셋팅
+				let checkSmoke = false;
+				var smokeSensorName;
+				for(i=0; i<smoke.length; i++){
+					smokeSensorName = smoke[i];
+					if(smoke[i].substring(0,5)===sensorName) {
+						if (smokeSensor[smokeSensorName] === "detected") {
+							checkSmoke = true;
+						}
+					}
+				}
+				var $smoke = $('#smoke');
+				if (checkSmoke){
+					$smoke.addClass("active");
+				}else{
+					$smoke.removeClass("active");
 				}
 			}
 

@@ -73,27 +73,11 @@
                         humRefresh('humChartRm4', humDataRm4);// 거실 습도
                     }
 
-                    if(res.data.doorsensor !== '') {
-                        // 창문 셋팅
+                    // 창문 가스 화재 셋팅
+                    if(res.data.doorsensor !== ''&& res.data.smoke !== '') {
                         console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-                        doorDetectData("exercise",res.data.doorsensor.r_data);
-                    }
-
-                    if(res.data.smoke !== '') {
-                        // 화재 셋팅
-                        console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
-                        var smoke = JSON.parse(res.data.smoke.r_data);
-                        console.log('');
-
-                        let checkSmoke = false;
-                        if (smoke.SS024sm01 === "detected") checkSmoke = true;
-
-                        var $smoke = $('#smoke');
-                        if (checkSmoke){
-                            $smoke.addClass("active");
-                        }else{
-                            $smoke.removeClass("active");
-                        }
+                        console.log('smokesensor Json 데이터 : ' + res.data.smoke.r_data);
+                        detectData("exercise",res.data.doorsensor.r_data,res.data.gas.r_data,res.data.smoke.r_data);
                     }
 
                     if(res.data.batteryData !== '') {
