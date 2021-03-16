@@ -21,16 +21,10 @@ public class AdminController {
         return "index-admin";
     }
 
-    // 운영조회 환경설정
+    // 운영정책 디텍트 환경설정
     @RequestMapping("/system")
     public String system(){
         return "adminstate/system";
-    }
-
-    // 디텍트 셋팅
-    @RequestMapping("/detect")
-    public String detect(){
-        return "adminstate/detect";
     }
 
     // 관리자 - 온도페이지

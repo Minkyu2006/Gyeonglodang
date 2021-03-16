@@ -35,6 +35,4 @@ public class SystemRestController {
         return ResponseEntity.ok(res.success());
     }
 
-
-
 }
