@@ -171,13 +171,9 @@
             $('#outBtn').on('click', function() {
                 outGoReady();
             });
-
 			$('#outGoExec').on('click', function() {
-
 				outGo();
 			});
-
-
 
 			//음성활성화
 			$('#audioCheck').on('click', function() {
@@ -228,54 +224,7 @@
 					alert('퇴실실패');
 				},
 				success: function (res) {
-
-
-
-					var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-					let doorCheckRm1 =false; //거실
-					let doorCheckRm2 =false; //주방
-					let doorCheckRm3 =false; //안방
-					let doorCheckRm4 =false; //운동
-					let doorCheckRm5 =false; //창고
-
-					if (doorsensor.SS021dr01 === "on")  doorCheckRm1 = true
-					if (doorsensor.SS021dr02 === "on")  doorCheckRm1 = true
-					if (doorsensor.SS021dr03 === "on")  doorCheckRm1 = true
-
-					if (doorsensor.SS022dr03 === "on")  doorCheckRm2 = true
-					if (doorsensor.SS022dr04 === "on")  doorCheckRm2 = true
-					if (doorsensor.SS022dr05 === "on")  doorCheckRm2 = true
-					if (doorsensor.SS022dr06 === "on")  doorCheckRm2 = true
-					if (doorsensor.SS022dr07 === "on")  doorCheckRm2 = true
-
-					if (doorsensor.SS023dr01 === "on")  doorCheckRm3 = true
-					if (doorsensor.SS023dr02 === "on")  doorCheckRm3 = true
-					if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
-
-					if (doorsensor.SS024dr01 === "on")  doorCheckRm4 = true
-					if (doorsensor.SS024dr02 === "on")  doorCheckRm4 = true
-					if (doorsensor.SS024dr03 === "on")  doorCheckRm4 = true
-
-					if (doorsensor.SS025dr01 === "on")  doorCheckRm5 = true
-					if (doorsensor.SS025dr02 === "on")  doorCheckRm5 = true
-
-
-					if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5 ){
-						$('#doorStatus').addClass("active")
-						let doorType ='';
-						if(doorCheckRm1) doorType = "거실";
-						if(doorCheckRm2) doorType = "주방";
-						if(doorCheckRm3) doorType = "안방";
-						if(doorCheckRm4) doorType = "운동방";
-						if(doorCheckRm5) doorType = "창고방";
-						$('#place').text(doorType +  " 창문(뒷문)이 열려있습니다.");
-						$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
-
-					}else{
-						$('#doorStatus').removeClass("active")
-						$('#place').text("");
-
-					}
+					doorDetectData(res.data.doorsensor.r_data,true)
 				}
 			});
 		}
@@ -482,8 +431,8 @@
 
 					}
 
+					// 습도셋팅
 					if(res.data.humidity !== '') {
-						// 습도셋팅
 						console.log('humidityData Json 데이터 : ' + res.data.humidity.r_data);
 						var humidity = JSON.parse(res.data.humidity.r_data);
 						// console.log('사무실 습도 humidity SS021 상태 : ' + humidity.SS021hu01);
@@ -516,8 +465,8 @@
 						// humRefresh('humChartRm5', humDataRm5);// 창고 습도
 					}
 
+					// 공기질
 					if(res.data.airquality !== '') {
-						// 공기질
 						console.log('airqualityData Json 데이터 : ' + res.data.airquality.r_data);
 						var airquality = JSON.parse(res.data.airquality.r_data);
 						let airDataRm1 = '0'; // 거실 공기질(PM10)
@@ -542,8 +491,8 @@
 						airRefresh('airChartRm3', airDataRm3);// 안방 공기질(PM10)
 					}
 
+					// 공기청정기 셋팅
 					if(res.data.airpurification !== '') {
-						// 공기청정기 셋팅
 						console.log('airpurificationData Json 데이터 : ' + res.data.airpurification.r_data);
 						var airpurification = JSON.parse(res.data.airpurification.r_data);
 						console.log('airpurification 상태 : ' + airpurification.SS021aq01);
@@ -557,8 +506,8 @@
 						}
 					}
 
+					// 에어컨 셋팅
 					if(res.data.aircondition !== '') {
-						// 에어컨 셋팅
 						console.log('airconditionData Json 데이터 : ' + res.data.aircondition.r_data);
 						var aircondition
 								= JSON.parse(res.data.aircondition.r_data);
@@ -586,8 +535,8 @@
 						}
 					}
 
+					// 날씨셋팅
 					if(res.data.weather !== '') {
-						// 날씨셋팅
 						console.log('weather Json 데이터 : ' + res.data.weather.r_data);
 						var weather = JSON.parse(res.data.weather.r_data);
 						console.log('오늘 날씨 상태 : ' + weather.condition);
@@ -634,59 +583,14 @@
 						}
 					}
 
+					// 창문 셋팅
 					if(res.data.doorsensor !== '') {
-						// 창문 셋팅
 						console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-						var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-						let doorCheckRm1 =false; //거실
-						let doorCheckRm2 =false; //주방
-						let doorCheckRm3 =false; //안방
-						let doorCheckRm4 =false; //운동
-						let doorCheckRm5 =false; //창고
-
-						if (doorsensor.SS021dr01 === "on")  doorCheckRm1 = true
-						if (doorsensor.SS021dr02 === "on")  doorCheckRm1 = true
-						if (doorsensor.SS021dr03 === "on")  doorCheckRm1 = true
-						if (doorsensor.SS021dr04 === "on")  doorCheckRm1 = true
-
-						if (doorsensor.SS022dr01 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr02 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr03 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr04 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr05 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr06 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr07 === "on")  doorCheckRm2 = true
-
-						if (doorsensor.SS023dr01 === "on")  doorCheckRm3 = true
-						if (doorsensor.SS023dr02 === "on")  doorCheckRm3 = true
-						// if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
-
-						if (doorsensor.SS024dr01 === "on")  doorCheckRm4 = true
-						if (doorsensor.SS024dr02 === "on")  doorCheckRm4 = true
-						if (doorsensor.SS024dr03 === "on")  doorCheckRm4 = true
-
-						if (doorsensor.SS025dr01 === "on")  doorCheckRm5 = true
-						if (doorsensor.SS025dr02 === "on")  doorCheckRm5 = true
-
-						if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5){
-							let doorType= "";
-							if(doorCheckRm1) doorType = "거실";
-							if(doorCheckRm2) doorType = "주방";
-							if(doorCheckRm3) doorType = "안방";
-							if(doorCheckRm4) doorType = "운동방";
-							if(doorCheckRm5) doorType = "창고방";
-							$('#doorStatus').addClass("active")
-							$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
-						}else{
-							$('#doorStatus').removeClass("active")
-							$('#doorMessage').text("창문 보안 안전");
-						}
-
-
+						doorDetectData(res.data.doorsensor.r_data,false)
 					}
 
+					// 가스 셋팅
 					if(res.data.gas !== '') {
-						// 가스 셋팅
 						console.log('gas Json 데이터 : ' + res.data.gas.r_data);
 						var gas = JSON.parse(res.data.gas.r_data);
 						console.log('gas 상태 : ' + gas.SS022ga01);
@@ -702,8 +606,8 @@
 						}
 					}
 
+					// 화재 셋팅
 					if(res.data.smoke !== '') {
-						// 화재 셋팅
 						console.log('smoke Json 데이터 : ' + res.data.smoke.r_data);
 						var smoke = JSON.parse(res.data.smoke.r_data);
 						console.log('smoke 상태 : ' + smoke.SS021sm01);
@@ -723,7 +627,6 @@
 							$smoke.removeClass("active");
 						}
 					}
-
 
                 }
 			});
@@ -874,9 +777,82 @@
             }
         }
 
-		// todo 화면 새로고침
+		// 화면 새로고침
 		function reflesh() {
 			location.reload();
+		}
+
+		// 도어센서의 디텍트 데이터 가져오기
+		function doorDetectData(data,outGoCheck) {
+
+			var params = {
+				value : "http://square.abrain.co.kr:8080/square/operation/detector?system_id=S002"
+			};
+
+			$.ajax({
+				url: '/apiData/operationGet',
+				type: 'post',
+				data: params,
+				cache: false,
+				error: function () {
+					alert('디텍트 데이터받기 실패');
+				},
+				success: function (res) {
+					var doorsensor = JSON.parse(data);
+					if (res.data.operationDate !== '') {
+						var operationDate = JSON.parse(res.data.operationDate);
+						var door = [];
+						operationDate.data.doorsensorchecklist.forEach(function(item) {
+							door.push(item.id)
+						});
+						console.log("도어센서 디텍트센서리스트 : "+door);
+
+						// 창문 셋팅
+						let doorCheckRm1 = false; //거실
+						let doorCheckRm2 = false; //주방
+						let doorCheckRm3 = false; //안방
+						let doorCheckRm4 = false; //운동
+						let doorCheckRm5 = false; //창고
+
+						var sensorName;
+						for(i=0; i<door.length; i++){
+							sensorName = door[i];
+							if(doorsensor[sensorName] === "on"){
+								if(sensorName.substring(0,5)==="SS021"){
+									doorCheckRm1 = true;
+								}else if(sensorName.substring(0,5)==="SS022"){
+									doorCheckRm2 = true;
+								}else if(sensorName.substring(0,5)==="SS023"){
+									doorCheckRm3 = true;
+								}else if(sensorName.substring(0,5)==="SS024"){
+									doorCheckRm4 = true;
+								}else if(sensorName.substring(0,5)==="SS025"){
+									doorCheckRm5 = true;
+								}
+							}
+						}
+
+						if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5){
+							let doorType= "";
+							if(doorCheckRm1) doorType = "거실";
+							if(doorCheckRm2) doorType = "주방";
+							if(doorCheckRm3) doorType = "안방";
+							if(doorCheckRm4) doorType = "운동방";
+							if(doorCheckRm5) doorType = "창고방";
+							if(outGoCheck){
+								$('#place').text(doorType +  " 창문(뒷문)이 열려있습니다.");
+							}
+							$('#doorStatus').addClass("active")
+							$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
+						}else{
+							$('#doorStatus').removeClass("active")
+							$('#doorMessage').text("창문 보안 안전");
+						}
+					}else{
+						console.log("디텍터데이터 존재하지 않음.");
+					}
+				}
+			});
 		}
 
     </script>

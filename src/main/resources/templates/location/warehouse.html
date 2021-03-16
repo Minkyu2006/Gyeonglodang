@@ -75,23 +75,7 @@
                     // 창문 셋팅
                     if(res.data.doorsensor !== '') {
                         console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-                        var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-                        let doorCheckRm5 =false; //창고
-
-                        if (doorsensor.SS025dr01 ==="on")  doorCheckRm5 = true
-                        if (doorsensor.SS025dr02 ==="on")  doorCheckRm5 = true
-
-                        if(doorCheckRm5){
-                            let doorType= "";
-                            if(doorCheckRm5) doorType = "창고방";
-                            $('#doorStatus').addClass("active")
-                            $('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
-                        }else{
-                            $('#doorStatus').removeClass("active")
-                            $('#doorMessage').text("창문 보안 안전");
-                        }
-
-
+                        doorDetectData("warehouse",res.data.doorsensor.r_data);
                     }
 
                     // 화재 셋팅

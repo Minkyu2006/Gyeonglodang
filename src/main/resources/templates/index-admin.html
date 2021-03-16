@@ -97,52 +97,8 @@
                     }
 
                     if(res.data.doorsensor !== '') {
-                        // 창문 셋팅
                         console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-                        var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-                        let doorCheckRm1 =false; //거실
-                        let doorCheckRm2 =false; //주방
-                        let doorCheckRm3 =false; //안방
-                        let doorCheckRm4 =false; //운동
-                        let doorCheckRm5 =false; //창고
-
-                        if (doorsensor.SS021dr01 === "on")  doorCheckRm1 = true
-                        if (doorsensor.SS021dr02 === "on")  doorCheckRm1 = true
-                        if (doorsensor.SS021dr03 === "on")  doorCheckRm1 = true
-                        if (doorsensor.SS021dr04 === "on")  doorCheckRm1 = true
-
-                        if (doorsensor.SS022dr01 === "on")  doorCheckRm2 = true
-                        if (doorsensor.SS022dr02 === "on")  doorCheckRm2 = true
-                        if (doorsensor.SS022dr03 === "on")  doorCheckRm2 = true
-                        if (doorsensor.SS022dr04 === "on")  doorCheckRm2 = true
-                        if (doorsensor.SS022dr05 === "on")  doorCheckRm2 = true
-                        if (doorsensor.SS022dr06 === "on")  doorCheckRm2 = true
-                        if (doorsensor.SS022dr07 === "on")  doorCheckRm2 = true
-
-                        if (doorsensor.SS023dr01 === "on")  doorCheckRm3 = true
-                        if (doorsensor.SS023dr02 === "on")  doorCheckRm3 = true
-                        // if (doorsensor.SS023dr03 === "on")  doorCheckRm3 = true
-
-                        if (doorsensor.SS024dr01 === "on")  doorCheckRm4 = true
-                        if (doorsensor.SS024dr02 === "on")  doorCheckRm4 = true
-                        if (doorsensor.SS024dr03 === "on")  doorCheckRm4 = true
-
-                        if (doorsensor.SS025dr01 === "on")  doorCheckRm5 = true
-                        if (doorsensor.SS025dr02 === "on")  doorCheckRm5 = true
-
-                        if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5){
-                            let doorType= "";
-                            if(doorCheckRm1) doorType = "거실";
-                            if(doorCheckRm2) doorType = "주방";
-                            if(doorCheckRm3) doorType = "안방";
-                            if(doorCheckRm4) doorType = "운동방";
-                            if(doorCheckRm5) doorType = "창고방";
-                            $('#doorStatus').addClass("active")
-                            $('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
-                        }else{
-                            $('#doorStatus').removeClass("active")
-                            $('#doorMessage').text("창문 보안 안전");
-                        }
+                        doorDetectData("all",res.data.doorsensor.r_data);
                     }
 
                     if(res.data.gas !== '') {
@@ -201,10 +157,10 @@
                         console.log('제일 낮은 battery : ' + batteryLowValue);
                         batteryRefresh(batteryLowValue)
                     }
-
                 }
             });
         }
+
     </script>
 </head>
 <body>

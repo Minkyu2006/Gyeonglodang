@@ -89,27 +89,7 @@
 					if(res.data.doorsensor !== '') {
 						// 창문 셋팅
 						console.log('doorsensor Json 데이터 : ' + res.data.doorsensor.r_data);
-						var doorsensor = JSON.parse(res.data.doorsensor.r_data);
-
-						let doorCheckRm2 =false; //주방
-
-						if (doorsensor.SS022dr01 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr02 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr03 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr04 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr05 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr06 === "on")  doorCheckRm2 = true
-						if (doorsensor.SS022dr07 === "on")  doorCheckRm2 = true
-
-						if(doorCheckRm2){
-							let doorType= "";
-							if(doorCheckRm2) doorType = "주방";
-							$('#doorStatus').addClass("active")
-							$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
-						}else{
-							$('#doorStatus').removeClass("active")
-							$('#doorMessage').text("창문 보안 안전");
-						}
+						doorDetectData("kitchen",res.data.doorsensor.r_data);
 					}
 
 					if(res.data.gas !== '') {
