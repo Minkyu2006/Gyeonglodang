@@ -471,6 +471,17 @@
 				});
 			}
 
+			// 도어,가스,화재 센서의 API 디텍트 데이터가 에러날경우 디폴트값처리
+			function dafult() {
+				console.log('디텍트 데이터받기 실패 : dafult함수실행');
+				var $smoke = $('#smoke');
+				$smoke.removeClass("active");
+				var $gas = $('#gas');
+				$gas.removeClass("active")
+				$('#doorStatus').removeClass("active")
+				$('#doorMessage').text("창문 보안 안전");
+			}
+
 			// 도어,가스,화재 센서의 디텍트 데이터 가져오기
 			function detectData(room,doorData,gasData,smokeData) {
 
@@ -484,115 +495,121 @@
 					data: params,
 					cache: false,
 					error: function () {
-						alert('디텍트 데이터받기 실패');
+						// alert('디텍트 데이터받기 실패');
+						dafult();
 					},
 					success: function (res) {
-						var doorSensor = JSON.parse(doorData);
-						var smokeSensor = JSON.parse(smokeData);
-						var gasSensor = JSON.parse(gasData);
 
-						if (res.data.operationDate !== '') {
-							var operationDate = JSON.parse(res.data.operationDate);
-							var door = [];
-							operationDate.data.doorsensorchecklist.forEach(function(item) {
-								door.push(item.id)
-							});
-							console.log("도어센서 디텍트센서리스트 : "+door);
+						if(res.status === 200) {
+							var doorSensor = JSON.parse(doorData);
+							var smokeSensor = JSON.parse(smokeData);
+							var gasSensor = JSON.parse(gasData);
 
-							var smoke = [];
-							operationDate.data.smokedetector.forEach(function(item) {
-								smoke.push(item.id)
-							});
-							console.log("화재센서 디텍트센서리스트 : "+smoke);
+							if (res.data.operationDate !== '') {
+								var operationDate = JSON.parse(res.data.operationDate);
+								var door = [];
+								operationDate.data.doorsensorchecklist.forEach(function(item) {
+									door.push(item.id)
+								});
+								console.log("도어센서 디텍트센서리스트 : "+door);
 
-							var gas = [];
-							operationDate.data.gasdetector.forEach(function(item) {
-								gas.push(item.id)
-							});
-							console.log("가스센서 디텍트센서리스트 : "+gas);
+								var smoke = [];
+								operationDate.data.smokedetector.forEach(function(item) {
+									smoke.push(item.id)
+								});
+								console.log("화재센서 디텍트센서리스트 : "+smoke);
 
-							if (room === "all") {
+								var gas = [];
+								operationDate.data.gasdetector.forEach(function(item) {
+									gas.push(item.id)
+								});
+								console.log("가스센서 디텍트센서리스트 : "+gas);
 
-								// 창문 셋팅
-								let doorCheckRm1 = false; //거실
-								let doorCheckRm2 = false; //주방
-								let doorCheckRm3 = false; //안방
-								let doorCheckRm4 = false; //운동
-								let doorCheckRm5 = false; //창고
+								if (room === "all") {
 
-								var doorSensorName;
-								for(i=0; i<door.length; i++){
-									doorSensorName = door[i];
-									if(doorSensor[doorSensorName] === "on"){
-										if(doorSensorName.substring(0,5)==="SS021"){
-											doorCheckRm1 = true;
-										}else if(doorSensorName.substring(0,5)==="SS022"){
-											doorCheckRm2 = true;
-										}else if(doorSensorName.substring(0,5)==="SS023"){
-											doorCheckRm3 = true;
-										}else if(doorSensorName.substring(0,5)==="SS024"){
-											doorCheckRm4 = true;
-										}else if(doorSensorName.substring(0,5)==="SS025"){
-											doorCheckRm5 = true;
+									// 창문 셋팅
+									let doorCheckRm1 = false; //거실
+									let doorCheckRm2 = false; //주방
+									let doorCheckRm3 = false; //안방
+									let doorCheckRm4 = false; //운동
+									let doorCheckRm5 = false; //창고
+
+									var doorSensorName;
+									for(i=0; i<door.length; i++){
+										doorSensorName = door[i];
+										if(doorSensor[doorSensorName] === "on"){
+											if(doorSensorName.substring(0,5)==="SS021"){
+												doorCheckRm1 = true;
+											}else if(doorSensorName.substring(0,5)==="SS022"){
+												doorCheckRm2 = true;
+											}else if(doorSensorName.substring(0,5)==="SS023"){
+												doorCheckRm3 = true;
+											}else if(doorSensorName.substring(0,5)==="SS024"){
+												doorCheckRm4 = true;
+											}else if(doorSensorName.substring(0,5)==="SS025"){
+												doorCheckRm5 = true;
+											}
 										}
 									}
-								}
 
-								if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5){
-									let doorType= "";
-									if(doorCheckRm1) doorType = "거실";
-									if(doorCheckRm2) doorType = "주방";
-									if(doorCheckRm3) doorType = "안방";
-									if(doorCheckRm4) doorType = "운동방";
-									if(doorCheckRm5) doorType = "창고방";
-									$('#doorStatus').addClass("active")
-									$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
-								}else{
-									$('#doorStatus').removeClass("active")
-									$('#doorMessage').text("창문 보안 안전");
-								}
-
-								// 가스 셋팅
-								roomGasCheck(gasSensor,gas,"SS022");
-
-								// 화재 셋팅
-								let checkSmoke = false;
-								var smokeSensorName;
-								for(i=0; i<smoke.length; i++){
-									smokeSensorName = smoke[i];
-									if(smokeSensor[smokeSensorName] === "detected"){
-										checkSmoke = true;
+									if(doorCheckRm1 || doorCheckRm2 || doorCheckRm3 || doorCheckRm4 || doorCheckRm5){
+										let doorType= "";
+										if(doorCheckRm1) doorType = "거실";
+										if(doorCheckRm2) doorType = "주방";
+										if(doorCheckRm3) doorType = "안방";
+										if(doorCheckRm4) doorType = "운동방";
+										if(doorCheckRm5) doorType = "창고방";
+										$('#doorStatus').addClass("active")
+										$('#doorMessage').text(doorType + " 창문(뒷문)이 열렸습니다.");
+									}else{
+										$('#doorStatus').removeClass("active")
+										$('#doorMessage').text("창문 보안 안전");
 									}
-								}
 
-								var $smoke = $('#smoke');
-								if (checkSmoke){
-									$smoke.addClass("active");
+									// 가스 셋팅
+									roomGasCheck(gasSensor,gas,"SS022");
+
+									// 화재 셋팅
+									let checkSmoke = false;
+									var smokeSensorName;
+									for(i=0; i<smoke.length; i++){
+										smokeSensorName = smoke[i];
+										if(smokeSensor[smokeSensorName] === "detected"){
+											checkSmoke = true;
+										}
+									}
+
+									var $smoke = $('#smoke');
+									if (checkSmoke){
+										$smoke.addClass("active");
+									}else{
+										$smoke.removeClass("active");
+									}
+
+								} else if(room==="living") {
+									roomDoorCheck(doorSensor,door,"거실","SS021");
+									roomSmokeCheck(smokeSensor,smoke,"SS021");
+								} else if(room==="kitchen") {
+									roomDoorCheck(doorSensor,door,"주방","SS022");
+									roomSmokeCheck(smokeSensor,smoke,"SS022");
+									roomGasCheck(gasSensor,gas,"SS022");
+								} else if(room==="inner") {
+									roomDoorCheck(doorSensor,door,"안방","SS023");
+									roomSmokeCheck(smokeSensor,smoke,"SS023");
+								} else if(room==="exercise") {
+									roomDoorCheck(doorSensor,door,"운동방","SS024");
+									roomSmokeCheck(smokeSensor,smoke,"SS024");
+								} else if(room==="warehouse") {
+									roomDoorCheck(doorSensor,door,"창고","SS025");
+									roomSmokeCheck(smokeSensor,smoke,"SS025");
 								}else{
-									$smoke.removeClass("active");
+									console.log("존재하지 않은 방입니다.");
 								}
-
-							} else if(room==="living") {
-								roomDoorCheck(doorSensor,door,"거실","SS021");
-								roomSmokeCheck(smokeSensor,smoke,"SS021");
-							} else if(room==="kitchen") {
-								roomDoorCheck(doorSensor,door,"주방","SS022");
-								roomSmokeCheck(smokeSensor,smoke,"SS022");
-								roomGasCheck(gasSensor,gas,"SS022");
-							} else if(room==="inner") {
-								roomDoorCheck(doorSensor,door,"안방","SS023");
-								roomSmokeCheck(smokeSensor,smoke,"SS023");
-							} else if(room==="exercise") {
-								roomDoorCheck(doorSensor,door,"운동방","SS024");
-								roomSmokeCheck(smokeSensor,smoke,"SS024");
-							} else if(room==="warehouse") {
-								roomDoorCheck(doorSensor,door,"창고","SS025");
-								roomSmokeCheck(smokeSensor,smoke,"SS025");
 							}else{
-								console.log("존재하지 않은 방입니다.");
+								console.log("디텍터데이터 존재하지 않음.");
 							}
 						}else{
-							console.log("디텍터데이터 존재하지 않음.");
+							dafult();
 						}
 					}
 				});
@@ -634,7 +651,6 @@
 					}
 				}
 
-				var $gas = $('#gas');
 				if (checkGas) {
 					$gas.addClass("active")
 				} else {
