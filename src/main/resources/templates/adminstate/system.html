@@ -101,7 +101,7 @@
 			var $opentime2 = $("#opentime2").val();
 			var opentime,opentime1Val,opentime2Val;
 			if($opentime1==="" || $opentime2===""){
-				alertCaution("운영시간을 입력해주세요.");
+				alertCaution("운영시간(from)을 입력해주세요.");
 				return;
 			}
 			else{
@@ -122,7 +122,7 @@
 			var $closetime2 = $("#closetime2").val();
 			var closetime,closetime1Val,closetime2Val;
 			if($closetime1==="" || $closetime2===""){
-				alertCaution("비운영시간을 입력해주세요.");
+				alertCaution("운영시간(to)을 입력해주세요.");
 				return;
 			}
 			else{
@@ -143,7 +143,7 @@
 			var $dooropentime2 = $("#dooropentime2").val();
 			var dooropentime,dooropentime1Val,dooropentime2Val;
 			if($dooropentime1==="" || $dooropentime2===""){
-				alertCaution("도어락 개방시간을 입력해주세요.");
+				alertCaution("도어락개방시간(from)을 입력해주세요.");
 				return;
 			}
 			else{
@@ -164,7 +164,7 @@
 			var $doorclosetime2 = $("#doorclosetime2").val();
 			var doorclosetime,doorclosetime1Val,doorclosetime2Val;
 			if($doorclosetime1==="" || $doorclosetime2===""){
-				alertCaution("도어락 비개방시간을 입력해주세요.");
+				alertCaution("도어락개방시간(to)을 입력해주세요.");
 				return;
 			}
 			else{
@@ -198,7 +198,7 @@
 
 			var motiontimer = $("#motiontimer").val();
 			if(motiontimer===""){
-				alertCaution("움직임 시간을 입력해주세요.");
+				alertCaution("움직임감지대기시간(분)을 입력해주세요.");
 				return;
 			}
 
@@ -209,50 +209,50 @@
 			var fullDay;
 
 			if(aircon_monthdate_from===""){
-				alertCaution("에어컨날짜 from을 셋팅해주세요.");
+				alertCaution("에어컨운영월일(from)을 셋팅해주세요.");
 				return;
 			}else{
 				if(aircon_monthdate_from.length!==4){
-					alertCaution("에어컨날짜 from을 확인해주세요.\nex)00월00일");
+					alertCaution("에어컨운영월일(from)을 확인해주세요.\nex)00월00일");
 					return;
 				}
 				if(12<Number(aircon_monthdate_from.substring(0,2))){
-					alertCaution("에어컨날짜 from의 월을 확인해주세요.");
+					alertCaution("에어컨운영월일(from)의 월을 확인해주세요.");
 					return;
 				}
 				fullDay = new Date(Number(new Date().getFullYear()),Number(aircon_monthdate_from.substring(0,2)),0).getDate();
 				// console.log("from fullDay : "+fullDay);
 				if(fullDay<Number(aircon_monthdate_from.substring(2,4))){
-					alertCaution("에어컨날짜 to의 월의 일수가\n높습니다. 확인해주세요.");
+					alertCaution("에어컨운영월일(from)의 월의 일수가 높습니다. 확인해주세요.");
 					return;
 				}
 			}
 			if(aircon_monthdate_to===""){
-				alertCaution("에어컨날짜 to를 셋팅해주세요.");
+				alertCaution("에어컨운영월일(to)을 셋팅해주세요.");
 				return;
 			}else{
 				if(aircon_monthdate_to.length!==4) {
-					alertCaution("에어컨날짜 to를 확인해주세요.\nex)00월00일");
+					alertCaution("에어컨운영월일(to)을 확인해주세요.\nex)00월00일");
 					return;
 				}
 				if(12<Number(aircon_monthdate_to.substring(0,2))){
-					alertCaution("에어컨날짜 to의 월을 확인해주세요.");
+					alertCaution("에어컨운영월일(to)을 월을 확인해주세요.");
 					return;
 				}
 				fullDay = new Date(Number(new Date().getFullYear()),Number(aircon_monthdate_to.substring(0,2)),0).getDate();
 				// console.log("to fullDay : "+fullDay);
 				if(fullDay<Number(aircon_monthdate_to.substring(2,4))){
-					alertCaution("에어컨날짜 from의 월의 일수가\n높습니다. 확인해주세요.");
+					alertCaution("에어컨운영월일(to)의 월의 일수가 높습니다. 확인해주세요.");
 					return;
 				}
 			}
 
 			if(aircon_tmp_from===""){
-				alertCaution("에어컨온도 from을 셋팅해주세요.");
+				alertCaution("에어컨운영온도(from)을 셋팅해주세요.");
 				return;
 			}
 			if(aircon_tmp_to===""){
-				alertCaution("에어컨온도 to을 셋팅해주세요.");
+				alertCaution("에어컨운영온도(to)을 셋팅해주세요.");
 				return;
 			}
 
