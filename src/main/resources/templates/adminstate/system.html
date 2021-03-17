@@ -190,10 +190,11 @@
 				}
 			}
 
-			if(dayofweek==="0000000"){
-				alertCaution("운영날을 선택해주세요.");
-				return;
-			}
+			// 	3월17일 0000000 저장되게 수정
+			// if(dayofweek==="0000000"){
+			// 	alertCaution("운영날을 선택해주세요.");
+			// 	return;
+			// }
 
 			var motiontimer = $("#motiontimer").val();
 			if(motiontimer===""){
@@ -598,7 +599,7 @@
         		<li>
         			<ul class="setting__list">
         				<li>
-        					<h5 class="setting__title">운영시간</h5>
+        					<h5 class="setting__title">운영시간(from)</h5>
 		        			<div class="setting__console">
 			        			<input type="number" id="opentime1" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 			        			<span>:</span>
@@ -606,7 +607,7 @@
 		        			</div>
         				</li>
         				<li>
-        					<h5 class="setting__title">비운영시간</h5>
+        					<h5 class="setting__title">운영시간(to)</h5>
 		        			<div class="setting__console">
 			        			<input type="number" id="closetime1" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 			        			<span>:</span>
@@ -618,7 +619,7 @@
         		<li>
         			<ul class="setting__list">
         				<li>
-        					<h5 class="setting__title">도어락 개방시간</h5>
+        					<h5 class="setting__title">도어락개방시간(from)</h5>
 		        			<div class="setting__console">
 			        			<input type="number" id="dooropentime1" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 			        			<span>:</span>
@@ -626,7 +627,7 @@
 		        			</div>
         				</li>
         				<li>
-        					<h5 class="setting__title">도어락 비개방시간</h5>
+        					<h5 class="setting__title">도어락개방시간(to)</h5>
 		        			<div class="setting__console">
 			        			<input type="number" id="doorclosetime1" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 			        			<span>:</span>
@@ -639,13 +640,13 @@
 				<li>
 					<ul class="setting__list">
 						<li>
-							<h5 class="setting__title">에어컨날짜 from</h5>
+							<h5 class="setting__title">에어컨운영월일(from)</h5>
 						<div class="setting__console">
 							<input type="number" id="aircon_monthdate_from" class="setting__input-text" maxlength="4" oninput="numberMaxLength(this);" />
 						</div>
 						</li>
 						<li>
-							<h5 class="setting__title">에어컨날짜 to</h5>
+							<h5 class="setting__title">에어컨운영월일(to)</h5>
 							<div class="setting__console">
 								<input type="number" id="aircon_monthdate_to" class="setting__input-text" maxlength="4" oninput="numberMaxLength(this);" />
 							</div>
@@ -655,13 +656,13 @@
 				<li>
 					<ul class="setting__list">
 						<li>
-							<h5 class="setting__title">에어컨온도 from</h5>
+							<h5 class="setting__title">에어컨운영온도(from)</h5>
 							<div class="setting__console">
 								<input type="number" id="aircon_tmp_from" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 							</div>
 						</li>
 						<li>
-							<h5 class="setting__title">에어컨온도 to</h5>
+							<h5 class="setting__title">에어컨운영온도(to)</h5>
 							<div class="setting__console">
 								<input type="number" id="aircon_tmp_to" class="setting__input-text" maxlength="2" oninput="numberMaxLength(this);" />
 							</div>
@@ -670,7 +671,7 @@
 				</li>
 
 				<li>
-					<h5 class="setting__title">운영날</h5>
+					<h5 class="setting__title">운영요일</h5>
 					<div class="setting__console">
 						<ul>
 							<li>
@@ -705,7 +706,7 @@
 					</div>
 				</li>
 				<li>
-					<h5 class="setting__title">움직임 시간</h5>
+					<h5 class="setting__title">움직임감지대기시간(분)</h5>
 					<div class="setting__console">
 						<input type="number" id="motiontimer" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
 					</div>
@@ -719,7 +720,7 @@
 
 			<div class="sensor">
 				<div class="sensor__head">
-					<h4 class="sensor__title">연기센서</h4>
+					<h4 class="sensor__title">감지대상 연기센서</h4>
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
@@ -730,7 +731,7 @@
 
 			<div class="sensor">
 				<div class="sensor__head">
-					<h4 class="sensor__title">가스센서</h4>
+					<h4 class="sensor__title">감지대상 가스센서</h4>
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
@@ -741,7 +742,7 @@
 
 			<div class="sensor">
 				<div class="sensor__head">
-					<h4 class="sensor__title">모션센서</h4>
+					<h4 class="sensor__title">감지대상 모션센서</h4>
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
@@ -752,7 +753,7 @@
 
 			<div class="sensor">
 				<div class="sensor__head">
-					<h4 class="sensor__title">도어센서</h4>
+					<h4 class="sensor__title">감지대상 도어센서</h4>
 					<button class="sensor__add">추가</button>
 				</div>
 				<div class="sensor__body">
