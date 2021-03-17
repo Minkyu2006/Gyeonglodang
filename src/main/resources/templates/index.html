@@ -768,7 +768,8 @@
 				data: params,
 				cache: false,
 				error: function () {
-					// alert('디텍트 데이터받기 실패');
+					// alert('에러펑션 디텍트 데이터받기 실패');
+					console.log('에러펑션 디텍트 데이터받기 실패');
 					dafult();
 				},
 				success: function (res) {
@@ -881,6 +882,8 @@
 							console.log("디텍터데이터 존재하지 않음.");
 						}
 					}else{
+						// alert('res.status 500 디텍트 데이터받기 실패');
+						console.log('res.status 500 디텍트 데이터받기 실패');
 						dafult();
 					}
 				}
