@@ -33,6 +33,13 @@
 			$(document).ajaxSend(function(e, xhr) { xhr.setRequestHeader(header, token); });
 
 			$(function() {
+
+				// 로그아웃버튼
+				$('#logout').on('click', function() {
+					logout();
+				});
+
+
 				$('#passwordchange').on('click', function(e) {
 					$('.password-pop').addClass('active');
 					e.preventDefault();
@@ -108,6 +115,11 @@
 
 			});
 
+			// 로그아웃
+			function logout() {
+
+			}
+
 			function consoleReady(value) {
 				$("#things").text(value);
 				$("#controlPop").addClass("active");
@@ -168,11 +180,13 @@
 
 			}
 
+			// 자동시작 : 시간,메뉴
 			function AutoStart() {
 				setInterval(clock, 60000);
 				setInterval(dataInfo, 60000);
 			}
 			var week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+			// 날짜시간
 			function clock() {
 				var date = new Date();
 				var year = date.getFullYear();
@@ -237,7 +251,7 @@
 					console.log("알 수 없는 명령")
 				}
 			}
-			//todo 대시보드 메뉴 에어컨
+			// 대시보드 메뉴 에어컨
 			function airconditionCheck(value) {
 				// 에어컨 셋팅
 				console.log('airconditionData Json 데이터 : ' + value);
@@ -263,7 +277,7 @@
 					$airBtn.removeClass("active")
 				}
 			}
-			//todo 대시보드 메뉴 조명
+			// 대시보드 메뉴 조명
 			function lightCheck(value) {
 				let light = JSON.parse(value);
 				//todo 조명이 하나라도 켜있으면 On 할것
@@ -298,7 +312,7 @@
 					$lightBtn.children('.fa-lightbulb').removeClass('far');
 				}
 			}
-			//todo 대시보드 메뉴 공기청정기
+			// 대시보드 메뉴 공기청정기
 			function airpurificationCheck(value) {
 				// 공기청정기 셋팅
 				console.log('airpurificationData Json 데이터 : ' + value);
@@ -312,7 +326,7 @@
 				} else {
 				}
 			}
-			//todo 대시보드 메뉴 가전전원
+			// 대시보드 메뉴 가전전원
 			function electricCheck(value) {
 				//todo 전원이 하나라도 켜있으면 On 할것
 				console.log('electricDate Json 데이터 : '+ value);
@@ -335,7 +349,7 @@
 					$electricBtn.children('.fa-lightbulb').removeClass('far');
 				}
 			}
-			//todo 대시보드 메뉴 배터리표기 함수
+			// 대시보드 메뉴 배터리표기 함수
 			function batteryRefresh(value) {
 				// battery progress
 				$('.battery__progress').each(function() {
@@ -651,6 +665,7 @@
 					}
 				}
 
+				var $gas = $("#gas");
 				if (checkGas) {
 					$gas.addClass("active")
 				} else {

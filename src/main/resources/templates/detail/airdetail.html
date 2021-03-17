@@ -183,10 +183,13 @@
     <div class="console">
         <div class="infobox">
             <h2 class="info-title">Manager Mode
-                <ul>
-                    <li><a href="/admindashboard/system" class="up-icon"><img src="/assets/images/btn_setting.png" alt=""/></a></li>
-                    <li><a id="passwordchange" href="#" class="up-icon"><img src="/assets/images/icon_password.png" alt=""/></a></li>
-                </ul>
+                <form th:action="@{/logout}" method="post" id="logout">
+                    <ul>
+                        <li><a onclick="document.getElementById('logout').submit();" style="cursor:pointer" class="up-icon"><img src="/assets/images/icon_logout.png" alt=""/></a></li>
+                        <li><a href="/admindashboard/system" class="up-icon"><img src="/assets/images/btn_setting.png" alt=""/></a></li>
+                        <li><a id="passwordchange" href="#" class="up-icon"><img src="/assets/images/icon_password.png" alt=""/></a></li>
+                    </ul>
+                </form>
             </h2>
             <div class="datetime">
                 <span class="date">2021.01.18 월요일</span>
