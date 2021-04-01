@@ -49,9 +49,9 @@
 				success: function (res) {
 					console.log("상태 : "+res.data.lockState);
 					if(res.data.lockState==="Y"){
-						$("#lockBtn").html("<img src='/assets/images/icon_statelock1.png' alt='' />도어락잠김");
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock1.png' alt='' />도어락버튼 잠김");
 					}else{
-						$("#lockBtn").html("<img src='/assets/images/icon_statelock2.png' alt='' />도어락해제");
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock2.png' alt='' />도어락버턴 잠김해제");
 					}
 				}
 			});
@@ -68,9 +68,9 @@
 				success: function (res) {
 					console.log("상태 : "+res.data.lockState);
 					if(res.data.lockState==="Y"){
-						$("#lockBtn").html("<img src='/assets/images/icon_statelock1.png' alt='' />도어락잠김");
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock1.png' alt='' />도어락버튼 잠김");
 					}else{
-						$("#lockBtn").html("<img src='/assets/images/icon_statelock2.png' alt='' />도어락해제");
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock2.png' alt='' />도어락버튼 잠김해제");
 					}
 				}
 			});
@@ -758,9 +758,9 @@
 					</div>
 				</li>
 				<li>
-					<h5 class="setting__title">도어락상태</h5>
+					<h5 class="setting__title">도어락버튼 설정</h5>
 					<div class="setting__console">
-						<button id="lockBtn" class="lock-button lock"><img src="/assets/images/icon_statelock1.png" alt="" />도어락잠김</button>
+						<button id="lockBtn" class="lock-button lock"></button>
 					</div>
 				</li>
 				<li>

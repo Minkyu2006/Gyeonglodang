@@ -718,8 +718,8 @@ a.console-button {
 
 /* 민규가추가한거 */
 .lock-button {
-    width: 50%;
-    height: 50%;
+    width: 80%;
+    height: 100%;
     border: 1px solid #ddd;
     color: #fff;
     font-size: 45px;
