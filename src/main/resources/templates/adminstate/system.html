@@ -28,7 +28,53 @@
 				$(this).parent('li').remove();
 			});
 
+			// 상태가져오기
+			stateGet();
+			setInterval(stateGet, 60000); // 1분마다 데이터 불러와 실행
+			// 액티브 도어락잠김 / 도어락해제
+			$('#lockBtn').on('click', function() {
+				stateUpdate();
+			});
+
         })
+
+		function stateGet() {
+			$.ajax({
+				url: '/lock/stateGet',
+				type: 'post',
+				cache: false,
+				error: function () {
+					console.log('도어락잠김 실패');
+				},
+				success: function (res) {
+					console.log("상태 : "+res.data.lockState);
+					if(res.data.lockState==="Y"){
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock1.png' alt='' />도어락잠김");
+					}else{
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock2.png' alt='' />도어락해제");
+					}
+				}
+			});
+		}
+
+		function stateUpdate() {
+			$.ajax({
+				url: '/lock/stateUpdate',
+				type: 'post',
+				cache: false,
+				error: function () {
+					console.log('도어락업데이트 실패');
+				},
+				success: function (res) {
+					console.log("상태 : "+res.data.lockState);
+					if(res.data.lockState==="Y"){
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock1.png' alt='' />도어락잠김");
+					}else{
+						$("#lockBtn").html("<img src='/assets/images/icon_statelock2.png' alt='' />도어락해제");
+					}
+				}
+			});
+		}
 
 		// 글자제한함수
 		function numberMaxLength(e){
@@ -711,7 +757,14 @@
 						<input type="number" id="motiontimer" class="setting__input-text" maxlength="3" oninput="numberMaxLength(this);" />
 					</div>
 				</li>
-
+				<li>
+					<h5 class="setting__title">도어락상태</h5>
+					<div class="setting__console">
+						<button id="lockBtn" class="lock-button lock"><img src="/assets/images/icon_statelock1.png" alt="" />도어락잠김</button>
+					</div>
+				</li>
+				<li>
+				</li>
         	</ul>
 			<button onclick="operlationPut()" class="setting__btn">저장</button>
         </div>

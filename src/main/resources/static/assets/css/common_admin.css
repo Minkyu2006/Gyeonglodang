@@ -716,6 +716,24 @@ a.console-button {
     background-color: #448aff;
 }
 
+/* 민규가추가한거 */
+.lock-button {
+    width: 50%;
+    height: 50%;
+    border: 1px solid #ddd;
+    color: #fff;
+    font-size: 45px;
+    font-weight: 700;
+    outline: none;
+    border-radius: 7px;
+}
+.lock-button.lock {
+    background-color: #bebebe;
+}
+.lock-button.lock:active {
+    background-color: #808080;
+}
+
 /* battery */
 .battery-wrap {
     width: 100%;
